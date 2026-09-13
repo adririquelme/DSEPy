@@ -1,0 +1,14 @@
+# DSEPy 1.0.0 core runtime dependencies
+#
+# Install these packages in the Python environment used by CloudCompare's
+# Python/pycc runtime. Do not install them into an unrelated system Python
+# environment unless that is the environment CloudCompare uses.
+
+numpy
+scipy
+matplotlib
+Pillow
+
+# Optional packages:
+# colorcet  - additional scientific colour maps
+# pyvista   - interactive 3D normal/sphere visualisation

@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+message: "If you use DSEPy in academic work, please cite this software and the scientific references listed in the repository."
+title: "DSEPy: Discontinuity Set Extractor in Python"
+version: "1.0.0"
+type: software
+abstract: "Python-based Discontinuity Set Extractor for the analysis, visualisation and classification of rock mass discontinuities from 3D point clouds within CloudCompare."
+date-released: 2026-09-13
+license: GPL-3.0
+repository-code: "https://github.com/adririquelme/DSEpy"
+url: "https://github.com/adririquelme/DSEpy"
+authors:
+  - family-names: "Riquelme Guill"
+    given-names: "Adrián"
+  - family-names: "Tomás Jover"
+    given-names: "Roberto"
+  - family-names: "Abellán Fernández"
+    given-names: "Antonio"
+keywords:
+  - "CloudCompare"
+  - "point clouds"
+  - "rock mechanics"
+  - "discontinuities"
+  - "discontinuity sets"
+  - "stereonet"
+  - "geotechnical engineering"
+  - "structural geology"
