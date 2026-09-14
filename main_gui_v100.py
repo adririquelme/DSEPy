@@ -2642,12 +2642,17 @@ if restart_required:
                         )
                         return progress_dialog.update_progress(overall, text)
 
+                try:
                     result = stereonet.analyze_normal_spacing(
                         cloud, family_id, float(bandwidth.get()),
                         float(minimum.get()), float(tolerance.get()),
                         progress_callback=spacing_progress
                     )
                     results.append(result)
+                except ValueError as exc:
+                    if str(exc) == self.tr("error.two_planes_required"):
+                        continue
+                    raise
                 progress_dialog.update_progress(100, self.tx(self.tr("gui.normal_spacing_completed")))
                 folder = None
                 if export.get():
