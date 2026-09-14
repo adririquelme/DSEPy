@@ -947,24 +947,108 @@ class DSEMainApp:
             self.btn_mup.config(text=labels["up"])
             self.btn_mdown.config(text=labels["down"])
 
-    def set_language(self, language):
-        """Switch every live interface element to a freshly loaded catalogue."""
-        requested = language
-        self.i18n.reload()
-        self.language = self.i18n.set_language(requested)
+def set_language(self, language, restart_required=False):
+    """Set the interface language. A restart is required after changing it."""
+    requested = language
+    self.i18n.reload()
+    self.language = self.i18n.set_language(requested)
+
+    if restart_required:
+        self._save_method_settings()
+
+if restart_required:
+    import tkinter as tk
+
+    language_name = self.i18n.metadata.get(
+        self.language, {}
+    ).get("native_name", self.language)
+
+    dialog = tk.Toplevel(self.root)
+    dialog.title(self.tr("language.changed", language=language_name))
+    dialog.transient(self.root)
+    dialog.grab_set()
+    dialog.resizable(False, False)
+
+    message = (
+        f"The language has been changed to {language_name}.\n\n"
+        "Please restart DSEPy to apply the new language "
+        "to all menus, options and interface elements."
+    )
+
+    tk.Label(
+        dialog,
+        text=message,
+        justify="left",
+        padx=20,
+        pady=20,
+    ).pack()
+
+    button_frame = tk.Frame(dialog)
+    button_frame.pack(pady=(0, 15))
+
+    def continue_without_restart():
+        dialog.destroy()
+
         self._translate_widget_tree(self.root)
         self._refresh_language_dependent_controls()
         self._refresh_action_labels()
         self._refresh_menu_language()
         self._refresh_table_language()
         self._set_poles_status(self.poles_review_status)
-        self.log(self.tr("language.changed", language=self.i18n.metadata.get(self.language, {}).get("native_name", self.language)))
-        if self.fig is not None and self.ax is not None:
-            self.ax.set_title(self.tr(
-                "plot.density_title", projection=self.cached_projection or ""
-            ))
-            self.fig.canvas.draw_idle()
-        return self.language
+
+    def close_and_restart():
+        dialog.destroy()
+        self.root.destroy()
+
+    tk.Button(
+        button_frame,
+        text="Continue",
+        command=continue_without_restart,
+        width=16,
+    ).pack(side="left", padx=5)
+
+    tk.Button(
+        button_frame,
+        text="Close and restart",
+        command=close_and_restart,
+        width=16,
+    ).pack(side="left", padx=5)
+
+    dialog.protocol(
+        "WM_DELETE_WINDOW",
+        continue_without_restart
+    )
+
+    self.root.wait_window(dialog)
+
+    return self.language
+
+    self._translate_widget_tree(self.root)
+    self._refresh_language_dependent_controls()
+    self._refresh_action_labels()
+    self._refresh_menu_language()
+    self._refresh_table_language()
+    self._set_poles_status(self.poles_review_status)
+
+    self.log(
+        self.tr(
+            "language.changed",
+            language=self.i18n.metadata.get(
+                self.language, {}
+            ).get("native_name", self.language)
+        )
+    )
+
+    if self.fig is not None and self.ax is not None:
+        self.ax.set_title(
+            self.tr(
+                "plot.density_title",
+                projection=self.cached_projection or ""
+            )
+        )
+        self.fig.canvas.draw_idle()
+
+    return self.language
 
     def _canonical_projection(self):
         value = self.proj_combo.get()
@@ -1254,8 +1338,7 @@ class DSEMainApp:
         return self._get_code_display(self.language)
 
     def _select_language_from_menu(self, code):
-        self.set_language(code)
-        self._save_method_settings()
+        self.set_language(code, restart_required=True)
 
     def _rebuild_language_menu(self):
         self.language_menu.delete(0, tk.END)
