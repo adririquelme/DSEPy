@@ -101,6 +101,20 @@ def _resolve_plugins_dir():
         if os.path.isfile(stereonet_path):
             return folder
 
+        # CloudCompare may execute this script without __file__.
+        # Also check one level below known plugin roots (e.g. CCPlugins\DSEpy).
+        try:
+            children = os.listdir(folder)
+        except OSError:
+            children = []
+
+        for name in children:
+            child = os.path.join(folder, name)
+            if os.path.isdir(child) and os.path.isfile(
+                os.path.join(child, "stereonet.py")
+            ):
+                return child
+
     raise RuntimeError(
         "DSE plugin directory not found. Checked: "
         + " | ".join(checked)
