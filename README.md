@@ -9,7 +9,7 @@
 [![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![CloudCompare Integration](https://img.shields.io/badge/CloudCompare-Python_Plugin-00A896)](https://www.cloudcompare.org/)
 
-[Features](#-key-features) • [Workflow](#-workflow) • [Installation](#-installation--requirements) • [Documentation](#-documentation) • [Citation](#-citation) • [Authors](#-authors)
+[Features](#key-features) • [Workflow](#workflow) • [Installation](#installation--requirements) • [Documentation](#documentation) • [Citation](#citation) • [Authors](#authors--acknowledgments)
 
 ---
 
@@ -64,10 +64,10 @@ It represents the Python/CloudCompare evolution of the original **Discontinuity 
  ┌────────────────────────────────────────┐
  │  3. Spatial Clustering & Geometry      │
  ├────────────────────────────────────────┤
- │  • Spacing Calculation                │
- │  • Persistence Estimation             │
- │  • Fisher Analysis                    │
- │  • Cluster Facet Extraction           │
+ │  • Spacing Calculation                 │
+ │  • Persistence Estimation              │
+ │  • Fisher Analysis                     │
+ │  • Cluster Facet Extraction            │
  └────────────────────────────────────────┘
 ```
 
@@ -110,7 +110,6 @@ Since DSEpy runs within CloudCompare's embedded Python environment, dependencies
    ```python
    exec(open("path/to/main_gui_v100.py").read())
    ```
-
 
 ---
 
@@ -175,6 +174,9 @@ If you use **DSEpy** in academic research, publications, or commercial projects,
 }
 ```
 
+### 2. DSEpy Software Implementation
+> **Riquelme, A., Tomás, R., & Abellán, A.** (2026). *DSEpy: Python-based Discontinuity Set Extractor for CloudCompare* (Version 1.0.1). GitHub. https://github.com/adririquelme/DSEpy
+
 ```bibtex
 @software{Riquelme_DSEpy_2026,
   author    = {Riquelme, Adri{\'a}n and Tom{\'a}s, Roberto and Abell{\'a}n, Antonio},
@@ -185,7 +187,6 @@ If you use **DSEpy** in academic research, publications, or commercial projects,
   url       = {[https://github.com/adririquelme/DSEpy](https://github.com/adririquelme/DSEpy)}
 }
 ```
-
 
 *You can also export citation formats directly from the [`CITATION.cff`](CITATION.cff) file on GitHub.*
 
