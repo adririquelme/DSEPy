@@ -156,9 +156,9 @@ For in-depth guides and technical details, consult the [`docs/`](./docs) folder:
 ## 👥 Authors & Acknowledgments
 
 **DSEpy** is developed and maintained by:
-* **Adrián Riquelme Guill** — *Department of Civil Engineering, Universidad de Alicante*
-* **Roberto Tomás Jover** — *Department of Civil Engineering, Universidad de Alicante*
-* **Antonio Abellán Fernández**
+* **Adrián Riquelme Guill** [![ORCID](https://img.shields.io/badge/ORCID-0000--0002--7250--9366-green?logo=orcid&logoColor=white)](https://orcid.org/0000-0002-7250-9366) — *Department of Civil Engineering, Universidad de Alicante*
+* **Roberto Tomás Jover** [![ORCID](https://img.shields.io/badge/ORCID-0000--0001--8355--2002-green?logo=orcid&logoColor=white)](https://orcid.org/0000-0001-8355-2002) — *Department of Civil Engineering, Universidad de Alicante*
+* **Antonio Abellán Fernández** [![ORCID](https://img.shields.io/badge/ORCID-0000--0002--1906--9983-green?logo=orcid&logoColor=white)](https://orcid.org/0000-0002-1906-9983)
 
 ---
 
