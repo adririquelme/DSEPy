@@ -1,20 +1,23 @@
 cff-version: 1.2.0
-message: "If you use DSEPy in academic work, please cite this software and the scientific references listed in the repository."
-title: "DSEPy: Discontinuity Set Extractor in Python"
-version: "1.0.0"
+message: "If you use DSEpy in academic work, please cite both this software and the preferred article below."
+title: "DSEpy: Discontinuity Set Extractor in Python"
+version: "1.0.1"
 type: software
 abstract: "Python-based Discontinuity Set Extractor for the analysis, visualisation and classification of rock mass discontinuities from 3D point clouds within CloudCompare."
-date-released: 2026-09-13
+date-released: 2026-09-15
 license: GPL-3.0
 repository-code: "https://github.com/adririquelme/DSEpy"
 url: "https://github.com/adririquelme/DSEpy"
 authors:
-  - family-names: "Riquelme Guill"
+  - family-names: "Riquelme"
     given-names: "Adrián"
-  - family-names: "Tomás Jover"
+    orcid: "https://orcid.org/0000-0002-2155-3515"
+  - family-names: "Tomás"
     given-names: "Roberto"
-  - family-names: "Abellán Fernández"
+    orcid: "https://orcid.org/0000-0003-2947-9441"
+  - family-names: "Abellán"
     given-names: "Antonio"
+    orcid: "https://orcid.org/0000-0003-2391-6049"
 keywords:
   - "CloudCompare"
   - "point clouds"
@@ -24,3 +27,24 @@ keywords:
   - "stereonet"
   - "geotechnical engineering"
   - "structural geology"
+preferred-citation:
+  type: article
+  authors:
+    - family-names: "Riquelme"
+      given-names: "A. J."
+      orcid: "https://orcid.org/0000-0002-2155-3515"
+    - family-names: "Abellán"
+      given-names: "A."
+      orcid: "https://orcid.org/0000-0003-2391-6049"
+    - family-names: "Tomás"
+      given-names: "R."
+      orcid: "https://orcid.org/0000-0003-2947-9441"
+    - family-names: "Jaboyedoff"
+      given-names: "M."
+      orcid: "https://orcid.org/0000-0002-6419-695X"
+  title: "A new approach for semi-automatic rock mass joints recognition from 3D point clouds"
+  journal: "Computers & Geosciences"
+  volume: 68
+  pages: "38-52"
+  year: 2014
+  doi: "10.1016/j.cageo.2014.03.014"
