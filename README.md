@@ -158,18 +158,35 @@ For in-depth guides and technical details, consult the [`docs/`](./docs) folder:
 
 ## 🎓 Citation
 
-If you use **DSEpy** in academic research, publications, or commercial projects, please cite it as follows:
+If you use **DSEpy** in academic research, publications, or commercial projects, please cite both the underlying methodology article and the software implementation:
+
+### 1. Original Methodology Paper
+> **Riquelme, A. J., Abellán, A., Tomás, R., & Jaboyedoff, M.** (2014). *A new approach for semi-automatic rock mass joints recognition from 3D point clouds*. Computers & Geosciences, 68, 38–52. https://doi.org/10.1016/j.cageo.2014.03.014
+
+```bibtex
+@article{Riquelme2014,
+  author  = {Riquelme, A. J. and Abell{\'a}n, A. and Tom{\'a}s, R. and Jaboyedoff, M.},
+  title   = {A new approach for semi-automatic rock mass joints recognition from 3D point clouds},
+  journal = {Computers \& Geosciences},
+  volume  = {68},
+  pages   = {38--52},
+  year    = {2014},
+  doi     = {10.1016/j.cageo.2014.03.014}
+}
+```
 
 ```bibtex
 @software{Riquelme_DSEpy_2026,
-  author       = {Riquelme, Adrián and Tomás, Roberto and Abellán, Antonio},
-  title        = {{DSEpy: Python-based Discontinuity Set Extractor for CloudCompare}},
-  year         = {2026},
-  version      = {1.0.0},
-  publisher    = {GitHub},
-  url          = {[https://github.com/adririquelme/DSEpy](https://github.com/adririquelme/DSEpy)}
+  author    = {Riquelme, Adri{\'a}n and Tom{\'a}s, Roberto and Abell{\'a}n, Antonio},
+  title     = {{DSEpy: Python-based Discontinuity Set Extractor for CloudCompare}},
+  year      = {2026},
+  version   = {1.0.1},
+  publisher = {GitHub},
+  url       = {[https://github.com/adririquelme/DSEpy](https://github.com/adririquelme/DSEpy)}
 }
 ```
+
+
 *You can also export citation formats directly from the [`CITATION.cff`](CITATION.cff) file on GitHub.*
 
 ---
