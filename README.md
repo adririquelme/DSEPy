@@ -9,12 +9,13 @@
 [![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![CloudCompare Integration](https://img.shields.io/badge/CloudCompare-Python_Plugin-00A896)](https://www.cloudcompare.org/)
 
-[Features](#key-features) • [Workflow](#workflow) • [Installation](#installation--requirements) • [Documentation](#documentation) • [Citation](#citation) • [Authors](#authors--acknowledgments)
+[Features](#features) • [Workflow](#workflow) • [Installation](#installation) • [Documentation](#documentation) • [Citation](#citation) • [Authors](#authors)
 
 ---
 
 </div>
 
+<a id="overview"></a>
 ## 📌 Overview
 
 **DSEpy** is an open-source Python plugin designed for **CloudCompare** to perform semi-automatic identification, classification, and geometric characterisation of rock mass discontinuity sets from 3D point clouds (LiDAR or photogrammetry).
@@ -29,6 +30,7 @@ It represents the Python/CloudCompare evolution of the original **Discontinuity 
 
 ---
 
+<a id="features"></a>
 ## 🚀 Key Features
 
 * **🎨 Advanced Normal Colour Optimisation:** Color-code point cloud normal vectors using advanced color spaces (**HSV**, **CIELAB**, **CIELCH**, **OKLCH**, **HSLuv**, etc.) for intuitive visual orientation inspection.
@@ -43,6 +45,7 @@ It represents the Python/CloudCompare evolution of the original **Discontinuity 
 
 ---
 
+<a id="workflow"></a>
 ## 🔄 Workflow
 
 ```text
@@ -73,6 +76,7 @@ It represents the Python/CloudCompare evolution of the original **Discontinuity 
 
 ---
 
+<a id="installation"></a>
 ## 🛠️ Installation & Requirements
 
 ### Prerequisites
@@ -113,6 +117,7 @@ Since DSEpy runs within CloudCompare's embedded Python environment, dependencies
 
 ---
 
+<a id="repository-structure"></a>
 ## 📂 Repository Structure
 
 ```text
@@ -136,6 +141,7 @@ DSEpy/
 
 ---
 
+<a id="documentation"></a>
 ## 📚 Documentation
 
 For in-depth guides and technical details, consult the [`docs/`](./docs) folder:
@@ -146,6 +152,7 @@ For in-depth guides and technical details, consult the [`docs/`](./docs) folder:
 
 ---
 
+<a id="authors"></a>
 ## 👥 Authors & Acknowledgments
 
 **DSEpy** is developed and maintained by:
@@ -155,6 +162,7 @@ For in-depth guides and technical details, consult the [`docs/`](./docs) folder:
 
 ---
 
+<a id="citation"></a>
 ## 🎓 Citation
 
 If you use **DSEpy** in academic research, publications, or commercial projects, please cite both the underlying methodology article and the software implementation:
@@ -192,6 +200,7 @@ If you use **DSEpy** in academic research, publications, or commercial projects,
 
 ---
 
+<a id="license"></a>
 ## 📄 License
 
 Distributed under the **GNU General Public License v3.0 (GPL-3.0)**. See [`LICENSE`](LICENSE) for more details. Compatible with the open-source CloudCompare ecosystem.
