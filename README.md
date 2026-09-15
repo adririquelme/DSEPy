@@ -156,18 +156,18 @@ For in-depth guides and technical details, consult the [`docs/`](./docs) folder:
 ## 👥 Authors & Acknowledgments
 
 **DSEpy** is developed and maintained by:
-* **Adrián Riquelme Guill** [![ORCID](https://img.shields.io/badge/ORCID-0000--0002--7250--9366-green?logo=orcid&logoColor=white)](https://orcid.org/0000-0002-7250-9366) — *Department of Civil Engineering, Universidad de Alicante*
-* **Roberto Tomás Jover** [![ORCID](https://img.shields.io/badge/ORCID-0000--0001--8355--2002-green?logo=orcid&logoColor=white)](https://orcid.org/0000-0001-8355-2002) — *Department of Civil Engineering, Universidad de Alicante*
-* **Antonio Abellán Fernández** [![ORCID](https://img.shields.io/badge/ORCID-0000--0002--1906--9983-green?logo=orcid&logoColor=white)](https://orcid.org/0000-0002-1906-9983)
+* **Adrián Riquelme Guill** [![DOI](https://img.shields.io/badge/DOI-10.1016%2Fj.cageo.2014.03.014-blue)](https://doi.org/10.1016/j.cageo.2014.03.014) [![DOI](https://img.shields.io/badge/DOI-10.1007%2Fs00603--018--1519--9-blue)](https://doi.org/10.1007/s00603-018-1519-9) — *Department of Civil Engineering, Universidad de Alicante*
+* **Roberto Tomás Jover** [![DOI](https://img.shields.io/badge/DOI-10.1016%2Fj.cageo.2014.03.014-blue)](https://doi.org/10.1016/j.cageo.2014.03.014) [![DOI](https://img.shields.io/badge/DOI-10.1007%2Fs00603--018--1519--9-blue)](https://doi.org/10.1007/s00603-018-1519-9) — *Department of Civil Engineering, Universidad de Alicante*
+* **Antonio Abellán Fernández** [![DOI](https://img.shields.io/badge/DOI-10.1016%2Fj.cageo.2014.03.014-blue)](https://doi.org/10.1016/j.cageo.2014.03.014) [![DOI](https://img.shields.io/badge/DOI-10.1007%2Fs00603--018--1519--9-blue)](https://doi.org/10.1007/s00603-018-1519-9)
 
 ---
 
 <a id="citation"></a>
 ## 🎓 Citation
 
-If you use **DSEpy** in academic research, publications, or commercial projects, please cite both the underlying methodology article and the software implementation:
+If you use **DSEpy** in academic research, publications, or commercial projects, please cite both the underlying methodology articles and the software implementation:
 
-### 1. Original Methodology Paper
+### 1. Original Methodology Papers
 > **Riquelme, A. J., Abellán, A., Tomás, R., & Jaboyedoff, M.** (2014). *A new approach for semi-automatic rock mass joints recognition from 3D point clouds*. Computers & Geosciences, 68, 38–52. https://doi.org/10.1016/j.cageo.2014.03.014
 
 ```bibtex
@@ -179,6 +179,21 @@ If you use **DSEpy** in academic research, publications, or commercial projects,
   pages   = {38--52},
   year    = {2014},
   doi     = {10.1016/j.cageo.2014.03.014}
+}
+```
+
+> **Riquelme, A., Tomás, R., Cano, M., Pastor, J. L., & Abellán, A.** (2018). *Automatic Mapping of Discontinuity Persistence on Rock Masses Using 3D Point Clouds*. Rock Mechanics and Rock Engineering, 51(10), 3005–3028. https://doi.org/10.1007/s00603-018-1519-9
+
+```bibtex
+@article{Riquelme2018,
+  author  = {Riquelme, A. and Tom{\'a}s, R. and Cano, M. and Pastor, J. L. and Abell{\'a}n, A.},
+  title   = {Automatic Mapping of Discontinuity Persistence on Rock Masses Using 3D Point Clouds},
+  journal = {Rock Mechanics and Rock Engineering},
+  volume  = {51},
+  number  = {10},
+  pages   = {3005--3028},
+  year    = {2018},
+  doi     = {10.1007/s00603-018-1519-9}
 }
 ```
 
