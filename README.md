@@ -156,9 +156,10 @@ For in-depth guides and technical details, consult the [`docs/`](./docs) folder:
 ## 👥 Authors & Acknowledgments
 
 **DSEpy** is developed and maintained by:
-* **Adrián Riquelme Guill** [![DOI](https://img.shields.io/badge/DOI-10.1016%2Fj.cageo.2014.03.014-blue)](https://doi.org/10.1016/j.cageo.2014.03.014) [![DOI](https://img.shields.io/badge/DOI-10.1007%2Fs00603--018--1519--9-blue)](https://doi.org/10.1007/s00603-018-1519-9) — *Department of Civil Engineering, Universidad de Alicante*
-* **Roberto Tomás Jover** [![DOI](https://img.shields.io/badge/DOI-10.1016%2Fj.cageo.2014.03.014-blue)](https://doi.org/10.1016/j.cageo.2014.03.014) [![DOI](https://img.shields.io/badge/DOI-10.1007%2Fs00603--018--1519--9-blue)](https://doi.org/10.1007/s00603-018-1519-9) — *Department of Civil Engineering, Universidad de Alicante*
-* **Antonio Abellán Fernández** [![DOI](https://img.shields.io/badge/DOI-10.1016%2Fj.cageo.2014.03.014-blue)](https://doi.org/10.1016/j.cageo.2014.03.014) [![DOI](https://img.shields.io/badge/DOI-10.1007%2Fs00603--018--1519--9-blue)](https://doi.org/10.1007/s00603-018-1519-9)
+
+* **Adrián Riquelme Guillén** [![ORCID](https://img.shields.io/badge/ORCID-0000--0002--2155--3515-green?logo=orcid&logoColor=white)](https://orcid.org/0000-0002-2155-3515) — *Department of Civil Engineering, Universidad de Alicante*
+* **Roberto Tomás Jover** [![ORCID](https://img.shields.io/badge/ORCID-0000--0003--2947--9441-green?logo=orcid&logoColor=white)](https://orcid.org/0000-0003-2947-9441) — *Department of Civil Engineering, Universidad de Alicante*
+* **Antonio Abellán Fernández** [![ORCID](https://img.shields.io/badge/ORCID-0000--0003--2391--6049-green?logo=orcid&logoColor=white)](https://orcid.org/0000-0003-2391-6049)
 
 ---
 
