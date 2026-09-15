@@ -11,7 +11,7 @@ import webbrowser
 from datetime import datetime
 
 # Single source of truth for the DSEPy version. Change this value only when releasing a new version.
-DSE_VERSION = "1.0.0"
+DSE_VERSION = "1.0.1"
 
 
 def _enable_windows_dpi_awareness():
