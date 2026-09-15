@@ -157,7 +157,7 @@ For in-depth guides and technical details, consult the [`docs/`](./docs) folder:
 
 **DSEpy** is developed and maintained by:
 
-* **Adrián Riquelme Guillén** [![ORCID](https://img.shields.io/badge/ORCID-0000--0002--2155--3515-green?logo=orcid&logoColor=white)](https://orcid.org/0000-0002-2155-3515) — *Department of Civil Engineering, Universidad de Alicante*
+* **Adrián Riquelme Guill** [![ORCID](https://img.shields.io/badge/ORCID-0000--0002--2155--3515-green?logo=orcid&logoColor=white)](https://orcid.org/0000-0002-2155-3515) — *Department of Civil Engineering, Universidad de Alicante*
 * **Roberto Tomás Jover** [![ORCID](https://img.shields.io/badge/ORCID-0000--0003--2947--9441-green?logo=orcid&logoColor=white)](https://orcid.org/0000-0003-2947-9441) — *Department of Civil Engineering, Universidad de Alicante*
 * **Antonio Abellán Fernández** [![ORCID](https://img.shields.io/badge/ORCID-0000--0003--2391--6049-green?logo=orcid&logoColor=white)](https://orcid.org/0000-0003-2391-6049)
 
