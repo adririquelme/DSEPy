@@ -658,7 +658,7 @@
     "log.startup_ref_spacing": "Referencia sobre espaciado normal: https://doi.org/10.1016/j.enggeo.2015.06.009",
     "log.startup_ref_persistence": "Referencia sobre persistencia: https://doi.org/10.1016/j.ijrmms.2015.12.008",
     "log.startup_ref_colour": "Referencia sobre codificación por colores según la orientación: https://doi.org/10.1016/j.jrmge.2025.12.059",
-    "log.startup_wiki": "Wiki de DSE: https://personal.ua.es/en/ariquelme/dse-wiki/dse-wiki.html",
+    "log.startup_wiki": "Wiki de DSE: https://github.com/adririquelme/DSEPy/wiki",
     "projection.equal_angle": "Equiangular",
     "projection.equal_area": "Equiárea",
     "projection.equal_proportion": "Equiproporcional",

@@ -658,7 +658,7 @@
     "log.startup_ref_spacing": "المتجه العمودي التباعد reference: https://doi.org/10.1016/j.enggeo.2015.06.009",
     "log.startup_ref_persistence": "الاستمرارية reference: https://doi.org/10.1016/j.ijrmms.2015.12.008",
     "log.startup_ref_colour": "الاتجاه-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059",
-    "log.startup_wiki": "DSE wiki: https://personal.ua.es/en/ariquelme/dse-wiki/dse-wiki.html",
+    "log.startup_wiki": "DSE wiki: https://github.com/adririquelme/DSEPy/wiki",
     "projection.equal_angle": "إسقاط متساوي الزوايا",
     "projection.equal_area": "إسقاط متساوي المساحة",
     "projection.equal_proportion": "إسقاط متساوي النسب",

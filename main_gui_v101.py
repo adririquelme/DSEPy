@@ -11,7 +11,7 @@ import webbrowser
 from datetime import datetime
 
 # Single source of truth for the DSEPy version. Change this value only when releasing a new version.
-DSE_VERSION = "1.0.1"
+DSE_VERSION = "1.0.2"
 
 
 def _enable_windows_dpi_awareness():
@@ -947,47 +947,68 @@ class DSEMainApp:
             self.btn_mup.config(text=labels["up"])
             self.btn_mdown.config(text=labels["down"])
 
-def set_language(self, language, restart_required=False):
-    """Set the interface language. A restart is required after changing it."""
-    requested = language
-    self.i18n.reload()
-    self.language = self.i18n.set_language(requested)
+    def set_language(self, language, restart_required=False):
+        """Set the interface language. A restart is required after changing it."""
+        requested = language
+        self.i18n.reload()
+        self.language = self.i18n.set_language(requested)
 
-    if restart_required:
-        self._save_method_settings()
+        if restart_required:
+            self._save_method_settings()
 
-if restart_required:
-    import tkinter as tk
+        if restart_required:
+            import tkinter as tk
 
-    language_name = self.i18n.metadata.get(
-        self.language, {}
-    ).get("native_name", self.language)
+            language_name = self.i18n.metadata.get(
+                self.language, {}
+            ).get("native_name", self.language)
 
-    dialog = tk.Toplevel(self.root)
-    dialog.title(self.tr("language.changed", language=language_name))
-    dialog.transient(self.root)
-    dialog.grab_set()
-    dialog.resizable(False, False)
+            dialog = tk.Toplevel(self.root)
+            dialog.title(self.tr("language.changed", language=language_name))
+            dialog.transient(self.root)
+            dialog.grab_set()
+            dialog.resizable(False, False)
 
-    message = (
-        f"The language has been changed to {language_name}.\n\n"
-        "Please restart DSEPy to apply the new language "
-        "to all menus, options and interface elements."
-    )
+            message = (
+                f"The language has been changed to {language_name}.\n\n"
+                "Please restart DSEPy to apply the new language "
+                "to all menus, options and interface elements."
+            )
 
-    tk.Label(
-        dialog,
-        text=message,
-        justify="left",
-        padx=20,
-        pady=20,
-    ).pack()
+            tk.Label(
+                dialog, text=message, justify="left", padx=20, pady=20,
+            ).pack()
 
-    button_frame = tk.Frame(dialog)
-    button_frame.pack(pady=(0, 15))
+            button_frame = tk.Frame(dialog)
+            button_frame.pack(pady=(0, 15))
 
-    def continue_without_restart():
-        dialog.destroy()
+            def continue_without_restart():
+                dialog.destroy()
+                self._translate_widget_tree(self.root)
+                self._refresh_language_dependent_controls()
+                self._refresh_action_labels()
+                self._refresh_menu_language()
+                self._refresh_table_language()
+                self._set_poles_status(self.poles_review_status)
+
+            def close_and_restart():
+                dialog.destroy()
+                self.root.destroy()
+
+            tk.Button(
+                button_frame, text="Continue",
+                command=continue_without_restart, width=16,
+            ).pack(side="left", padx=5)
+
+            tk.Button(
+                button_frame, text="Close and restart",
+                command=close_and_restart, width=16,
+            ).pack(side="left", padx=5)
+
+            dialog.protocol("WM_DELETE_WINDOW", continue_without_restart)
+            self.root.wait_window(dialog)
+
+            return self.language
 
         self._translate_widget_tree(self.root)
         self._refresh_language_dependent_controls()
@@ -996,59 +1017,25 @@ if restart_required:
         self._refresh_table_language()
         self._set_poles_status(self.poles_review_status)
 
-    def close_and_restart():
-        dialog.destroy()
-        self.root.destroy()
-
-    tk.Button(
-        button_frame,
-        text="Continue",
-        command=continue_without_restart,
-        width=16,
-    ).pack(side="left", padx=5)
-
-    tk.Button(
-        button_frame,
-        text="Close and restart",
-        command=close_and_restart,
-        width=16,
-    ).pack(side="left", padx=5)
-
-    dialog.protocol(
-        "WM_DELETE_WINDOW",
-        continue_without_restart
-    )
-
-    self.root.wait_window(dialog)
-
-    return self.language
-
-    self._translate_widget_tree(self.root)
-    self._refresh_language_dependent_controls()
-    self._refresh_action_labels()
-    self._refresh_menu_language()
-    self._refresh_table_language()
-    self._set_poles_status(self.poles_review_status)
-
-    self.log(
-        self.tr(
-            "language.changed",
-            language=self.i18n.metadata.get(
-                self.language, {}
-            ).get("native_name", self.language)
-        )
-    )
-
-    if self.fig is not None and self.ax is not None:
-        self.ax.set_title(
+        self.log(
             self.tr(
-                "plot.density_title",
-                projection=self.cached_projection or ""
+                "language.changed",
+                language=self.i18n.metadata.get(
+                    self.language, {}
+                ).get("native_name", self.language)
             )
         )
-        self.fig.canvas.draw_idle()
 
-    return self.language
+        if self.fig is not None and self.ax is not None:
+            self.ax.set_title(
+                self.tr(
+                    "plot.density_title",
+                    projection=self.cached_projection or ""
+                )
+            )
+            self.fig.canvas.draw_idle()
+
+        return self.language
 
     def _canonical_projection(self):
         value = self.proj_combo.get()
@@ -1115,7 +1102,7 @@ if restart_required:
                 "Contour Lines": self.tx("gui.contour_lines"),
                 "Filled Contours": self.tx("gui.filled_contours"),
             }.get(current_style, current_style))
-        if hasattr(self, "self.poles_frame"):
+        if hasattr(self, "poles_frame"):
             self.poles_frame.configure(text=" " + self.tx("gui.principal_pole_analysis") + " ")
         if hasattr(self, "grp_step1"):
             self.grp_step1.configure(text=" " + self.tx("gui.principal_poles") + " ")
@@ -1123,11 +1110,11 @@ if restart_required:
             self.grp_step2.configure(text=" " + self.tx("gui.step2") + " ")
         if hasattr(self, "grp_step3"):
             self.grp_step3.configure(text=self.tx("Spatial clustering and plane fitting"))
-        if hasattr(self, "self.cluster_parameters"):
+        if hasattr(self, "cluster_parameters"):
             self.cluster_parameters.configure(text=" " + self.tx("Cluster analysis") + " ")
-        if hasattr(self, "self.plane_parameters"):
+        if hasattr(self, "plane_parameters"):
             self.plane_parameters.configure(text=" " + self.tx("Plane calculation") + " ")
-        if hasattr(self, "self.facet_export"):
+        if hasattr(self, "facet_export"):
             self.facet_export.configure(text=" " + self.tx("Facet export") + " ")
         if hasattr(self, "facet_type_combo"):
             current_facet = self._canonical_facet_type()
