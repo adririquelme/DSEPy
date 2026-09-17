@@ -146,7 +146,7 @@ DSEpy/
 
 For in-depth guides and technical details, consult the [`docs/`](./docs) folder:
 * 📥 **[Installation Guide](./docs/installation.md):** Step-by-step environment setup.
-* 📖 **[User Guide](./docs/user_guide.md):** Detailed GUI walkthrough and parameter configuration.
+* 📖 **[User Guide](./docs/user_guide.md):** Detailed GUI walkthrough and parameter configuration (pending).
 * ⚙️ **[Methodological Workflow](./docs/workflow.md):** Scientific background and algorithms.
 * 🔧 **[Troubleshooting](./docs/troubleshooting.md):** Common errors, logs (`DSE_execution_log.txt`), and FAQs.
 
