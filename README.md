@@ -85,7 +85,7 @@ It represents the Python/CloudCompare evolution of the original **Discontinuity 
 
 ### Installing Dependencies in CloudCompare's Python
 
-Since DSEpy runs within CloudCompare's embedded Python environment, dependencies must be installed into CloudCompare's specific Python interpreter:
+Since DSEpy runs within CloudCompare's embedded Python environment, dependencies must be installed into CloudCompare's specific Python interpreter, not the system-wide Python.
 
 1. **Find CloudCompare's Python executable:**
    Open CloudCompare, open the **Python Console**, and run:
@@ -94,7 +94,7 @@ Since DSEpy runs within CloudCompare's embedded Python environment, dependencies
    print(sys.executable)
    ```
 2. **Install dependencies:**
-   Open Windows Command Prompt (CMD) or Terminal and use that specific path to install packages:
+   Open Windows Command Prompt (CMD) or PowerShell and use that specific path to install the packages:
    ```cmd
    "C:\Path\To\CloudCompare\python.exe" -m pip install -r requirements.txt
    ```
@@ -105,7 +105,7 @@ Since DSEpy runs within CloudCompare's embedded Python environment, dependencies
    ```
 
 ### Quick Start
-1. Clone this repository or download the latest release:
+1. Clone this repository or download the [Latest Release ZIP](https://github.com/adririquelme/DSEpy/releases):
    ```bash
    git clone [https://github.com/adririquelme/DSEpy.git](https://github.com/adririquelme/DSEpy.git)
    ```
@@ -157,7 +157,7 @@ For in-depth guides and technical details, consult the [`docs/`](./docs) folder:
 
 **DSEpy** is developed and maintained by:
 
-* **Adrián Riquelme Guill** [![ORCID](https://img.shields.io/badge/ORCID-0000--0002--2155--3515-green?logo=orcid&logoColor=white)](https://orcid.org/0000-0002-2155-3515) — *Department of Civil Engineering, Universidad de Alicante*
+* **Adrián Riquelme Guillén** [![ORCID](https://img.shields.io/badge/ORCID-0000--0002--2155--3515-green?logo=orcid&logoColor=white)](https://orcid.org/0000-0002-2155-3515) — *Department of Civil Engineering, Universidad de Alicante*
 * **Roberto Tomás Jover** [![ORCID](https://img.shields.io/badge/ORCID-0000--0003--2947--9441-green?logo=orcid&logoColor=white)](https://orcid.org/0000-0003-2947-9441) — *Department of Civil Engineering, Universidad de Alicante*
 * **Antonio Abellán Fernández** [![ORCID](https://img.shields.io/badge/ORCID-0000--0003--2391--6049-green?logo=orcid&logoColor=white)](https://orcid.org/0000-0003-2391-6049)
 
