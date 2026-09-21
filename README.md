@@ -227,15 +227,15 @@ If you use **DSEpy** in academic research, publications, or commercial projects,
 }
 ```
 
-### 5. Normal Vector Colour Mapping
-> **Riquelme, A. J., et al.** (2025). *Optimisation of 3D point cloud colour mapping based on normal vector orientations*. Journal of Rock Mechanics and Geotechnical Engineering. https://doi.org/10.1016/j.jrmge.2025.12.059
+### 5. Normal Vector Colour Mapping & Density Analysis
+> **Riquelme, A., Tomás, R., Cano, M., Pastor, J. L., & Abellán, A.** (2026). *Orientation-based colour mapping and spherical density analysis for rock discontinuity detection in 3D point clouds of roadcut slopes*. Journal of Rock Mechanics and Geotechnical Engineering. https://doi.org/10.1016/j.jrmge.2025.12.059
 
 ```bibtex
-@article{Riquelme2025Colour,
-  author  = {Riquelme, A. J. and others},
-  title   = {Optimisation of 3D point cloud colour mapping based on normal vector orientations},
+@article{Riquelme2026Colour,
+  author  = {Riquelme, A. and Tom{\'a}s, R. and Cano, M. and Pastor, J. L. and Abell{\'a}n, A.},
+  title   = {Orientation-based colour mapping and spherical density analysis for rock discontinuity detection in 3D point clouds of roadcut slopes},
   journal = {Journal of Rock Mechanics and Geotechnical Engineering},
-  year    = {2025},
+  year    = {2026},
   doi     = {10.1016/j.jrmge.2025.12.059}
 }
 ```
