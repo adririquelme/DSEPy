@@ -91,7 +91,7 @@ git clone https://github.com/adririquelme/DSEpy.git C:\CCPlugins\DSEPy
 #### 2. Install Dependencies in CloudCompare's Python
 Since CloudCompare is installed in `C:\Program Files\` by default, installing Python packages requires elevated administrator privileges.
 
-1. **Close CloudCompare completely** if it is currently running (to prevent file-locking errors on DLLs).
+1. **Close CloudCompare completely** if it is currently running.
 2. **Open Command Prompt (CMD) or PowerShell as Administrator:**
    * Press `Win + S`, type `powershell` or `cmd`, right-click, and select **Run as administrator**.
 3. **Navigate to the DSEpy directory:**
@@ -102,27 +102,19 @@ Since CloudCompare is installed in `C:\Program Files\` by default, installing Py
 
    * **In PowerShell:**
      ```powershell
-     & "C:\Program Files\CloudCompare\plugins\Python\python.exe" -m pip install -r requirements.txt --no-warn-script-location
+     & "C:\Program Files\CloudCompare\plugins\Python\python.exe" -m pip install -r requirements.txt --no-warn-script-location --break-system-packages
      ```
 
    * **In Command Prompt (CMD):**
      ```cmd
-     "C:\Program Files\CloudCompare\plugins\Python\python.exe" -m pip install -r requirements.txt --no-warn-script-location
+     "C:\Program Files\CloudCompare\plugins\Python\python.exe" -m pip install -r requirements.txt --no-warn-script-location --break-system-packages
      ```
 
 > 💡 **Troubleshooting & Notes:**
-> * **Permission Error / Access Denied (`WinError 5`):** Ensure your console was opened via **"Run as administrator"** and that **CloudCompare is completely closed** (otherwise DLL files like `scipy`/`numpy` will be locked in memory).
+> * **Externally Managed Environment Error (PEP 668):** Newer CloudCompare 2.14.beta builds mark their embedded Python as externally managed. The `--break-system-packages` flag is required to allow `pip` to install packages directly into CloudCompare's Python environment.
+> * **Permission Error / Access Denied (`WinError 5`):** Ensure your console was opened via **"Run as administrator"** and that **CloudCompare is completely closed**.
 > * **PowerShell Syntax Error (`Unexpected token`):** In PowerShell, always include the `&` operator before quoted executable paths.
 > * **NumPy 2.x Compatibility Issues:** CloudCompare plugins require **NumPy 1.x** (`numpy<2.0.0`). Ensure your `requirements.txt` restricts NumPy (`numpy>=1.20.0,<2.0.0`) to avoid C-extension errors (`ImportError: cannot import name '_c_internal_utils'`).
-> * **Custom Installation Directory:** If CloudCompare is installed in a non-standard path, identify its Python executable by launching CloudCompare, opening the **Python Console**, and running:
->   ```python
->   import sys; print(sys.executable)
->   ```
-> * **Alternative Installation (from CloudCompare Console):** You can also install the required packages directly within CloudCompare's Python Console:
->   ```python
->   import subprocess, sys
->   subprocess.check_call([sys.executable, "-m", "pip", "install", "numpy<2", "scipy", "matplotlib", "Pillow"])
->   ```
 
 ---
 
