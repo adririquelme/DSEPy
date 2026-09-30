@@ -76,6 +76,9 @@ It represents the Python/CloudCompare evolution of the original **Discontinuity 
 
 ---
 
+<a id="installation"></a>
+## 🛠️ Installation & Setup
+
 ### Prerequisites
 * **[CloudCompare](https://www.cloudcompare.org/)** (v2.14.beta - build 2024-09-26 or higher required; earlier builds or older stable releases may cause Python binding issues).
 * **CloudCompare Python Plugin** enabled during installation (ensure the Python plugin option is checked during the CloudCompare setup wizard).
@@ -85,7 +88,7 @@ It represents the Python/CloudCompare evolution of the original **Discontinuity 
 #### 1. Download DSEpy
 Clone or extract DSEpy into a simple directory path without spaces or special characters (e.g., `C:\CCPlugins\DSEPy`):
 ```bash
-git clone https://github.com/adririquelme/DSEpy.git C:\CCPlugins\DSEPy
+git clone [https://github.com/adririquelme/DSEpy.git](https://github.com/adririquelme/DSEpy.git) C:\CCPlugins\DSEPy
 ```
 
 #### 2. Install Dependencies in CloudCompare's Python
