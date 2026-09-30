@@ -88,7 +88,7 @@ It represents the Python/CloudCompare evolution of the original **Discontinuity 
 #### 1. Download DSEpy
 Clone or extract DSEpy into a simple directory path without spaces or special characters (e.g., `C:\CCPlugins\DSEPy`):
 ```bash
-git clone [https://github.com/adririquelme/DSEpy.git](https://github.com/adririquelme/DSEpy.git) C:\CCPlugins\DSEPy
+git clone https://github.com/adririquelme/DSEpy.git C:\CCPlugins\DSEPy
 ```
 
 #### 2. Install Dependencies in CloudCompare's Python
