@@ -96,7 +96,7 @@ Since DSEpy runs within CloudCompare's embedded Python environment, dependencies
 2. **Install dependencies:**
    Open Windows Command Prompt (CMD) or PowerShell and use that specific path to install the packages:
    ```cmd
-   "C:\Path\To\CloudCompare\python.exe" -m pip install -r requirements.txt
+   "C:\Program Files\CloudCompare\plugins\Python\python.exe" -m pip install -r requirements.txt
    ```
    *Alternatively, run this inside CloudCompare's Python console:*
    ```python
@@ -157,7 +157,7 @@ For in-depth guides and technical details, consult the [`docs/`](./docs) folder:
 
 **DSEpy** is developed and maintained by:
 
-* **Adrián Riquelme Guillén** [![ORCID](https://img.shields.io/badge/ORCID-0000--0002--2155--3515-green?logo=orcid&logoColor=white)](https://orcid.org/0000-0002-2155-3515) — *Department of Civil Engineering, Universidad de Alicante*
+* **Adrián Riquelme Guill** [![ORCID](https://img.shields.io/badge/ORCID-0000--0002--2155--3515-green?logo=orcid&logoColor=white)](https://orcid.org/0000-0002-2155-3515) — *Department of Civil Engineering, Universidad de Alicante*
 * **Roberto Tomás Jover** [![ORCID](https://img.shields.io/badge/ORCID-0000--0003--2947--9441-green?logo=orcid&logoColor=white)](https://orcid.org/0000-0003-2947-9441) — *Department of Civil Engineering, Universidad de Alicante*
 * **Antonio Abellán Fernández** [![ORCID](https://img.shields.io/badge/ORCID-0000--0003--2391--6049-green?logo=orcid&logoColor=white)](https://orcid.org/0000-0003-2391-6049)
 
@@ -184,12 +184,12 @@ If you use **DSEpy** in academic research, publications, or commercial projects,
 ```
 
 ### 2. Methodological Foundations (PhD Thesis)
-> **Riquelme, A.** (2015). *Caracterización geomecánica de macizos rocosos mediante nubes de puntos 3D* [Doctoral dissertation, Universidad de Alicante]. RUA Repository. https://rua.ua.es/entities/publication/78d254b9-1a7b-49b1-a35a-c0edbdeeb225
+> **Riquelme, A.** (2015). *Uso de nubes de puntos 3D para identificación y caracterización de familias de discontinuidades planas en afloramientos rocosos y evaluación de la calidad geomecánica* [Doctoral dissertation, Universidad de Alicante]. RUA Repository. https://rua.ua.es/entities/publication/78d254b9-1a7b-49b1-a35a-c0edbdeeb225
 
 ```bibtex
 @phdthesis{Riquelme2015Thesis,
   author = {Riquelme, Adri{\'a}n},
-  title  = {Caracterizaci{\'o}n geomec{\'a}nica de macizos rocosos mediante nubes de puntos 3D},
+  title  = {Uso de nubes de puntos 3D para identificación y caracterización de familias de discontinuidades planas en afloramientos rocosos y evaluación de la calidad geomecánica},
   school = {Universidad de Alicante},
   year   = {2015},
   url    = {[https://rua.ua.es/entities/publication/78d254b9-1a7b-49b1-a35a-c0edbdeeb225](https://rua.ua.es/entities/publication/78d254b9-1a7b-49b1-a35a-c0edbdeeb225)}
