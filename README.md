@@ -85,6 +85,15 @@ It represents the Python/CloudCompare evolution of the original **Discontinuity 
 
 ---
 
+<a id="installation"></a>
+## 🛠️ Installation & Requirements
+
+### Prerequisites
+* **[CloudCompare](https://www.cloudcompare.org/)** (v2.12 or higher recommended).
+* **CloudCompare Python Plugin** enabled during installation (ensure the Python plugin option is selected in the CloudCompare installer setup).
+
+---
+
 ### Step-by-Step Installation
 
 #### 1. Download DSEpy
@@ -96,13 +105,14 @@ git clone [https://github.com/adririquelme/DSEpy.git](https://github.com/adririq
 #### 2. Install Dependencies in CloudCompare's Python
 Since CloudCompare is installed in `C:\Program Files\` by default, installing Python packages requires elevated administrator privileges.
 
-1. **Open Command Prompt (CMD) or PowerShell as Administrator:**
+1. **Close CloudCompare completely** if it is currently running (to prevent file-locking errors on DLLs).
+2. **Open Command Prompt (CMD) or PowerShell as Administrator:**
    * Press `Win + S`, type `powershell` or `cmd`, right-click, and select **Run as administrator**.
-2. **Navigate to the DSEpy directory:**
+3. **Navigate to the DSEpy directory:**
    ```cmd
    cd C:\CCPlugins\DSEPy
    ```
-3. **Run the installation command:**
+4. **Run the installation command:**
 
    * **In PowerShell:**
      ```powershell
@@ -115,8 +125,9 @@ Since CloudCompare is installed in `C:\Program Files\` by default, installing Py
      ```
 
 > 💡 **Troubleshooting & Notes:**
-> * **Permission Error (`WinError 5`):** Ensure your Command Prompt/PowerShell window was opened with **"Run as administrator"**.
-> * **PowerShell Syntax Error (`Unexpected token`):** In PowerShell, always include the `&` operator before quoted paths to execute binaries.
+> * **Permission Error / Access Denied (`WinError 5`):** Ensure your console was opened via **"Run as administrator"** and that **CloudCompare is completely closed** (otherwise DLL files like `scipy`/`numpy` will be locked in memory).
+> * **PowerShell Syntax Error (`Unexpected token`):** In PowerShell, always include the `&` operator before quoted executable paths.
+> * **NumPy 2.x Compatibility Issues:** CloudCompare plugins require **NumPy 1.x** (`numpy<2.0.0`). Ensure your `requirements.txt` restricts NumPy (`numpy>=1.20.0,<2.0.0`) to avoid C-extension errors (`ImportError: cannot import name '_c_internal_utils'`).
 > * **Custom Installation Directory:** If CloudCompare is installed in a non-standard path, identify its Python executable by launching CloudCompare, opening the **Python Console**, and running:
 >   ```python
 >   import sys; print(sys.executable)
@@ -124,8 +135,9 @@ Since CloudCompare is installed in `C:\Program Files\` by default, installing Py
 > * **Alternative Installation (from CloudCompare Console):** You can also install the required packages directly within CloudCompare's Python Console:
 >   ```python
 >   import subprocess, sys
->   subprocess.check_call([sys.executable, "-m", "pip", "install", "numpy", "scipy", "matplotlib", "Pillow"])
+>   subprocess.check_call([sys.executable, "-m", "pip", "install", "numpy<2", "scipy", "matplotlib", "Pillow"])
 >   ```
+
 ---
 
 #### 3. Quick Start / Launching DSEpy
