@@ -97,18 +97,26 @@ git clone [https://github.com/adririquelme/DSEpy.git](https://github.com/adririq
 Since CloudCompare is installed in `C:\Program Files\` by default, installing Python packages requires elevated administrator privileges.
 
 1. **Open Command Prompt (CMD) or PowerShell as Administrator:**
-   * Press `Win + S`, type `cmd`, right-click **Command Prompt**, and select **Run as administrator**.
+   * Press `Win + S`, type `powershell` or `cmd`, right-click, and select **Run as administrator**.
 2. **Navigate to the DSEpy directory:**
    ```cmd
    cd C:\CCPlugins\DSEPy
    ```
 3. **Run the installation command:**
-   ```cmd
-   "C:\Program Files\CloudCompare\plugins\Python\python.exe" -m pip install -r requirements.txt --no-warn-script-location
-   ```
+
+   * **In PowerShell:**
+     ```powershell
+     & "C:\Program Files\CloudCompare\plugins\Python\python.exe" -m pip install -r requirements.txt --no-warn-script-location
+     ```
+
+   * **In Command Prompt (CMD):**
+     ```cmd
+     "C:\Program Files\CloudCompare\plugins\Python\python.exe" -m pip install -r requirements.txt --no-warn-script-location
+     ```
 
 > 💡 **Troubleshooting & Notes:**
 > * **Permission Error (`WinError 5`):** Ensure your Command Prompt/PowerShell window was opened with **"Run as administrator"**.
+> * **PowerShell Syntax Error (`Unexpected token`):** In PowerShell, always include the `&` operator before quoted paths to execute binaries.
 > * **Custom Installation Directory:** If CloudCompare is installed in a non-standard path, identify its Python executable by launching CloudCompare, opening the **Python Console**, and running:
 >   ```python
 >   import sys; print(sys.executable)
@@ -118,7 +126,6 @@ Since CloudCompare is installed in `C:\Program Files\` by default, installing Py
 >   import subprocess, sys
 >   subprocess.check_call([sys.executable, "-m", "pip", "install", "numpy", "scipy", "matplotlib", "Pillow"])
 >   ```
-
 ---
 
 #### 3. Quick Start / Launching DSEpy
