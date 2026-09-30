@@ -72,3 +72,207 @@ It represents the Python/CloudCompare evolution of the original **Discontinuity 
  │  • Fisher Analysis                     │
  │  • Cluster Facet Extraction            │
  └────────────────────────────────────────┘
+```
+
+---
+
+<a id="installation"></a>
+## 🛠️ Installation & Requirements
+
+### Prerequisites
+* **[CloudCompare](https://www.cloudcompare.org/)** (v2.12 or higher recommended).
+* **CloudCompare Python Plugin** enabled during CloudCompare installation (ensure the Python plugin option is selected in the CloudCompare installer setup).
+
+---
+
+### Step-by-Step Installation
+
+#### 1. Download DSEpy
+Clone or extract DSEpy into a simple directory path without spaces or special characters (e.g., `C:\CCPlugins\DSEPy`):
+```bash
+git clone [https://github.com/adririquelme/DSEpy.git](https://github.com/adririquelme/DSEpy.git) C:\CCPlugins\DSEPy
+```
+
+#### 2. Install Dependencies in CloudCompare's Python
+Since CloudCompare is installed in `C:\Program Files\` by default, installing Python packages requires elevated administrator privileges.
+
+1. **Open Command Prompt (CMD) or PowerShell as Administrator:**
+   * Press `Win + S`, type `cmd`, right-click **Command Prompt**, and select **Run as administrator**.
+2. **Navigate to the DSEpy directory:**
+   ```cmd
+   cd C:\CCPlugins\DSEPy
+   ```
+3. **Run the installation command:**
+   ```cmd
+   "C:\Program Files\CloudCompare\plugins\Python\python.exe" -m pip install -r requirements.txt --no-warn-script-location
+   ```
+
+> 💡 **Troubleshooting & Notes:**
+> * **Permission Error (`WinError 5`):** Ensure your Command Prompt/PowerShell window was opened with **"Run as administrator"**.
+> * **Custom Installation Directory:** If CloudCompare is installed in a non-standard path, identify its Python executable by launching CloudCompare, opening the **Python Console**, and running:
+>   ```python
+>   import sys; print(sys.executable)
+>   ```
+> * **Alternative Installation (from CloudCompare Console):** You can also install the required packages directly within CloudCompare's Python Console:
+>   ```python
+>   import subprocess, sys
+>   subprocess.check_call([sys.executable, "-m", "pip", "install", "numpy", "scipy", "matplotlib", "Pillow"])
+>   ```
+
+---
+
+#### 3. Quick Start / Launching DSEpy
+1. Open **CloudCompare**.
+2. Open the **Python Console** (from the menu or toolbar).
+3. Execute the launcher script:
+   ```python
+   exec(open("C:/CCPlugins/DSEPy/main_gui_v100.py").read())
+   ```
+
+---
+
+<a id="repository-structure"></a>
+## 📂 Repository Structure
+
+```text
+DSEpy/
+├── main_gui_v100.py          # Main GUI launcher & CloudCompare interface
+├── colour_optimisation.py   # Chromatic space algorithms & normal colour-coding
+├── stereonet.py             # Stereographic projection & density computations
+├── i18n.py                  # Internationalization translation engine
+├── requirements.txt         # Python package dependencies
+├── CITATION.cff             # Academic citation metadata
+├── CHANGELOG.md             # Version history
+├── LICENSE                  # GNU GPL v3.0 License
+├── docs/                    # Complete user & developer documentation
+│   ├── installation.md
+│   ├── user_guide.md
+│   ├── workflow.md
+│   └── troubleshooting.md
+├── icons/                   # GUI icons & visual assets
+└── locales/                 # i18n translation JSON files (en, es, ca, de, etc.)
+```
+
+---
+
+<a id="documentation"></a>
+## 📚 Documentation
+
+For in-depth guides and technical details, consult the [`docs/`](./docs) folder:
+* 📥 **[Installation Guide](./docs/installation.md):** Step-by-step environment setup.
+* 📖 **[User Guide](./docs/user_guide.md):** Detailed GUI walkthrough and parameter configuration.
+* ⚙️ **[Methodological Workflow](./docs/workflow.md):** Scientific background and algorithms.
+* 🔧 **[Troubleshooting](./docs/troubleshooting.md):** Common errors, logs (`DSE_execution_log.txt`), and FAQs.
+
+---
+
+<a id="authors"></a>
+## 👥 Authors & Acknowledgments
+
+**DSEpy** is developed and maintained by:
+
+* **Adrián Riquelme Guill** [![ORCID](https://img.shields.io/badge/ORCID-0000--0002--2155--3515-green?logo=orcid&logoColor=white)](https://orcid.org/0000-0002-2155-3515) — *Department of Civil Engineering, Universidad de Alicante*
+* **Roberto Tomás Jover** [![ORCID](https://img.shields.io/badge/ORCID-0000--0003--2947--9441-green?logo=orcid&logoColor=white)](https://orcid.org/0000-0003-2947-9441) — *Department of Civil Engineering, Universidad de Alicante*
+* **Antonio Abellán Fernández** [![ORCID](https://img.shields.io/badge/ORCID-0000--0003--2391--6049-green?logo=orcid&logoColor=white)](https://orcid.org/0000-0003-2391-6049)
+
+---
+
+<a id="citation"></a>
+## 🎓 Citation
+
+If you use **DSEpy** in academic research, publications, or commercial projects, please cite both the underlying methodology publications and the software implementation:
+
+### 1. General DSE Methodology & Joint Recognition
+> **Riquelme, A. J., Abellán, A., Tomás, R., & Jaboyedoff, M.** (2014). *A new approach for semi-automatic rock mass joints recognition from 3D point clouds*. Computers & Geosciences, 68, 38–52. https://doi.org/10.1016/j.cageo.2014.03.014
+
+```bibtex
+@article{Riquelme2014,
+  author  = {Riquelme, A. J. and Abell{\'a}n, A. and Tom{\'a}s, R. and Jaboyedoff, M.},
+  title   = {A new approach for semi-automatic rock mass joints recognition from 3D point clouds},
+  journal = {Computers \& Geosciences},
+  volume  = {68},
+  pages   = {38--52},
+  year    = {2014},
+  doi     = {10.1016/j.cageo.2014.03.014}
+}
+```
+
+### 2. Methodological Foundations (PhD Thesis)
+> **Riquelme, A.** (2015). *Uso de nubes de puntos 3D para identificación y caracterización de familias de discontinuidades planas en afloramientos rocosos y evaluación de la calidad geomecánica* [Doctoral dissertation, Universidad de Alicante]. RUA Repository. https://rua.ua.es/entities/publication/78d254b9-1a7b-49b1-a35a-c0edbdeeb225
+
+```bibtex
+@phdthesis{Riquelme2015Thesis,
+  author = {Riquelme, Adri{\'a}n},
+  title  = {Uso de nubes de puntos 3D para identificación y caracterización de familias de discontinuidades planas en afloramientos rocosos y evaluación de la calidad geomecánica},
+  school = {Universidad de Alicante},
+  year   = {2015},
+  url    = {[https://rua.ua.es/entities/publication/78d254b9-1a7b-49b1-a35a-c0edbdeeb225](https://rua.ua.es/entities/publication/78d254b9-1a7b-49b1-a35a-c0edbdeeb225)}
+}
+```
+
+### 3. Normal Spacing Analysis Method
+> **Riquelme, A., Abellán, A., & Tomás, R.** (2015). *Discontinuity spacing analysis in rock masses using 3D point clouds*. Engineering Geology, 195, 185–195. https://doi.org/10.1016/j.enggeo.2015.06.009
+
+```bibtex
+@article{Riquelme2015Spacing,
+  author  = {Riquelme, A. and Abell{\'a}n, A. and Tom{\'a}s, R.},
+  title   = {Discontinuity spacing analysis in rock masses using 3D point clouds},
+  journal = {Engineering Geology},
+  volume  = {195},
+  pages   = {185--195},
+  year    = {2015},
+  doi     = {10.1016/j.enggeo.2015.06.009}
+}
+```
+
+### 4. Persistence Estimation Method
+> **Riquelme, A., Tomás, R., Cano, M., Pastor, J. L., & Abellán, A.** (2018). *Automatic Mapping of Discontinuity Persistence on Rock Masses Using 3D Point Clouds*. Rock Mechanics and Rock Engineering, 51(10), 3005–3028. https://doi.org/10.1007/s00603-018-1519-9
+
+```bibtex
+@article{Riquelme2018Persistence,
+  author  = {Riquelme, A. and Tom{\'a}s, R. and Cano, M. and Pastor, J. L. and Abell{\'a}n, A.},
+  title   = {Automatic Mapping of Discontinuity Persistence on Rock Masses Using 3D Point Clouds},
+  journal = {Rock Mechanics and Rock Engineering},
+  volume  = {51},
+  number  = {10},
+  pages   = {3005--3028},
+  year    = {2018},
+  doi     = {10.1007/s00603-018-1519-9}
+}
+```
+
+### 5. Normal Vector Colour Mapping & Density Analysis
+> **Riquelme, A., Tomás, R., Cano, M., Pastor, J. L., & Abellán, A.** (2026). *Orientation-based colour mapping and spherical density analysis for rock discontinuity detection in 3D point clouds of roadcut slopes*. Journal of Rock Mechanics and Geotechnical Engineering. https://doi.org/10.1016/j.jrmge.2025.12.059
+
+```bibtex
+@article{Riquelme2026Colour,
+  author  = {Riquelme, A. and Tom{\'a}s, R. and Cano, M. and Pastor, J. L. and Abell{\'a}n, A.},
+  title   = {Orientation-based colour mapping and spherical density analysis for rock discontinuity detection in 3D point clouds of roadcut slopes},
+  journal = {Journal of Rock Mechanics and Geotechnical Engineering},
+  year    = {2026},
+  doi     = {10.1016/j.jrmge.2025.12.059}
+}
+```
+
+### 6. DSEpy Software Implementation
+> **Riquelme, A., Tomás, R., & Abellán, A.** (2026). *DSEpy: Python-based Discontinuity Set Extractor for CloudCompare* (Version 1.0.1). GitHub. https://github.com/adririquelme/DSEpy
+
+```bibtex
+@software{Riquelme_DSEpy_2026,
+  author    = {Riquelme, Adri{\'a}n and Tom{\'a}s, Roberto and Abell{\'a}n, Antonio},
+  title     = {{DSEpy: Python-based Discontinuity Set Extractor for CloudCompare}},
+  year      = {2026},
+  version   = {1.0.1},
+  publisher = {GitHub},
+  url       = {[https://github.com/adririquelme/DSEpy](https://github.com/adririquelme/DSEpy)}
+}
+```
+
+*You can also export citation formats directly from the [`CITATION.cff`](CITATION.cff) file on GitHub.*
+
+---
+
+<a id="license"></a>
+## 📄 License
+
+Distributed under the **GNU General Public License v3.0 (GPL-3.0)**. See [`LICENSE`](LICENSE) for more details. Compatible with the open-source CloudCompare ecosystem.
