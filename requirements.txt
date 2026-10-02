@@ -1,4 +1,4 @@
-# DSEPy 1.0.0 core runtime dependencies
+# DSEPy 1.0.2 core runtime dependencies
 #
 # Install these packages in the Python environment used by CloudCompare's
 # Python/pycc runtime. Do not install them into an unrelated system Python
@@ -8,6 +8,7 @@ numpy
 scipy
 matplotlib
 Pillow
+scikit-learn>=1.3.0  # HDBSCAN clustering in Step 3
 
 # Optional packages:
 # colorcet  - additional scientific colour maps

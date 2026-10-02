@@ -218,8 +218,8 @@ importlib.reload(colour_opt)
 
 class DSEProgressDialog:
     """Modal progress dialog for real-time tracking with cancellation support."""
-    def __init__(self, parent, title=None):
-        self._tr = getattr(parent, "tr", lambda key, **values: key)
+    def __init__(self, parent, title=None, translator=None):
+        self._tr = translator or getattr(parent, "tr", lambda key, **values: key)
         if title is None:
             title = self._tr("progress.dialog_title")
         self.top = tk.Toplevel(parent)
@@ -460,6 +460,8 @@ class DSEMainApp:
             "labels": 1, "js_cone": 30.0, "k_neighbor": 4,
             "k_sigma": 2.0, "dbscan_minpts": 4,
             "minimum_cluster_size": 100, "merge_sigma": 1.5,
+            "clustering_method": "DBSCAN", "hdbscan_min_samples": 4,
+            "hdbscan_selection": "EOM",
             "fix_orientation": 1, "sort_index": 0,
             "random_seed": "", "create_clouds": 1,
             "export_family_clouds": 1,
@@ -487,6 +489,9 @@ class DSEMainApp:
             "js_cone": float(self.spin_js_cone.get()), "k_neighbor": int(self.spin_k_neighbor.get()),
             "k_sigma": float(self.spin_k_sigma.get()), "dbscan_minpts": int(self.spin_dbscan_minpts.get()),
             "minimum_cluster_size": int(self.spin_min_cluster_size.get()),
+            "clustering_method": self._canonical_clustering_method(),
+            "hdbscan_min_samples": int(self.spin_hdbscan_min_samples.get()),
+            "hdbscan_selection": self._canonical_hdbscan_selection(),
             "merge_sigma": float(self.spin_merge_sigma.get()),
             "fix_orientation": int(self.fix_orientation_var.get()),
             "sort_index": int(self.sort_combo.current()), "random_seed": self.ent_random_seed.get().strip(),
@@ -522,6 +527,10 @@ class DSEMainApp:
         self._set_control(self.spin_k_sigma, s["k_sigma"])
         self._set_control(self.spin_dbscan_minpts, s["dbscan_minpts"])
         self._set_control(self.spin_min_cluster_size, s["minimum_cluster_size"])
+        self.clustering_method_combo.set(self.tx(s["clustering_method"]))
+        self._set_control(self.spin_hdbscan_min_samples, s["hdbscan_min_samples"])
+        self.hdbscan_selection_combo.set(self.tx(s["hdbscan_selection"]))
+        self._update_clustering_controls()
         self._set_control(self.spin_merge_sigma, s["merge_sigma"])
         self.fix_orientation_var.set(s["fix_orientation"])
         self.sort_combo.current(min(max(int(s["sort_index"]), 0), 2))
@@ -1073,6 +1082,34 @@ class DSEMainApp:
             "convex": "convex", "disk": "disk", "ellipse": "ellipse", "rectangle": "rectangle",
         }.get(value, value)
 
+    def _canonical_clustering_method(self):
+        value = self.clustering_method_var.get()
+        return {
+            self.tx("DBSCAN"): "DBSCAN",
+            self.tx("HDBSCAN"): "HDBSCAN",
+            "DBSCAN": "DBSCAN", "HDBSCAN": "HDBSCAN",
+        }.get(value, "DBSCAN")
+
+    def _canonical_hdbscan_selection(self):
+        value = self.hdbscan_selection_var.get()
+        return {
+            self.tx("EOM"): "EOM", self.tx("Leaf"): "Leaf",
+            "EOM": "EOM", "Leaf": "Leaf",
+        }.get(value, "EOM")
+
+    def _update_clustering_controls(self, event=None):
+        use_dbscan = self._canonical_clustering_method() == "DBSCAN"
+        dbscan_state = tk.NORMAL if use_dbscan else tk.DISABLED
+        hdbscan_state = tk.DISABLED if use_dbscan else tk.NORMAL
+        for control in (
+                self.spin_k_neighbor, self.spin_k_sigma,
+                self.spin_dbscan_minpts):
+            control.configure(state=dbscan_state)
+        self.spin_hdbscan_min_samples.configure(state=hdbscan_state)
+        self.hdbscan_selection_combo.configure(
+            state="readonly" if not use_dbscan else "disabled"
+        )
+
     def _refresh_language_dependent_controls(self):
         if hasattr(self, "log_frame"):
             self.log_frame.configure(text=" " + self.tr("gui.execution_log") + " ")
@@ -1124,6 +1161,19 @@ class DSEMainApp:
                 "convex": self.tx("facet.type.convex"), "disk": self.tx("facet.type.disk"),
                 "ellipse": self.tx("facet.type.ellipse"), "rectangle": self.tx("facet.type.rectangle"),
             }.get(current_facet, current_facet))
+        if hasattr(self, "clustering_method_combo"):
+            method = self._canonical_clustering_method()
+            self.clustering_method_combo.configure(values=(
+                self.tx("DBSCAN"), self.tx("HDBSCAN")
+            ))
+            self.clustering_method_combo.set(self.tx(method))
+        if hasattr(self, "hdbscan_selection_combo"):
+            selection = self._canonical_hdbscan_selection()
+            self.hdbscan_selection_combo.configure(values=(
+                self.tx("EOM"), self.tx("Leaf")
+            ))
+            self.hdbscan_selection_combo.set(self.tx(selection))
+            self._update_clustering_controls()
 
         if hasattr(self, "workflow_notebook"):
             labels=(self.tx("1. Principal poles"),self.tx("2. DS classification"),self.tx("3. Spatial clustering"))
@@ -1636,6 +1686,25 @@ class DSEMainApp:
 
         self.cluster_parameters = ttk.LabelFrame(self.grp_step3, text=" " + self.tr("Cluster analysis") + " ")
         self.cluster_parameters.pack(fill=tk.X, padx=4, pady=(4, 3))
+        f_clustering_method = tk.Frame(self.cluster_parameters)
+        f_clustering_method.pack(fill=tk.X, pady=2)
+        tk.Label(
+            f_clustering_method, text=self.tr("gui.clustering_method")
+        ).pack(side=tk.LEFT, padx=5)
+        self.clustering_method_var = tk.StringVar(master=self.root, value="DBSCAN")
+        self.clustering_method_combo = ttk.Combobox(
+            f_clustering_method, textvariable=self.clustering_method_var,
+            values=(self.tx("DBSCAN"), self.tx("HDBSCAN")),
+            state="readonly", width=16
+        )
+        self.clustering_method_combo.set(self.tx("DBSCAN"))
+        self.clustering_method_combo.pack(side=tk.RIGHT, padx=5)
+        self.clustering_method_combo.bind(
+            "<<ComboboxSelected>>", self._update_clustering_controls
+        )
+        self.add_tooltip(
+            self.clustering_method_combo, "tip.clustering_method"
+        )
         f_kknn = tk.Frame(self.cluster_parameters)
         f_kknn.pack(fill=tk.X, pady=2)
         tk.Label(f_kknn, text=self.tx("K-th Neighbor (K):")).pack(side=tk.LEFT, padx=5)
@@ -1656,13 +1725,51 @@ class DSEMainApp:
         f_dbscan_minpts.pack(fill=tk.X, pady=2)
         tk.Label(f_dbscan_minpts, text=self.tr("gui.dbscan_minpts")).pack(side=tk.LEFT, padx=5)
         self.spin_dbscan_minpts = tk.Spinbox(f_dbscan_minpts, from_=2, to=100, increment=1, width=6)
+        self.spin_dbscan_minpts.delete(0, "end")
+        self.spin_dbscan_minpts.insert(0, "4")
         self.spin_dbscan_minpts.pack(side=tk.RIGHT, padx=5)
+
+        f_hdbscan_min_samples = tk.Frame(self.cluster_parameters)
+        f_hdbscan_min_samples.pack(fill=tk.X, pady=2)
+        tk.Label(
+            f_hdbscan_min_samples,
+            text=self.tr("gui.hdbscan_min_samples")
+        ).pack(side=tk.LEFT, padx=5)
+        self.spin_hdbscan_min_samples = tk.Spinbox(
+            f_hdbscan_min_samples, from_=1, to=1000000,
+            increment=1, width=8
+        )
+        self.spin_hdbscan_min_samples.delete(0, "end")
+        self.spin_hdbscan_min_samples.insert(0, "4")
+        self.spin_hdbscan_min_samples.pack(side=tk.RIGHT, padx=5)
+        self.add_tooltip(
+            self.spin_hdbscan_min_samples, "tip.hdbscan_min_samples"
+        )
+
+        f_hdbscan_selection = tk.Frame(self.cluster_parameters)
+        f_hdbscan_selection.pack(fill=tk.X, pady=2)
+        tk.Label(
+            f_hdbscan_selection, text=self.tr("gui.cluster_selection")
+        ).pack(side=tk.LEFT, padx=5)
+        self.hdbscan_selection_var = tk.StringVar(master=self.root, value="EOM")
+        self.hdbscan_selection_combo = ttk.Combobox(
+            f_hdbscan_selection, textvariable=self.hdbscan_selection_var,
+            values=(self.tx("EOM"), self.tx("Leaf")),
+            state="readonly", width=16
+        )
+        self.hdbscan_selection_combo.set(self.tx("EOM"))
+        self.hdbscan_selection_combo.pack(side=tk.RIGHT, padx=5)
+        self.add_tooltip(
+            self.hdbscan_selection_combo, "tip.cluster_selection"
+        )
 
         f_mincluster = tk.Frame(self.cluster_parameters)
         f_mincluster.pack(fill=tk.X, pady=2)
         tk.Label(f_mincluster, text=self.tr("gui.min_cluster_size")).pack(side=tk.LEFT, padx=5)
         self.spin_min_cluster_size = tk.Spinbox(f_mincluster, from_=1, to=1000000, increment=10, width=8)
         self.spin_min_cluster_size.pack(side=tk.RIGHT, padx=5)
+        self.add_tooltip(self.spin_min_cluster_size, "tip.minclustersize")
+        self._update_clustering_controls()
 
         self.plane_parameters = ttk.LabelFrame(self.grp_step3, text=" " + self.tr("Plane calculation") + " ")
         self.plane_parameters.pack(fill=tk.X, padx=4, pady=3)
@@ -2613,7 +2720,8 @@ class DSEMainApp:
                     else [int(family.get())]
                 )
                 progress_dialog = DSEProgressDialog(
-                    self.root, title=self.tx("Normal Spacing Progress")
+                    self.root, title=self.tx("Normal Spacing Progress"),
+                    translator=self.tr
                 )
                 results = []
                 family_count = len(selected)
@@ -2780,7 +2888,8 @@ class DSEMainApp:
             try:
                 progress_dialog = DSEProgressDialog(
                     self.root,
-                    title=self.tx("Persistence Progress")
+                    title=self.tx("Persistence Progress"),
+                    translator=self.tr
                 )
 
                 def persistence_progress(percent, status_text):
@@ -3400,7 +3509,10 @@ class DSEMainApp:
         self.log(self.tr("log.step2_header", cone=cone_thresh))
         self.log(self.tr("log.scalar_writer_backend"))
 
-        progress_dialog = DSEProgressDialog(self.root, title=self.tx("DS Family Classification Progress"))
+        progress_dialog = DSEProgressDialog(
+            self.root, title=self.tx("DS Family Classification Progress"),
+            translator=self.tr
+        )
 
         def progress_callback(percent, status_text):
             self.log(f"  [JS] {self.tx(status_text)}")
@@ -3697,12 +3809,26 @@ class DSEMainApp:
             messagebox.showwarning(self.tx("Workflow Error"), self.tx("No principal poles. Run Step 1 first."))
             return
 
+        clustering_method = self._canonical_clustering_method()
+        hdbscan_min_samples = 4
+        hdbscan_selection = "EOM"
         try:
-            k_neighbor = int(self.spin_k_neighbor.get())
-            k_sigma = float(self.spin_k_sigma.get())
-            dbscan_minpts = int(self.spin_dbscan_minpts.get())
             minimum_cluster_size = int(self.spin_min_cluster_size.get())
             merge_k_sigmas = float(self.spin_merge_sigma.get())
+            if clustering_method == "DBSCAN":
+                k_neighbor = int(self.spin_k_neighbor.get())
+                k_sigma = float(self.spin_k_sigma.get())
+                dbscan_minpts = int(self.spin_dbscan_minpts.get())
+            else:
+                k_neighbor = 4
+                k_sigma = 2.0
+                dbscan_minpts = 4
+                hdbscan_min_samples = int(
+                    self.spin_hdbscan_min_samples.get()
+                )
+                hdbscan_selection = self._canonical_hdbscan_selection()
+                if hdbscan_min_samples < 1 or minimum_cluster_size < 1:
+                    raise ValueError
         except ValueError:
             messagebox.showerror(self.tx("Error"), self.tx("Enter valid numeric parameters."))
             return
@@ -3719,14 +3845,36 @@ class DSEMainApp:
         self._save_method_settings()
         self.log(self.tr("log.step3_header"))
         self.log(self.tr("log.scalar_writer_backend"))
-        self.log(self.tr("log.cluster_params", k=k_neighbor, k_sigma=f"{k_sigma:.1f}", minpts=dbscan_minpts, minsize=minimum_cluster_size, merge=f"{merge_k_sigmas:.1f}", sort=sort_by, fix=fix_orientation))
+        self.log(self.tr(
+            "log.clustering_method", method=self.tx(clustering_method)
+        ))
+        if clustering_method == "DBSCAN":
+            self.log(self.tr(
+                "log.cluster_params", k=k_neighbor,
+                k_sigma=f"{k_sigma:.1f}", minpts=dbscan_minpts,
+                minsize=minimum_cluster_size,
+                merge=f"{merge_k_sigmas:.1f}", sort=sort_by,
+                fix=fix_orientation
+            ))
+        else:
+            self.log(self.tr(
+                "log.hdbscan_params", min_samples=hdbscan_min_samples,
+                minsize=minimum_cluster_size,
+                selection=self.tx(hdbscan_selection),
+                n_jobs=-1,
+                merge=f"{merge_k_sigmas:.1f}", sort=sort_by,
+                fix=fix_orientation
+            ))
 
         stats = None
         results = None
         stats_msg = None
         plane_msg = None
 
-        progress_dialog = DSEProgressDialog(self.root, title=self.tx("Clusterize Progress"))
+        progress_dialog = DSEProgressDialog(
+            self.root, title=self.tx("Clusterize Progress"),
+            translator=self.tr
+        )
 
         def progress_callback(percent, status_text):
             return progress_dialog.update_progress(percent, status_text)
@@ -3743,7 +3891,10 @@ class DSEMainApp:
                 minimum_cluster_size=minimum_cluster_size,
                 fix_orientation=fix_orientation, merge_k_sigmas=merge_k_sigmas,
                 sort_by=sort_by, random_seed=random_seed,
-                progress_callback=progress_callback
+                progress_callback=progress_callback,
+                clustering_method=clustering_method,
+                hdbscan_min_samples=hdbscan_min_samples,
+                hdbscan_selection=hdbscan_selection
             )
             timings["Complete cluster analysis and scalar writing"] = (
                 time.perf_counter() - stage_start
@@ -3764,9 +3915,26 @@ class DSEMainApp:
 
         for fam_id in sorted(stats.keys()):
             info = stats[fam_id]
-            self.log(
-                self.tr("log.cluster_fam_stats", family=fam_id, eps=f"{info['eps']:.4f}", before=info['clusters_before_merge'], after=info['clusters_after_merge'], pts=info['pts'], noise=info['raw_noise'], rejected=info['rejected_points'], zero=info['zero_points'])
-            )
+            if clustering_method == "DBSCAN":
+                self.log(self.tr(
+                    "log.cluster_fam_stats", family=fam_id,
+                    eps=f"{info['eps']:.4f}",
+                    before=info['clusters_before_merge'],
+                    after=info['clusters_after_merge'], pts=info['pts'],
+                    noise=info['raw_noise'],
+                    rejected=info['rejected_points'],
+                    zero=info['zero_points'],
+                    seconds=f"{info['clustering_seconds']:.3f}"
+                ))
+            else:
+                self.log(self.tr(
+                    "log.hdbscan_fam_stats", family=fam_id,
+                    before=info['clusters_before_merge'],
+                    after=info['clusters_after_merge'], pts=info['pts'],
+                    noise=info['raw_noise'],
+                    rejected=info['rejected_points'],
+                    zero=info['zero_points']
+                ))
 
         if results is None:
             if plane_msg and "cancelled" in plane_msg.lower():

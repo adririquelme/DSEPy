@@ -1,0 +1,346 @@
+[02/10/26 09:14:36] [en] Language changed to English.
+[02/10/26 09:14:36] [en] Greetings Professor Falken. Shall we play a game?
+[02/10/26 09:14:36] [en] DSEPy version 1.0.2.
+[02/10/26 09:14:36] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
+[02/10/26 09:14:36] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
+[02/10/26 09:14:36] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
+[02/10/26 09:14:36] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
+[02/10/26 09:14:36] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
+[02/10/26 09:14:38] [en] === Step 1: Botev KDE2D Density & Principal Poles Calculation ===
+[02/10/26 09:14:38] [en] Spatial Grid Resolution: 128x128 (2^7)
+[02/10/26 09:14:38] [en] Computing density matrix for 3805666 orientation poles...
+[02/10/26 09:14:38] [en] Timing - Density computation: 0.172 s
+[02/10/26 09:14:38] [en] Detecting local peaks with angular separation >= 15.0 deg...
+[02/10/26 09:14:38] [en] Timing - Principal pole search: 0.001 s
+[02/10/26 09:14:39] [en] === Fisher concentration by family (provisional) ===
+[02/10/26 09:14:39] [en]  -> Family J_1: K=53.01, N=1905565, R=1869617.5547
+[02/10/26 09:14:39] [en]  -> Family J_2: K=36.99, N=319836, R=311190.1755
+[02/10/26 09:14:39] [en]  -> Family J_3: K=35.00, N=344857, R=335003.1697
+[02/10/26 09:14:39] [en]  -> Family J_4: K=38.00, N=570572, R=555555.9655
+[02/10/26 09:14:39] [en]  -> Family J_5: K=32.35, N=146063, R=141548.2218
+[02/10/26 09:14:39] [en]  -> Family J_6: K=29.40, N=148036, R=143000.0707
+[02/10/26 09:14:39] [en] Timing - Provisional Fisher K: 0.788 s
+[02/10/26 09:14:39] [en] Extracted 6 principal poles.
+[02/10/26 09:14:40] [en] Timing - Step 1 total: 1.978 s
+[02/10/26 09:14:42] [en] === Step 2: Classifying Point Cloud into DS Field (Cone: 30.0 deg) ===
+[02/10/26 09:14:42] [en] Scalar writer: stable C++ ccScalarField.setValue backend.
+[02/10/26 09:14:42] [en]   [JS] Reading 3D normals from 3805666 points...
+[02/10/26 09:14:42] [en]   [JS] Calculating angular distance to 6 principal poles...
+[02/10/26 09:14:42] [en]   [JS] Writing 'Discontinuity Set (DS)' scalar field to CloudCompare...
+[02/10/26 09:14:43] [en]   [JS] === JS Classification Completed in 1.73 s ===
+Total points processed: 3805666
+JS cone threshold: 30.0
+Point count by family:
+   J_0 (Unclassified / outside cone): 370737 pts (9.74%)
+   Family J_1: 1905565 pts (50.07%)
+   Family J_2: 319836 pts (8.40%)
+   Family J_3: 344857 pts (9.06%)
+   Family J_4: 570572 pts (14.99%)
+   Family J_5: 146063 pts (3.84%)
+   Family J_6: 148036 pts (3.89%)
+[02/10/26 09:14:43] [en] Discontinuity Set (DS) scalar field created from the reviewed principal-pole table.
+[02/10/26 09:14:43] [en] Timing - DS classification and writing: 1.785 s
+[02/10/26 09:14:43] [en]  -> DS = 0 (Unclassified background): 370737 pts (9.74%)
+[02/10/26 09:14:43] [en]  -> DS = 1 (Set J_1): 1905565 pts (50.07%)
+[02/10/26 09:14:43] [en]  -> DS = 2 (Set J_2): 319836 pts (8.40%)
+[02/10/26 09:14:43] [en]  -> DS = 3 (Set J_3): 344857 pts (9.06%)
+[02/10/26 09:14:43] [en]  -> DS = 4 (Set J_4): 570572 pts (14.99%)
+[02/10/26 09:14:43] [en]  -> DS = 5 (Set J_5): 146063 pts (3.84%)
+[02/10/26 09:14:43] [en]  -> DS = 6 (Set J_6): 148036 pts (3.89%)
+[02/10/26 09:14:45] [en] === Fisher concentration by family (final) ===
+[02/10/26 09:14:45] [en]  -> Family J_1: K=53.01, N=1905565, R=1869617.5547
+[02/10/26 09:14:45] [en]  -> Family J_2: K=36.99, N=319836, R=311190.1755
+[02/10/26 09:14:45] [en]  -> Family J_3: K=35.00, N=344857, R=335003.1697
+[02/10/26 09:14:45] [en]  -> Family J_4: K=38.00, N=570572, R=555555.9655
+[02/10/26 09:14:45] [en]  -> Family J_5: K=32.35, N=146063, R=141548.2218
+[02/10/26 09:14:45] [en]  -> Family J_6: K=29.40, N=148036, R=143000.0707
+[02/10/26 09:14:45] [en] Timing - Final Fisher K: 0.724 s
+[02/10/26 09:14:45] [en] Timing - Step 2 total: 3.384 s
+[02/10/26 09:15:15] [en] === Step 3: DBSCAN Clustering + Plane Fitting ===
+[02/10/26 09:15:15] [en] Scalar writer: stable C++ ccScalarField.setValue backend.
+[02/10/26 09:15:15] [en] Clustering method: HDBSCAN
+[02/10/26 09:15:15] [en] HDBSCAN parameters: Min Samples=4, Min Cluster Size=100, Selection=EOM | Merge k_sigmas=1.5 | Sort: size | Fix orient: True
+[02/10/26 09:15:24] [en] HDBSCAN requires scikit-learn 1.3 or later in CloudCompare's Python environment. Install a compatible scikit-learn version there and restart DSEPy.
+[02/10/26 09:15:35] [en] === Step 3: DBSCAN Clustering + Plane Fitting ===
+[02/10/26 09:15:35] [en] Scalar writer: stable C++ ccScalarField.setValue backend.
+[02/10/26 09:15:35] [en] Clustering method: HDBSCAN
+[02/10/26 09:15:35] [en] HDBSCAN parameters: Min Samples=4, Min Cluster Size=100, Selection=EOM | Merge k_sigmas=1.5 | Sort: size | Fix orient: True
+[02/10/26 09:16:35] [en] HDBSCAN requires scikit-learn 1.3 or later in CloudCompare's Python environment. Install a compatible scikit-learn version there and restart DSEPy.
+[02/10/26 09:18:25] [en] === Step 3: DBSCAN Clustering + Plane Fitting ===
+[02/10/26 09:18:25] [en] Scalar writer: stable C++ ccScalarField.setValue backend.
+[02/10/26 09:18:25] [en] Clustering method: HDBSCAN
+[02/10/26 09:18:25] [en] HDBSCAN parameters: Min Samples=4, Min Cluster Size=100, Selection=EOM | Merge k_sigmas=1.5 | Sort: size | Fix orient: True
+[02/10/26 09:18:28] [en] HDBSCAN requires scikit-learn 1.3 or later in CloudCompare's Python environment. Install a compatible scikit-learn version there and restart DSEPy.
+[02/10/26 09:19:01] [en] Language changed to English.
+[02/10/26 09:19:01] [en] Greetings Professor Falken. Shall we play a game?
+[02/10/26 09:19:01] [en] DSEPy version 1.0.2.
+[02/10/26 09:19:01] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
+[02/10/26 09:19:01] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
+[02/10/26 09:19:01] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
+[02/10/26 09:19:01] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
+[02/10/26 09:19:01] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
+[02/10/26 09:19:04] [en] === Step 1: Botev KDE2D Density & Principal Poles Calculation ===
+[02/10/26 09:19:04] [en] Spatial Grid Resolution: 128x128 (2^7)
+[02/10/26 09:19:04] [en] Computing density matrix for 3805666 orientation poles...
+[02/10/26 09:19:05] [en] Timing - Density computation: 0.178 s
+[02/10/26 09:19:05] [en] Detecting local peaks with angular separation >= 15.0 deg...
+[02/10/26 09:19:05] [en] Timing - Principal pole search: 0.001 s
+[02/10/26 09:19:05] [en] === Fisher concentration by family (provisional) ===
+[02/10/26 09:19:05] [en]  -> Family J_1: K=53.01, N=1905565, R=1869617.5547
+[02/10/26 09:19:05] [en]  -> Family J_2: K=36.99, N=319836, R=311190.1755
+[02/10/26 09:19:05] [en]  -> Family J_3: K=35.00, N=344857, R=335003.1697
+[02/10/26 09:19:05] [en]  -> Family J_4: K=38.00, N=570572, R=555555.9655
+[02/10/26 09:19:05] [en]  -> Family J_5: K=32.35, N=146063, R=141548.2218
+[02/10/26 09:19:05] [en]  -> Family J_6: K=29.40, N=148036, R=143000.0707
+[02/10/26 09:19:05] [en] Timing - Provisional Fisher K: 0.893 s
+[02/10/26 09:19:05] [en] Extracted 6 principal poles.
+[02/10/26 09:19:06] [en] Timing - Step 1 total: 2.019 s
+[02/10/26 09:19:08] [en] === Step 2: Classifying Point Cloud into DS Field (Cone: 30.0 deg) ===
+[02/10/26 09:19:08] [en] Scalar writer: stable C++ ccScalarField.setValue backend.
+[02/10/26 09:19:08] [en]   [JS] Reading 3D normals from 3805666 points...
+[02/10/26 09:19:09] [en]   [JS] Calculating angular distance to 6 principal poles...
+[02/10/26 09:19:09] [en]   [JS] Writing 'Discontinuity Set (DS)' scalar field to CloudCompare...
+[02/10/26 09:19:10] [en]   [JS] === JS Classification Completed in 1.67 s ===
+Total points processed: 3805666
+JS cone threshold: 30.0
+Point count by family:
+   J_0 (Unclassified / outside cone): 370737 pts (9.74%)
+   Family J_1: 1905565 pts (50.07%)
+   Family J_2: 319836 pts (8.40%)
+   Family J_3: 344857 pts (9.06%)
+   Family J_4: 570572 pts (14.99%)
+   Family J_5: 146063 pts (3.84%)
+   Family J_6: 148036 pts (3.89%)
+[02/10/26 09:19:10] [en] Discontinuity Set (DS) scalar field created from the reviewed principal-pole table.
+[02/10/26 09:19:10] [en] Timing - DS classification and writing: 1.729 s
+[02/10/26 09:19:10] [en]  -> DS = 0 (Unclassified background): 370737 pts (9.74%)
+[02/10/26 09:19:10] [en]  -> DS = 1 (Set J_1): 1905565 pts (50.07%)
+[02/10/26 09:19:10] [en]  -> DS = 2 (Set J_2): 319836 pts (8.40%)
+[02/10/26 09:19:10] [en]  -> DS = 3 (Set J_3): 344857 pts (9.06%)
+[02/10/26 09:19:10] [en]  -> DS = 4 (Set J_4): 570572 pts (14.99%)
+[02/10/26 09:19:10] [en]  -> DS = 5 (Set J_5): 146063 pts (3.84%)
+[02/10/26 09:19:10] [en]  -> DS = 6 (Set J_6): 148036 pts (3.89%)
+[02/10/26 09:19:12] [en] === Fisher concentration by family (final) ===
+[02/10/26 09:19:12] [en]  -> Family J_1: K=53.01, N=1905565, R=1869617.5547
+[02/10/26 09:19:12] [en]  -> Family J_2: K=36.99, N=319836, R=311190.1755
+[02/10/26 09:19:12] [en]  -> Family J_3: K=35.00, N=344857, R=335003.1697
+[02/10/26 09:19:12] [en]  -> Family J_4: K=38.00, N=570572, R=555555.9655
+[02/10/26 09:19:12] [en]  -> Family J_5: K=32.35, N=146063, R=141548.2218
+[02/10/26 09:19:12] [en]  -> Family J_6: K=29.40, N=148036, R=143000.0707
+[02/10/26 09:19:12] [en] Timing - Final Fisher K: 0.734 s
+[02/10/26 09:19:12] [en] Timing - Step 2 total: 3.301 s
+[02/10/26 09:19:13] [en] === Step 3: DBSCAN Clustering + Plane Fitting ===
+[02/10/26 09:19:13] [en] Scalar writer: stable C++ ccScalarField.setValue backend.
+[02/10/26 09:19:13] [en] Clustering method: HDBSCAN
+[02/10/26 09:19:13] [en] HDBSCAN parameters: Min Samples=4, Min Cluster Size=100, Selection=EOM | Merge k_sigmas=1.5 | Sort: size | Fix orient: True
+[02/10/26 09:19:17] [en] HDBSCAN requires scikit-learn 1.3 or later in CloudCompare's Python environment. Install a compatible scikit-learn version there and restart DSEPy.
+[02/10/26 09:20:44] [en] Language changed to English.
+[02/10/26 09:20:44] [en] Greetings Professor Falken. Shall we play a game?
+[02/10/26 09:20:44] [en] DSEPy version 1.0.2.
+[02/10/26 09:20:44] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
+[02/10/26 09:20:44] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
+[02/10/26 09:20:44] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
+[02/10/26 09:20:44] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
+[02/10/26 09:20:44] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
+[02/10/26 09:20:46] [en] === Step 1: Botev KDE2D Density & Principal Poles Calculation ===
+[02/10/26 09:20:46] [en] Spatial Grid Resolution: 128x128 (2^7)
+[02/10/26 09:20:46] [en] Computing density matrix for 3805666 orientation poles...
+[02/10/26 09:20:46] [en] Timing - Density computation: 0.166 s
+[02/10/26 09:20:46] [en] Detecting local peaks with angular separation >= 15.0 deg...
+[02/10/26 09:20:46] [en] Timing - Principal pole search: 0.001 s
+[02/10/26 09:20:47] [en] === Fisher concentration by family (provisional) ===
+[02/10/26 09:20:47] [en]  -> Family J_1: K=53.01, N=1905565, R=1869617.5547
+[02/10/26 09:20:47] [en]  -> Family J_2: K=36.99, N=319836, R=311190.1755
+[02/10/26 09:20:47] [en]  -> Family J_3: K=35.00, N=344857, R=335003.1697
+[02/10/26 09:20:47] [en]  -> Family J_4: K=38.00, N=570572, R=555555.9655
+[02/10/26 09:20:47] [en]  -> Family J_5: K=32.35, N=146063, R=141548.2218
+[02/10/26 09:20:47] [en]  -> Family J_6: K=29.40, N=148036, R=143000.0707
+[02/10/26 09:20:47] [en] Timing - Provisional Fisher K: 0.849 s
+[02/10/26 09:20:47] [en] Extracted 6 principal poles.
+[02/10/26 09:20:48] [en] Timing - Step 1 total: 2.020 s
+[02/10/26 09:20:50] [en] === Step 2: Classifying Point Cloud into DS Field (Cone: 30.0 deg) ===
+[02/10/26 09:20:50] [en] Scalar writer: stable C++ ccScalarField.setValue backend.
+[02/10/26 09:20:50] [en]   [JS] Reading 3D normals from 3805666 points...
+[02/10/26 09:20:51] [en]   [JS] Calculating angular distance to 6 principal poles...
+[02/10/26 09:20:51] [en]   [JS] Writing 'Discontinuity Set (DS)' scalar field to CloudCompare...
+[02/10/26 09:20:52] [en]   [JS] === JS Classification Completed in 1.72 s ===
+Total points processed: 3805666
+JS cone threshold: 30.0
+Point count by family:
+   J_0 (Unclassified / outside cone): 370737 pts (9.74%)
+   Family J_1: 1905565 pts (50.07%)
+   Family J_2: 319836 pts (8.40%)
+   Family J_3: 344857 pts (9.06%)
+   Family J_4: 570572 pts (14.99%)
+   Family J_5: 146063 pts (3.84%)
+   Family J_6: 148036 pts (3.89%)
+[02/10/26 09:20:52] [en] Discontinuity Set (DS) scalar field created from the reviewed principal-pole table.
+[02/10/26 09:20:52] [en] Timing - DS classification and writing: 1.775 s
+[02/10/26 09:20:52] [en]  -> DS = 0 (Unclassified background): 370737 pts (9.74%)
+[02/10/26 09:20:52] [en]  -> DS = 1 (Set J_1): 1905565 pts (50.07%)
+[02/10/26 09:20:52] [en]  -> DS = 2 (Set J_2): 319836 pts (8.40%)
+[02/10/26 09:20:52] [en]  -> DS = 3 (Set J_3): 344857 pts (9.06%)
+[02/10/26 09:20:52] [en]  -> DS = 4 (Set J_4): 570572 pts (14.99%)
+[02/10/26 09:20:52] [en]  -> DS = 5 (Set J_5): 146063 pts (3.84%)
+[02/10/26 09:20:52] [en]  -> DS = 6 (Set J_6): 148036 pts (3.89%)
+[02/10/26 09:20:54] [en] === Fisher concentration by family (final) ===
+[02/10/26 09:20:54] [en]  -> Family J_1: K=53.01, N=1905565, R=1869617.5547
+[02/10/26 09:20:54] [en]  -> Family J_2: K=36.99, N=319836, R=311190.1755
+[02/10/26 09:20:54] [en]  -> Family J_3: K=35.00, N=344857, R=335003.1697
+[02/10/26 09:20:54] [en]  -> Family J_4: K=38.00, N=570572, R=555555.9655
+[02/10/26 09:20:54] [en]  -> Family J_5: K=32.35, N=146063, R=141548.2218
+[02/10/26 09:20:54] [en]  -> Family J_6: K=29.40, N=148036, R=143000.0707
+[02/10/26 09:20:54] [en] Timing - Final Fisher K: 0.753 s
+[02/10/26 09:20:54] [en] Timing - Step 2 total: 3.365 s
+[02/10/26 09:20:55] [en] === Step 3: DBSCAN Clustering + Plane Fitting ===
+[02/10/26 09:20:55] [en] Scalar writer: stable C++ ccScalarField.setValue backend.
+[02/10/26 09:20:55] [en] Clustering method: HDBSCAN
+[02/10/26 09:20:55] [en] HDBSCAN parameters: Min Samples=4, Min Cluster Size=100, Selection=EOM | Merge k_sigmas=1.5 | Sort: size | Fix orient: True
+[02/10/26 09:30:06] [en] Language changed to English.
+[02/10/26 09:30:06] [en] Greetings Professor Falken. Shall we play a game?
+[02/10/26 09:30:06] [en] DSEPy version 1.0.2.
+[02/10/26 09:30:06] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
+[02/10/26 09:30:06] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
+[02/10/26 09:30:06] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
+[02/10/26 09:30:06] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
+[02/10/26 09:30:06] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
+[02/10/26 09:30:08] [en] === Step 1: Botev KDE2D Density & Principal Poles Calculation ===
+[02/10/26 09:30:08] [en] Spatial Grid Resolution: 128x128 (2^7)
+[02/10/26 09:30:09] [en] Computing density matrix for 3805666 orientation poles...
+[02/10/26 09:30:09] [en] Timing - Density computation: 0.232 s
+[02/10/26 09:30:09] [en] Detecting local peaks with angular separation >= 15.0 deg...
+[02/10/26 09:30:09] [en] Timing - Principal pole search: 0.001 s
+[02/10/26 09:30:10] [en] === Fisher concentration by family (provisional) ===
+[02/10/26 09:30:10] [en]  -> Family J_1: K=53.01, N=1905565, R=1869617.5547
+[02/10/26 09:30:10] [en]  -> Family J_2: K=36.99, N=319836, R=311190.1755
+[02/10/26 09:30:10] [en]  -> Family J_3: K=35.00, N=344857, R=335003.1697
+[02/10/26 09:30:10] [en]  -> Family J_4: K=38.00, N=570572, R=555555.9655
+[02/10/26 09:30:10] [en]  -> Family J_5: K=32.35, N=146063, R=141548.2218
+[02/10/26 09:30:10] [en]  -> Family J_6: K=29.40, N=148036, R=143000.0707
+[02/10/26 09:30:10] [en] Timing - Provisional Fisher K: 1.005 s
+[02/10/26 09:30:10] [en] Extracted 6 principal poles.
+[02/10/26 09:30:11] [en] Timing - Step 1 total: 2.463 s
+[02/10/26 09:30:13] [en] === Step 2: Classifying Point Cloud into DS Field (Cone: 30.0 deg) ===
+[02/10/26 09:30:13] [en] Scalar writer: stable C++ ccScalarField.setValue backend.
+[02/10/26 09:30:13] [en]   [JS] Reading 3D normals from 3805666 points...
+[02/10/26 09:30:13] [en]   [JS] Calculating angular distance to 6 principal poles...
+[02/10/26 09:30:14] [en]   [JS] Writing 'Discontinuity Set (DS)' scalar field to CloudCompare...
+[02/10/26 09:30:15] [en]   [JS] === JS Classification Completed in 1.86 s ===
+Total points processed: 3805666
+JS cone threshold: 30.0
+Point count by family:
+   J_0 (Unclassified / outside cone): 370737 pts (9.74%)
+   Family J_1: 1905565 pts (50.07%)
+   Family J_2: 319836 pts (8.40%)
+   Family J_3: 344857 pts (9.06%)
+   Family J_4: 570572 pts (14.99%)
+   Family J_5: 146063 pts (3.84%)
+   Family J_6: 148036 pts (3.89%)
+[02/10/26 09:30:15] [en] Discontinuity Set (DS) scalar field created from the reviewed principal-pole table.
+[02/10/26 09:30:15] [en] Timing - DS classification and writing: 1.927 s
+[02/10/26 09:30:15] [en]  -> DS = 0 (Unclassified background): 370737 pts (9.74%)
+[02/10/26 09:30:15] [en]  -> DS = 1 (Set J_1): 1905565 pts (50.07%)
+[02/10/26 09:30:15] [en]  -> DS = 2 (Set J_2): 319836 pts (8.40%)
+[02/10/26 09:30:15] [en]  -> DS = 3 (Set J_3): 344857 pts (9.06%)
+[02/10/26 09:30:15] [en]  -> DS = 4 (Set J_4): 570572 pts (14.99%)
+[02/10/26 09:30:15] [en]  -> DS = 5 (Set J_5): 146063 pts (3.84%)
+[02/10/26 09:30:15] [en]  -> DS = 6 (Set J_6): 148036 pts (3.89%)
+[02/10/26 09:30:16] [en] === Fisher concentration by family (final) ===
+[02/10/26 09:30:16] [en]  -> Family J_1: K=53.01, N=1905565, R=1869617.5547
+[02/10/26 09:30:16] [en]  -> Family J_2: K=36.99, N=319836, R=311190.1755
+[02/10/26 09:30:16] [en]  -> Family J_3: K=35.00, N=344857, R=335003.1697
+[02/10/26 09:30:16] [en]  -> Family J_4: K=38.00, N=570572, R=555555.9655
+[02/10/26 09:30:16] [en]  -> Family J_5: K=32.35, N=146063, R=141548.2218
+[02/10/26 09:30:16] [en]  -> Family J_6: K=29.40, N=148036, R=143000.0707
+[02/10/26 09:30:16] [en] Timing - Final Fisher K: 0.751 s
+[02/10/26 09:30:16] [en] Timing - Step 2 total: 3.572 s
+[02/10/26 09:30:18] [en] === Step 3: DBSCAN Clustering + Plane Fitting ===
+[02/10/26 09:30:18] [en] Scalar writer: stable C++ ccScalarField.setValue backend.
+[02/10/26 09:30:18] [en] Clustering method: HDBSCAN
+[02/10/26 09:30:18] [en] HDBSCAN parameters: Min Samples=4, Min Cluster Size=100, Selection=EOM | Merge k_sigmas=1.5 | Sort: size | Fix orient: True
+[02/10/26 09:41:42] [en] Language changed to English.
+[02/10/26 09:41:42] [en] Greetings Professor Falken. Shall we play a game?
+[02/10/26 09:41:42] [en] DSEPy version 1.0.2.
+[02/10/26 09:41:42] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
+[02/10/26 09:41:42] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
+[02/10/26 09:41:42] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
+[02/10/26 09:41:42] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
+[02/10/26 09:41:42] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
+[02/10/26 09:41:45] [en] === Step 1: Botev KDE2D Density & Principal Poles Calculation ===
+[02/10/26 09:41:45] [en] Spatial Grid Resolution: 128x128 (2^7)
+[02/10/26 09:41:45] [en] Computing density matrix for 3805666 orientation poles...
+[02/10/26 09:41:46] [en] Timing - Density computation: 0.201 s
+[02/10/26 09:41:46] [en] Detecting local peaks with angular separation >= 15.0 deg...
+[02/10/26 09:41:46] [en] Timing - Principal pole search: 0.001 s
+[02/10/26 09:41:47] [en] === Fisher concentration by family (provisional) ===
+[02/10/26 09:41:47] [en]  -> Family J_1: K=53.01, N=1905565, R=1869617.5547
+[02/10/26 09:41:47] [en]  -> Family J_2: K=36.99, N=319836, R=311190.1755
+[02/10/26 09:41:47] [en]  -> Family J_3: K=35.00, N=344857, R=335003.1697
+[02/10/26 09:41:47] [en]  -> Family J_4: K=38.00, N=570572, R=555555.9655
+[02/10/26 09:41:47] [en]  -> Family J_5: K=32.35, N=146063, R=141548.2218
+[02/10/26 09:41:47] [en]  -> Family J_6: K=29.40, N=148036, R=143000.0707
+[02/10/26 09:41:47] [en] Timing - Provisional Fisher K: 0.920 s
+[02/10/26 09:41:47] [en] Extracted 6 principal poles.
+[02/10/26 09:41:47] [en] Timing - Step 1 total: 2.216 s
+[02/10/26 09:41:49] [en] === Step 2: Classifying Point Cloud into DS Field (Cone: 30.0 deg) ===
+[02/10/26 09:41:49] [en] Scalar writer: stable C++ ccScalarField.setValue backend.
+[02/10/26 09:41:49] [en]   [JS] Reading 3D normals from 3805666 points...
+[02/10/26 09:41:49] [en]   [JS] Calculating angular distance to 6 principal poles...
+[02/10/26 09:41:50] [en]   [JS] Writing 'Discontinuity Set (DS)' scalar field to CloudCompare...
+[02/10/26 09:41:51] [en]   [JS] === JS Classification Completed in 1.71 s ===
+Total points processed: 3805666
+JS cone threshold: 30.0
+Point count by family:
+   J_0 (Unclassified / outside cone): 370737 pts (9.74%)
+   Family J_1: 1905565 pts (50.07%)
+   Family J_2: 319836 pts (8.40%)
+   Family J_3: 344857 pts (9.06%)
+   Family J_4: 570572 pts (14.99%)
+   Family J_5: 146063 pts (3.84%)
+   Family J_6: 148036 pts (3.89%)
+[02/10/26 09:41:51] [en] Discontinuity Set (DS) scalar field created from the reviewed principal-pole table.
+[02/10/26 09:41:51] [en] Timing - DS classification and writing: 1.755 s
+[02/10/26 09:41:51] [en]  -> DS = 0 (Unclassified background): 370737 pts (9.74%)
+[02/10/26 09:41:51] [en]  -> DS = 1 (Set J_1): 1905565 pts (50.07%)
+[02/10/26 09:41:51] [en]  -> DS = 2 (Set J_2): 319836 pts (8.40%)
+[02/10/26 09:41:51] [en]  -> DS = 3 (Set J_3): 344857 pts (9.06%)
+[02/10/26 09:41:51] [en]  -> DS = 4 (Set J_4): 570572 pts (14.99%)
+[02/10/26 09:41:51] [en]  -> DS = 5 (Set J_5): 146063 pts (3.84%)
+[02/10/26 09:41:51] [en]  -> DS = 6 (Set J_6): 148036 pts (3.89%)
+[02/10/26 09:41:52] [en] === Fisher concentration by family (final) ===
+[02/10/26 09:41:52] [en]  -> Family J_1: K=53.01, N=1905565, R=1869617.5547
+[02/10/26 09:41:52] [en]  -> Family J_2: K=36.99, N=319836, R=311190.1755
+[02/10/26 09:41:52] [en]  -> Family J_3: K=35.00, N=344857, R=335003.1697
+[02/10/26 09:41:52] [en]  -> Family J_4: K=38.00, N=570572, R=555555.9655
+[02/10/26 09:41:52] [en]  -> Family J_5: K=32.35, N=146063, R=141548.2218
+[02/10/26 09:41:52] [en]  -> Family J_6: K=29.40, N=148036, R=143000.0707
+[02/10/26 09:41:52] [en] Timing - Final Fisher K: 0.752 s
+[02/10/26 09:41:52] [en] Timing - Step 2 total: 3.405 s
+[02/10/26 09:42:03] [en] === Step 3: DBSCAN Clustering + Plane Fitting ===
+[02/10/26 09:42:03] [en] Scalar writer: stable C++ ccScalarField.setValue backend.
+[02/10/26 09:42:03] [en] Clustering method: DBSCAN
+[02/10/26 09:42:03] [en] DBSCAN parameters: K=4, k_sigma=2.0, MinPts=4, Minimum Cluster Size=100 | Merge k_sigmas=1.5 | Sort: size | Fix orient: True
+[02/10/26 09:42:31] [en]  -> J_1: eps=0.0175 | 284 -> 63 clusters | 1905565 family pts | raw noise=1540 | small-cluster rejected=11480 pts | final cl=0=13020 | clustering=5.424 s
+[02/10/26 09:42:31] [en]  -> J_2: eps=0.0410 | 228 -> 60 clusters | 319836 family pts | raw noise=767 | small-cluster rejected=19475 pts | final cl=0=20242 | clustering=1.657 s
+[02/10/26 09:42:31] [en]  -> J_3: eps=0.0289 | 276 -> 16 clusters | 344857 family pts | raw noise=746 | small-cluster rejected=17664 pts | final cl=0=18410 | clustering=1.393 s
+[02/10/26 09:42:31] [en]  -> J_4: eps=0.0272 | 246 -> 100 clusters | 570572 family pts | raw noise=811 | small-cluster rejected=14929 pts | final cl=0=15740 | clustering=2.172 s
+[02/10/26 09:42:31] [en]  -> J_5: eps=0.0395 | 208 -> 46 clusters | 146063 family pts | raw noise=428 | small-cluster rejected=9942 pts | final cl=0=10370 | clustering=0.728 s
+[02/10/26 09:42:31] [en]  -> J_6: eps=0.0413 | 199 -> 94 clusters | 148036 family pts | raw noise=557 | small-cluster rejected=13166 pts | final cl=0=13723 | clustering=0.776 s
+[02/10/26 09:42:31] [en] Planes computed. Scalars A, B, C, D written to cloud.
+[02/10/26 09:42:31] [en] Coplanarity merge complete. Final cl, A, B, C, D and sigma fields written.
+[02/10/26 09:42:31] [en] Timing - Complete cluster analysis and scalar writing: 28.144 s
+[02/10/26 09:42:42] [en] Family cloud J_1: 1905565 points, cl active.
+[02/10/26 09:42:43] [en] Family cloud J_2: 319836 points, cl active.
+[02/10/26 09:42:43] [en] Family cloud J_3: 344857 points, cl active.
+[02/10/26 09:42:44] [en] Family cloud J_4: 570572 points, cl active.
+[02/10/26 09:42:45] [en] Family cloud J_5: 146063 points, cl active.
+[02/10/26 09:42:45] [en] Family cloud J_6: 148036 points, cl active.
+[02/10/26 09:42:45] [en] Created 6 family cluster-result clouds in 'Clustering results 20261002_094238'.
+[02/10/26 09:42:45] [en] Timing - CloudCompare UI refresh: 0.079 s
+[02/10/26 09:42:45] [en] Timing - CloudCompare redraw: 0.000 s
+[02/10/26 09:42:45] [en] Cluster Planes tab: 379 cluster planes listed.
+[02/10/26 09:42:45] [en] Timing - Step 3 total: 42.150 s
+[02/10/26 09:43:39] [en] === Step 3: DBSCAN Clustering + Plane Fitting ===
+[02/10/26 09:43:39] [en] Scalar writer: stable C++ ccScalarField.setValue backend.
+[02/10/26 09:43:39] [en] Clustering method: HDBSCAN
+[02/10/26 09:43:39] [en] HDBSCAN parameters: Min Samples=4, Min Cluster Size=100, Selection=EOM, n_jobs=-1 | Merge k_sigmas=1.5 | Sort: size | Fix orient: True

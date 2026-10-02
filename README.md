@@ -37,6 +37,7 @@ It represents the Python/CloudCompare evolution of the original **Discontinuity 
 * **📊 Stereonet Analysis & Pole Density:** Identify principal discontinuity set poles using spherical density calculations on stereonets.
 * **🏷️ Automated Set Classification:** Classify 3D points based on proximity to main set orientations.
 * **🔍 Spatial Clustering & Geometric Extraction:**
+  * Choose the existing custom KDTree DBSCAN or HDBSCAN (requires optional scikit-learn 1.3.0+ in CloudCompare's Python environment).
   * **Normal Spacing:** Compute true normal spacing between adjacent surfaces within a set.
   * **Persistence:** Calculate discontinuity persistence and extent.
   * **Fisher Analysis:** Statistical evaluation of orientation dispersion.

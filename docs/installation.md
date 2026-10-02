@@ -54,6 +54,13 @@ Open Windows Command Prompt or PowerShell and run `pip` using the exact executab
 "C:\Program Files\CloudCompare\python\python.exe" -m pip install colorcet pyvista
 ```
 
+*To enable HDBSCAN in Step 3, install scikit-learn 1.3.0 or later in the same CloudCompare Python environment:*
+```cmd
+"C:\Program Files\CloudCompare\python\python.exe" -m pip install "scikit-learn>=1.3.0"
+```
+
+HDBSCAN is optional; DBSCAN remains available without scikit-learn. Check that the selected scikit-learn wheel is compatible with CloudCompare's embedded Python, NumPy and SciPy versions before installing it.
+
 #### Method B: Directly Inside CloudCompare Python Console
 Paste and execute this snippet inside CloudCompare's Python console:
 

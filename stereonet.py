@@ -1649,7 +1649,9 @@ def run_dse_cluster_analysis(
         cloud, principal_poles, k_neighbor=4, k_sigma=2.0,
         dbscan_minpts=4, minimum_cluster_size=100,
         fix_orientation=True, merge_k_sigmas=1.5,
-        sort_by="size", random_seed=None, progress_callback=None):
+        sort_by="size", random_seed=None, progress_callback=None,
+        clustering_method="DBSCAN", hdbscan_min_samples=4,
+        hdbscan_selection="EOM"):
     """Complete DSE clustering with global point indices as source of truth."""
     def report(percent, text):
         if progress_callback and progress_callback(percent, text) is False:
@@ -1669,18 +1671,83 @@ def run_dse_cluster_analysis(
     family_records = {}
     diagnostics = {}
 
+    if clustering_method not in ("DBSCAN", "HDBSCAN"):
+        return None, None, _tr("error.clustering_method_invalid")
+    if clustering_method == "HDBSCAN":
+        try:
+            from sklearn.cluster import HDBSCAN
+        except (ImportError, OSError):
+            return None, None, _tr("error.hdbscan_unavailable")
+        if hdbscan_selection not in ("EOM", "Leaf"):
+            return None, None, _tr("error.hdbscan_selection_invalid")
+        if int(hdbscan_min_samples) < 1 or int(minimum_cluster_size) < 1:
+            return None, None, _tr("error.hdbscan_parameters_invalid")
+
     try:
-        # Phase 1: DBSCAN and ppcluster filtering.
+        # Phase 1: cluster each family, then apply the shared size filtering.
         for family_position, family_id in enumerate(family_ids):
-            report(int(45 * family_position / max(len(family_ids), 1)),
-                   _tr("progress.clustering_family", family=family_id))
+            family_start = int(
+                45 * family_position / max(len(family_ids), 1)
+            )
+            family_end = int(
+                45 * (family_position + 1) / max(len(family_ids), 1)
+            )
             family_global = global_point_ids[js_values == family_id]
             family_points = coordinates[family_global]
-            eps, mean_knn, std_knn = _dse_eps(family_points, k_neighbor, k_sigma)
-            raw = native_dbscan_kdtree(
-                family_points, eps, int(dbscan_minpts),
-                progress_callback=None, family_label=f"J_{family_id}"
-            )
+            clustering_start = time.perf_counter()
+            if clustering_method == "DBSCAN":
+                report(
+                    family_start,
+                    _tr("progress.clustering_family", family=family_id)
+                )
+                eps, mean_knn, std_knn = _dse_eps(
+                    family_points, k_neighbor, k_sigma
+                )
+                raw = native_dbscan_kdtree(
+                    family_points, eps, int(dbscan_minpts),
+                    progress_callback=None, family_label=f"J_{family_id}"
+                )
+            else:
+                report(
+                    family_start,
+                    _tr(
+                        "progress.hdbscan_family_start",
+                        family=family_id, count=len(family_points)
+                    )
+                )
+                eps, mean_knn, std_knn = 0.0, 0.0, 0.0
+                minimum_input_size = max(
+                    2, int(hdbscan_min_samples),
+                    int(minimum_cluster_size)
+                )
+                if len(family_points) < minimum_input_size:
+                    raw = np.full(len(family_points), -1, dtype=np.int64)
+                else:
+                    clusterer = HDBSCAN(
+                        min_samples=int(hdbscan_min_samples),
+                        min_cluster_size=int(minimum_cluster_size),
+                        cluster_selection_method=hdbscan_selection.lower(),
+                        algorithm="auto",
+                        n_jobs=-1,
+                    )
+                    report(
+                        int((family_position + 0.5) * 45 / max(len(family_ids), 1)),
+                        _tr(
+                            "progress.hdbscan_fitting",
+                            family=family_id, count=len(family_points)
+                        )
+                    )
+                    raw = clusterer.fit_predict(family_points)
+                clustering_seconds = time.perf_counter() - clustering_start
+                report(
+                    family_end,
+                    _tr(
+                        "progress.hdbscan_family_complete",
+                        family=family_id, seconds=clustering_seconds
+                    )
+                )
+            if clustering_method == "DBSCAN":
+                clustering_seconds = time.perf_counter() - clustering_start
             local_final, valid_count, raw_noise, rejected_clusters, rejected_points = (
                 _filter_and_order_dbscan(raw, minimum_cluster_size)
             )
@@ -1707,6 +1774,7 @@ def run_dse_cluster_analysis(
                 "clusters_before_merge": valid_count,
                 "clustered_before_merge": valid_points,
                 "zero_points": zero_points,
+                "clustering_seconds": clustering_seconds,
             }
 
         # Phase 2: fit initial planes from stored global indices.

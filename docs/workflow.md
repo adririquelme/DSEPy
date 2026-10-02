@@ -104,12 +104,26 @@ The DS field becomes an input to Stage 3.
 
 Stage 3 uses the classified point cloud and performs spatial clustering within the discontinuity families.
 
-Important parameters include:
+Choose either DBSCAN or HDBSCAN. The default remains the existing custom KDTree DBSCAN implementation.
+
+DBSCAN parameters:
 
 - K-th neighbour (`K`);
 - sigma multiplier (`k_sigma`);
 - DBSCAN MinPts;
+
+HDBSCAN parameters:
+
+- Min Samples;
 - minimum cluster size;
+- cluster selection (`EOM` or `Leaf`).
+
+HDBSCAN Min Samples is an HDBSCAN density parameter and is not mathematically equivalent to DBSCAN MinPts. HDBSCAN is provided by scikit-learn 1.3.0 or later and requires that package in CloudCompare's embedded Python environment.
+
+Both methods use the same minimum cluster size and feed the shared plane-fitting and downstream workflow. HDBSCAN runs independently for each discontinuity family. On very large families it can require substantial additional processing time and memory; benchmark representative point clouds before using it for production workloads.
+
+The remaining shared parameters include:
+
 - coplanarity-merge threshold;
 - orientation fixing using the family pole;
 - cluster sorting;
