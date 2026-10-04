@@ -6,9 +6,9 @@
 
 https://img.shields.io/github/v/release/adririquelme/DSEPy?color=blue&logo=github](https://github.com/adririquelme/DSEPy/releases)
 https://img.shields.io/badge/License-GPLv3-blue.svg](https://www.gnu.org/licenses/gpl-3.0)
-[!tps://img.shields.io/badge/Python-CloudCompare%20Runtime-3776AB?logo=python&logoColor=white](https://www.cloudcompare.org/)
+https://img.shields.io/badge/Python-CloudCompare%20Runtime-3776AB?logo=python&logoColor=white](https://www.cloudcompare.org/)
 https://img.shields.io/badge/CloudCompare-Python%20Plugin-00A896](https://www.cloudcompare.org/)
-[![Documentation](https://img.shieldsation-Wiki-success?logo=github](https://github.com/adririquelme/DSEPy/wiki)
+https://img.shields.io/badge/Documentation-Wiki-success?logo=github](https://github.com/adririquelme/DSEPy/wiki)
 
 #features • #workflow • #installation • #documentation • #citation • #authors
 
