@@ -2,19 +2,20 @@
 
 # 🪨 DSEpy: Discontinuity Set Extractor for CloudCompare
 
-**A CloudCompare Python plugin for semi-automatic rock mass discontinuity analysis on 3D point clouds.**
+**A Python-based evolution of DSE for semi-automatic rock mass discontinuity analysis on 3D point clouds.**
 
-[![Latest Release](https://img.shieldse/adririquelme/DSEpy?color=blue&logo=github](https://github.com/adririquelme/DSEPy/releases)
-[![Documentation](https://img.shields.io/badge/-success?logo=readthedocs](https://github.com/adririquelme/DSEPy/wiki)
-[![License: GPL v3](https://img.ense-GPLv3-blue.svg](https://www.gnu.org/licenses/gpl-3.0)
-[![Runtime](https://img.shields.io/badge/Runtime-CloudCompare_Python-00A896w.cloudcompare.org/)
-[![CloudCompareelds.io/badge/CloudCompare-v2.14.beta-orange](https://www.cloudcompare.org/)
+https://img.shields.io/github/v/release/adririquelme/DSEpy?color=blue&logo=github](https://github.com/adririquelme/DSEpy/releases)
+https://img.shields.io/badge/License-GPLv3-blue.svg](https://www.gnu.org/licenses/gpl-3.0)
+https://img.shields.io/badge/Python-CloudCompare_Runtime-3776AB?logo=python&logoColor=white](https://www.cloudcompare.org/)
+https://img.shields.io/badge/CloudCompare-Python_Plugin-00A896](https://www.cloudcompare.org/)
+https://img.shields.io/badge/Documentation-Wiki-success?logo=github](https://github.com/adririquelme/DSEPy/wiki)
 
-[Features](#features) • [Workflow](#workflow) • [Installation](#installation) • [Documentation]( #citation • #authors
+#features • #workflow • #installation • #documentation • #citation • #authors
 
 ---
 
 </div>
+
 
 
 <a id="overview"></a>
