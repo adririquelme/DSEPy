@@ -1,44 +1,19 @@
 <div align="center">
 
-<h1>🪨 DSEpy: Discontinuity Set Extractor for CloudCompare</h1>
+# 🪨 DSEpy: Discontinuity Set Extractor for CloudCompare
 
-<p>
-  <strong>A Python-based evolution of DSE for semi-automatic rock mass discontinuity analysis on 3D point clouds.</strong>
-</p>
+**A Python-based evolution of DSE for semi-automatic rock mass discontinuity analysis on 3D point clouds.**
 
-<p>
-  <a href="https://github.com/adririquelme/DSEPy">
-    https://img.shields.io/github/v/release/adririquelme/DSEPy?color=blue&amp;logo=github
-  </a>
-  <a href="https://www.gnu.org/licenses/gpl-3.0">
-    <img src="https://img.shields.io/badge/License-GPLv3-blue.svg" alt="License: GPL v3">
-  </a>
-  <a href="https://www.cloudcompare.org/">
-    <img src="https://img.shields.io/badge/Pythonare_Runtime-3776AB?logo=python&amp;logoColor=white
-  </a>
-  <a href="https://www.cloudcompare.org/">
-    <img src="https://img.shields.io/badge/CloudCompare-Python_Plugin-00A896" alt="CloudCompare Python Plugin">
-  </a>
-  <a href="https://github.com/adririquelme/DSEPy">
-    https://img.shields.io/badge/Documentation-Wiki-success?logo=github
-  </a>
-</p>
+[![Latest Release](https://img.shields.io/github/v/release/adririquelme/DSEpy?color=blue&logo=github)](https://github.com/adririquelme/DSEpy/releases)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![CloudCompare Integration](https://img.shields.io/badge/CloudCompare-Python_Plugin-00A896)](https://www.cloudcompare.org/)
 
-<p>
-  #featuresFeatures</a> •
-  #workflowWorkflow</a> •
-  #installationInstallation</a> •
-  <a href="https://github.com/adririquelme/DSEPy">Documentation</a> •
-  #citationCitation</a> •
-  <a href="#thors</a>
-</p>
+[Features](#features) • [Workflow](#workflow) • [Installation](#installation) • [Documentation • #citation • #authors
 
-<hr>
+---
 
 </div>
-</div>
-
-
 
 <a id="overview"></a>
 ## 📌 Overview
