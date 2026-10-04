@@ -161,7 +161,7 @@ DSEpy/
 
 The complete DSEpy documentation is available in the project Wiki:
 
-👉 **[DSEpy Wiki](https://github.com/adririquelme/DSEPy)**
+👉 **[DSEpy Wiki](https://github.com/adririquelme/DSEPy/wiki/)**
 
 The Wiki is the primary source of documentation for DSEpy and is continuously updated as new features are implemented.
 
@@ -218,7 +218,7 @@ The Wiki is the primary source of documentation for DSEpy and is continuously up
 | **Clustering & Facets** | Spatial clustering and geometric characterisation |
 | **References** | Scientific and methodological bibliography |
 
-➡️ **Open the Wiki:** [https://github.com/adririquelme/DSEPy/wiki](https://github.com/adririquelme/DSEPy)
+➡️ **Open the Wiki:** [https://github.com/adririquelme/DSEPy/wiki](https://github.com/adririquelme/DSEPy/wiki)
 
 ---
 
