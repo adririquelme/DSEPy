@@ -4,29 +4,13 @@
 
 **A Python-based evolution of DSE for semi-automatic rock mass discontinuity analysis on 3D point clouds.**
 
-<a href="https://github.com/adririquelme/DSEPy">
-  https://img.shields.io/github/v/release/adririquelme/DSEPy?color=blue&logo=github
-</a>
-<a href="https://www.gnu.org/licenses/gpl-3.0">
-  <img src="https://img.shields.io/badge/License-GPLv3-blue.svg" alt="License: GPL v3">
-</a>
-<a href="https://www.cloudcompare.org/">
-  https://img.shields.io/badge/Python-CloudCompare_Runtime-3776AB?logo=python&logoColor=white
-</a>
-<a href="https://www.cloudcompare.org/">
-  <img src="https://img.shields.io/badge/CloudCompare-Python_Plugin-00A896" alt="CloudCompare Python Plugin">
-</a>
-<a href="https://github.com/adririquelme/DSEPy">
-  https://img.shields.io/badge/Documentation-Wiki-success?logo=github
-</a>
+[![Latest Releaseds.io/github/v/release/adririquelme/DSEPy?color=blue&logo=github](https://github.com/adririquelme/DSEPy/releases)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+https://img.shields.io/badge/Python-CloudCompare_Runtime-3776AB?logo=python&logoColor=white](https://www.cloudcompare.org/)
+[![CloudCompare Integration](https://img.shields.io/badge/CloudCompare-Python_Plugin-00A896)](https://www.cloudcompare.org/)
+https://img.shields.io/badge/Documentation-Wiki-success?logo=github](https://github.com/adririquelme/DSEPy/wiki)
 
-<br><br>
-
-<a href="#features">FeatureskflowWorkflow</a> •
-<a hreflationInstallation</a> •
-<a href="https://github.com/adririquelme/DSEPy">Documentation</a> •
-#citationCitation</a> •
-#authorsAuthors</a>
+#features • #workflow • #installation • #documentation • #citation • #authors
 
 ---
 
