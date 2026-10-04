@@ -9,7 +9,7 @@
 [![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![CloudCompare Integration](https://img.shields.io/badge/CloudCompare-Python_Plugin-00A896)](https://www.cloudcompare.org/)
 
-[Features](#features) • [Workflow](#workflow) • [Installation](#installation) • [Documentation](#documentation) • [Citation](#citation) • [Authors](#authors)
+[Features](#features) • [Workflow](#workflow) • [Installation](#installation) • [Documentation • #citation • #authors
 
 ---
 
@@ -137,7 +137,7 @@ Since CloudCompare is installed in `C:\Program Files\` by default, installing Py
 
 ```text
 DSEpy/
-├── main_gui_v100.py          # Main GUI launcher & CloudCompare interface
+├── main_gui.py          # Main GUI launcher & CloudCompare interface
 ├── colour_optimisation.py   # Chromatic space algorithms & normal colour-coding
 ├── stereonet.py             # Stereographic projection & density computations
 ├── i18n.py                  # Internationalization translation engine
@@ -159,11 +159,66 @@ DSEpy/
 <a id="documentation"></a>
 ## 📚 Documentation
 
-For in-depth guides and technical details, consult the [`docs/`](./docs) folder:
-* 📥 **[Installation Guide](./docs/installation.md):** Step-by-step environment setup.
-* 📖 **[User Guide](./docs/user_guide.md):** Detailed GUI walkthrough and parameter configuration.
-* ⚙️ **[Methodological Workflow](./docs/workflow.md):** Scientific background and algorithms.
-* 🔧 **[Troubleshooting](./docs/troubleshooting.md):** Common errors, logs (`DSE_execution_log.txt`), and FAQs.
+The complete DSEpy documentation is available in the project Wiki:
+
+👉 **[DSEpy Wiki](https://github.com/adririquelme/DSEPy)**
+
+The Wiki is the primary source of documentation for DSEpy and is continuously updated as new features are implemented.
+
+### Available Documentation
+
+* 📖 **User Guide**
+  * Detailed walkthrough of all graphical interfaces.
+  * Step-by-step workflows.
+  * Parameter descriptions and recommended settings.
+
+* 📊 **Stereonet Analysis & Principal Pole Identification**
+  * Lower-hemisphere projection methods.
+  * Pole density estimation.
+  * Kernel Density Estimation (KDE).
+  * Principal pole detection and filtering algorithms.
+
+* 🏷️ **Set Classification**
+  * Automatic discontinuity set assignment.
+  * Angular thresholding methodology.
+  * Colour-coded classification workflows.
+
+* 🔍 **Clustering & Facets**
+  * Spatial clustering of classified discontinuities.
+  * Persistence estimation.
+  * Normal spacing calculations.
+  * Fisher statistics.
+  * 3D facet extraction and analysis.
+
+* ⚙️ **Methodological Background**
+  * Mathematical foundations.
+  * Structural geology concepts.
+  * Projection geometry.
+  * Implemented algorithms and assumptions.
+
+* 🔧 **Installation & Troubleshooting**
+  * Installation procedures.
+  * Dependency management.
+  * Common CloudCompare Python issues.
+  * Frequently Asked Questions (FAQs).
+
+* 📚 **Scientific References**
+  * Original DSE methodology papers.
+  * DSEpy methodological developments.
+  * Stereographic projection references.
+  * Rock mechanics and structural geology bibliography.
+
+### Quick Access
+
+| Section | Description |
+|----------|-------------|
+| **Home** | Documentation entry point and navigation hub |
+| **Stereonet Analysis & Principal Pole Identification** | Pole density estimation and stereonet analysis |
+| **Set Classification** | Discontinuity family assignment workflow |
+| **Clustering & Facets** | Spatial clustering and geometric characterisation |
+| **References** | Scientific and methodological bibliography |
+
+➡️ **Open the Wiki:** [https://github.com/adririquelme/DSEPy/wiki](https://github.com/adririquelme/DSEPy)
 
 ---
 
