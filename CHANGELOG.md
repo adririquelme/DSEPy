@@ -2,6 +2,24 @@
 
 All notable changes to DSEPy are documented in this file.
 
+## [1.0.2]
+ 
+### Added
+ 
+- New cluster analysis functionality for discontinuity data interpretation.
+- Alternative normal vector loading using scalar fields (`Nx`, `Ny`, `Nz`) when direct access through the CloudCompare Python API is unavailable.
+ 
+### Improved
+ 
+- Better compatibility across CloudCompare versions.
+- More robust handling of normal vector information.
+- Improved user feedback when normals cannot be accessed directly.
+ 
+### Fixed
+ 
+- Several minor bugs and stability issues.
+- Minor GUI improvements and code cleanup.
+
 ## [1.0.0] - 2026-09-13
 
 ### Added
