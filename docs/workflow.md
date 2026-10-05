@@ -28,6 +28,8 @@ The source point cloud should contain valid normal vectors. Press **Refresh** af
 
 The refresh operation determines which workflow actions and Tools commands can be enabled.
 
+Some stable `pycc` runtimes report that normals exist but do not expose their values to Python. DSEPy warns once when such a selected cloud is detected. Use **Edit → Normals → Export normals to SF(s)** in CloudCompare to create the `Nx`, `Ny`, and `Nz` scalar fields, then press **Refresh** in DSEPy. Builds that expose `normals()` or `getPointNormal()` can read the normals directly without this step.
+
 ## Stage 1 — Principal poles
 
 ### 1. Colour-code 3DPC

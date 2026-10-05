@@ -44,6 +44,8 @@ Make sure `stereonet.py` is in the same DSEPy directory as `main_gui_v100.py`.
 
 The selected entity must be a valid point cloud with accessible normals. Refresh after changing the selected CloudCompare entity.
 
+Some stable CloudCompare `pycc` runtimes expose `hasNormals()` but not a Python accessor for normal values. DSEPy warns once when such a selected cloud is detected. Use **Edit → Normals → Export normals to SF(s)** to create the `Nx`, `Ny`, and `Nz` scalar fields, then return to DSEPy and press **Refresh**. DSEPy reads these fields as a compatibility fallback.
+
 ## Principal poles are not detected
 
 Check:

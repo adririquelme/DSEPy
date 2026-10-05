@@ -44,6 +44,115 @@ def _tr(key, **values):
         return text
 
 
+def cloud_reports_normals(cloud):
+    """Return whether CloudCompare reports normals on the cloud."""
+    return cloud is not None and cloud.hasNormals()
+
+
+def cloud_has_normals(cloud):
+    """Return whether this pycc binding lets DSE read the cloud normals."""
+    if not cloud_reports_normals(cloud):
+        return False
+
+    if any(
+        getattr(cloud, name, None) is not None
+        for name in ("normals", "normalsToNpArrayCopy")
+    ):
+        return True
+    if callable(getattr(cloud, "getPointNormal", None)):
+        return True
+
+    get_scalar_field_index = getattr(cloud, "getScalarFieldIndexByName", None)
+    if not callable(get_scalar_field_index):
+        return False
+    for name in ("Nx", "Ny", "Nz"):
+        field_index = get_scalar_field_index(name)
+        if not isinstance(field_index, int) or field_index < 0:
+            return False
+    return True
+
+
+def _normal_components_from_scalar_fields(cloud, point_count):
+    component_arrays = []
+    for name in ("Nx", "Ny", "Nz"):
+        field_index = cloud.getScalarFieldIndexByName(name)
+        if not isinstance(field_index, int) or field_index < 0:
+            raise RuntimeError(_tr("error.normals_export_required"))
+
+        scalar_field = cloud.getScalarField(field_index)
+        values = None
+        for accessor_name in ("asArray", "getLocalValues"):
+            accessor = getattr(scalar_field, accessor_name, None)
+            if callable(accessor):
+                values = accessor()
+                if values is not None:
+                    break
+
+        if values is not None:
+            component = np.asarray(values, dtype=np.float64).reshape(-1)
+        else:
+            accessor = getattr(scalar_field, "getLocalValue", None)
+            if not callable(accessor):
+                accessor = getattr(scalar_field, "getValue", None)
+            if callable(accessor):
+                component = np.fromiter(
+                    (accessor(index) for index in range(point_count)),
+                    dtype=np.float64,
+                    count=point_count,
+                )
+            else:
+                raise RuntimeError(_tr("error.normals_export_required"))
+
+        if component.shape != (point_count,):
+            raise RuntimeError(_tr("error.normals_export_required"))
+        component_arrays.append(component)
+
+    return np.column_stack(component_arrays)
+
+
+def get_cloud_normals(cloud):
+    """Read normals across CloudCompare Python bindings with different APIs."""
+    if cloud is None or not cloud.hasNormals():
+        raise RuntimeError(_tr("error.no_normals"))
+
+    array_accessors = [
+        (name, getattr(cloud, name, None))
+        for name in ("normals", "normalsToNpArrayCopy")
+    ]
+    point_accessor = getattr(cloud, "getPointNormal", None)
+    point_count = int(cloud.size())
+    for _, accessor in array_accessors:
+        if accessor is None:
+            continue
+
+        values = accessor() if callable(accessor) else accessor
+        if values is None:
+            continue
+        normals = np.asarray(values, dtype=np.float64)
+        if normals.shape != (point_count, 3):
+            raise RuntimeError(_tr("error.normals_export_required"))
+        return normals
+
+    if callable(point_accessor):
+        normals = np.empty((point_count, 3), dtype=np.float64)
+        for index in range(point_count):
+            normal = point_accessor(index)
+            if normal is None:
+                raise RuntimeError(_tr("error.normals_export_required"))
+            try:
+                components = np.asarray(normal, dtype=np.float64).reshape(-1)
+            except (TypeError, ValueError):
+                components = np.asarray(
+                    (normal.x, normal.y, normal.z), dtype=np.float64
+                )
+            if components.shape != (3,):
+                raise RuntimeError(_tr("error.normals_export_required"))
+            normals[index] = components
+        return normals
+
+    return _normal_components_from_scalar_fields(cloud, point_count)
+
+
 class CalculationCancelledException(Exception):
     """Excepcion personalizada para capturar la cancelacion manual del usuario."""
     pass
@@ -296,12 +405,10 @@ def project_poles(cloud, projection="Equal-angle"):
     if npts == 0:
         return np.array([]), np.array([])
 
-    if not cloud.hasNormals():
+    if not cloud_has_normals(cloud):
         raise RuntimeError(_tr("error.no_normals"))
 
-    normals = cloud.normals()
-    if normals is None:
-        raise RuntimeError(_tr("error.normals_unavailable"))
+    normals = get_cloud_normals(cloud)
 
     dipdir, dip = f_vnorm2clar_v02(normals)
     xp, yp = f_clar2cart(dipdir, dip, projection=projection)
@@ -317,16 +424,14 @@ def project_poles_by_family(cloud, projection="Equal-angle"):
     if npts == 0:
         return np.array([]), np.array([]), np.array([])
 
-    if not cloud.hasNormals():
+    if not cloud_has_normals(cloud):
         raise RuntimeError(_tr("error.no_normals"))
 
     sf_idx = cloud.getScalarFieldIndexByName("Discontinuity Set (DS)")
     if sf_idx < 0:
         raise RuntimeError(_tr("error.ds_field_missing_classify"))
 
-    normals = cloud.normals()
-    if normals is None:
-        raise RuntimeError(_tr("error.normals_unavailable"))
+    normals = get_cloud_normals(cloud)
 
     dipdir, dip = f_vnorm2clar_v02(normals)
     xp, yp = f_clar2cart(dipdir, dip, projection=projection)
@@ -875,9 +980,9 @@ def compute_cloud_fisher_k(
         cloud, principal_poles, family_ids=None,
         max_cone_angle_deg=None):
     """Convenience wrapper that reads normals directly from a cloud."""
-    if not cloud.hasNormals():
+    if not cloud_has_normals(cloud):
         raise ValueError(_tr("error.cloud_no_normals"))
-    normals = np.asarray(cloud.normals(), dtype=np.float64)
+    normals = get_cloud_normals(cloud)
     return compute_fisher_k_by_family(
         normals, principal_poles, family_ids=family_ids,
         max_cone_angle_deg=max_cone_angle_deg
@@ -906,13 +1011,13 @@ def classify_point_cloud_js(cloud, principal_poles, max_cone_angle_deg=30.0, pro
     if npts == 0:
         return None, _tr("error.point_cloud_empty")
 
-    if not cloud.hasNormals():
+    if not cloud_has_normals(cloud):
         return None, _tr("error.cloud_normals_missing")
 
     _report(10, _tr("progress.reading_normals", count=npts))
 
     # 1. Matriz de normales de la nube (N, 3)
-    normals = np.asarray(cloud.normals(), dtype=np.float64)
+    normals = get_cloud_normals(cloud)
     norm_len = np.linalg.norm(normals, axis=1, keepdims=True)
     norm_len[norm_len == 0] = 1.0
     normals = normals / norm_len
@@ -2492,4 +2597,3 @@ def analyze_roughness(
 
     report(100, _tr("stereo.roughness_complete"))
     return profiles, cluster_rows, family_rows
-

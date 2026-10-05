@@ -392,6 +392,7 @@ class DSEMainApp:
         self.poles_revision = 0
         self.js_revision = -1
         self.poles_review_status = "empty"
+        self._normals_export_notice_cloud_id = None
 
         self.fig = None
         self.ax = None
@@ -860,7 +861,7 @@ class DSEMainApp:
         if os.path.isfile(refresh_path):
             try:
                 refresh_icon = self._load_resized_icon_v030(
-                    refresh_path, box_size=46, canvas_size=50
+                    refresh_path, box_size=30, canvas_size=34
                 )
             except Exception as exc:
                 self.log(f"Icon load warning (refresh): {exc}")
@@ -869,13 +870,13 @@ class DSEMainApp:
         if refresh_icon is not None:
             self.btn_refresh_cloud.configure(
                 image=refresh_icon, text="", compound=tk.CENTER,
-                width=58, height=54, padx=3, pady=3
+                width=38, height=36, padx=2, pady=2
             )
             self.btn_refresh_cloud._dse_icon_image = refresh_icon
         else:
             self.btn_refresh_cloud.configure(
-                text=self.tr("Refresh"), width=58, height=54,
-                padx=3, pady=3, font=("Segoe UI", 8, "bold")
+                text=self.tr("Refresh"), width=38, height=36,
+                padx=2, pady=2, font=("Segoe UI", 8, "bold")
             )
 
 
@@ -1489,7 +1490,7 @@ class DSEMainApp:
         f_cloud_hdr.pack(fill=tk.X, pady=(2, 6), padx=2)
         
         f_cloud_hdr.grid_columnconfigure(0, weight=1)
-        f_cloud_hdr.grid_columnconfigure(1, weight=0, minsize=68)
+        f_cloud_hdr.grid_columnconfigure(1, weight=0, minsize=48)
         self.lbl_cloud_status = tk.Label(
             f_cloud_hdr, text=self.tr("gui.status_checking"),
             font=("Segoe UI", 9, "bold"), bg="#e9ecef", fg="#495057",
@@ -1501,7 +1502,7 @@ class DSEMainApp:
 
         self.btn_refresh_cloud = tk.Button(
             f_cloud_hdr, text="", command=self.refresh_selected_cloud,
-            width=58, height=54, padx=3, pady=3,
+            width=38, height=36, padx=2, pady=2,
             relief=tk.RAISED, bg="#ffffff"
         )
         self.btn_refresh_cloud.grid(
@@ -2015,7 +2016,7 @@ class DSEMainApp:
         )
         self.txt_log = scrolledtext.ScrolledText(
             self.log_frame, font=("Consolas", 9), state=tk.DISABLED,
-            height=7, wrap=tk.NONE
+            height=8, wrap=tk.NONE
         )
         self.txt_log.pack(fill=tk.X, expand=False, padx=6, pady=5)
 
@@ -2135,7 +2136,7 @@ class DSEMainApp:
     def open_normal_colour_optimisation(self):
         """Optimise the colour reference system and inspect/export the result."""
         cloud = self.get_selected_cloud()
-        if cloud is None or not cloud.hasNormals():
+        if cloud is None or not stereonet.cloud_has_normals(cloud):
             messagebox.showwarning(
                 self.tr("dialog.warning_title"),
                 self.tr("colour.error.normals"), parent=self.root
@@ -2281,7 +2282,7 @@ class DSEMainApp:
                 ], dtype=float)
                 if not np.isfinite(angles).all():
                     raise ValueError(self.tr("colour.error.invalid_angles"))
-                normals = np.asarray(cloud.normals(), dtype=np.float64)
+                normals = stereonet.get_cloud_normals(cloud)
                 objective_name = variables["objective"].get()
                 objective_value = colour_opt.objective_value(
                     angles, normals, objective=objective_name
@@ -2422,7 +2423,7 @@ class DSEMainApp:
         buttons = ttk.Frame(frame)
         buttons.grid(row=10, column=0, columnspan=2, pady=(12, 2))
         def calculate_colours():
-            normals = np.asarray(cloud.normals(), dtype=np.float64)
+            normals = stereonet.get_cloud_normals(cloud)
             rgb, rotated = colour_opt.colours_from_normals(
                 normals,
                 state["result"].angles,
@@ -2436,7 +2437,7 @@ class DSEMainApp:
 
         def optimise():
             try:
-                normals = np.asarray(cloud.normals(), dtype=np.float64)
+                normals = stereonet.get_cloud_normals(cloud)
                 fraction = float(variables["subsample"].get()) / 100.0
                 seed_text = variables["seed"].get().strip()
                 seed = None if seed_text == "" else int(seed_text)
@@ -2496,7 +2497,7 @@ class DSEMainApp:
                 )
 
         def projected_poles():
-            normals = np.asarray(cloud.normals(), dtype=np.float64)
+            normals = stereonet.get_cloud_normals(cloud)
             x, y, rotated, valid = colour_opt.projected_poles_from_normals(
                 normals, state["result"].angles,
                 projection=self._canonical_projection()
@@ -2996,6 +2997,7 @@ class DSEMainApp:
         cloud = self.get_selected_cloud(verbose=False)
 
         if cloud is None:
+            self._normals_export_notice_cloud_id = None
             self.lbl_cloud_status.config(text=self.tx("Status: No Cloud Selected"), fg="#dc3545")
             self._set_step1_state(False)
             self._set_step2_state(False)
@@ -3006,7 +3008,9 @@ class DSEMainApp:
             return False
 
         cloud_name = cloud.getName()
-        has_normals = cloud.hasNormals()
+        has_normals = stereonet.cloud_has_normals(cloud)
+        cloud_reports_normals = stereonet.cloud_reports_normals(cloud)
+        cloud_id = cloud.getUniqueID()
         has_js_field = (cloud.getScalarFieldIndexByName("Discontinuity Set (DS)") >= 0)
         has_cl_field = (cloud.getScalarFieldIndexByName("Cluster id (cl)") >= 0)
         has_current_js = has_js_field and self._js_is_current()
@@ -3051,8 +3055,19 @@ class DSEMainApp:
         # Dynamic Status Feedback Text
         status_info = []
         if has_normals:
+            self._normals_export_notice_cloud_id = None
             status_info.append(self.tx("Normals OK"))
+        elif cloud_reports_normals:
+            status_info.append(self.tr("gui.normals_python_unavailable"))
+            if self._normals_export_notice_cloud_id != cloud_id:
+                self._normals_export_notice_cloud_id = cloud_id
+                messagebox.showwarning(
+                    self.tx("Warning"),
+                    self.tr("error.normals_export_required"),
+                    parent=self.root
+                )
         else:
+            self._normals_export_notice_cloud_id = None
             status_info.append(self.tx("Missing Normals"))
 
         if has_current_js:
@@ -3112,7 +3127,7 @@ class DSEMainApp:
     def _project_cloud_poles_for_step1(self, cloud, projection):
         if not self._use_rotated_pole_space():
             return stereonet.project_poles(cloud, projection=projection)
-        normals = np.asarray(cloud.normals(), dtype=np.float64)
+        normals = stereonet.get_cloud_normals(cloud)
         x, y, _, valid = colour_opt.projected_poles_from_normals(
             normals, self._rotation_angles_from_matrix(), projection=projection
         )
@@ -3124,7 +3139,7 @@ class DSEMainApp:
         return np.zeros(3)
 
     def _rotated_projected_poles(self, cloud, projection):
-        normals = np.asarray(cloud.normals(), dtype=np.float64)
+        normals = stereonet.get_cloud_normals(cloud)
         lengths = np.linalg.norm(normals, axis=1)
         valid = np.isfinite(normals).all(axis=1) & (lengths > np.finfo(float).eps)
         unit = normals[valid] / lengths[valid, None]
@@ -3259,7 +3274,7 @@ class DSEMainApp:
     def generate_principal_colour_cloud(self):
         """Create a CloudCompare copy coloured from the selected pole space."""
         cloud = self.get_selected_cloud()
-        if cloud is None or not cloud.hasNormals():
+        if cloud is None or not stereonet.cloud_has_normals(cloud):
             messagebox.showwarning(
                 self.tr("dialog.warning_title"),
                 self.tr("gui.export_hsv_requires_normals")
@@ -3275,7 +3290,7 @@ class DSEMainApp:
                 raise ValueError(self.tr("colour.error.lightness_range"))
 
             points = np.asarray(cloud.points(), dtype=np.float64)
-            normals = np.asarray(cloud.normals(), dtype=np.float64)
+            normals = stereonet.get_cloud_normals(cloud)
             if len(points) != len(normals):
                 raise ValueError(self.tr("colour.error.size_mismatch"))
 
@@ -3353,8 +3368,18 @@ class DSEMainApp:
 
     def run_plot_poles(self):
         cloud = self.get_selected_cloud()
-        if cloud is None or not cloud.hasNormals():
+        if cloud is None:
             messagebox.showwarning(self.tx("Warning"), self.tx("Select a cloud with computed normals."))
+            return
+        if not stereonet.cloud_has_normals(cloud):
+            if stereonet.cloud_reports_normals(cloud):
+                messagebox.showwarning(
+                    self.tx("Warning"),
+                    self.tr("error.normals_export_required"),
+                    parent=self.root
+                )
+            else:
+                messagebox.showwarning(self.tx("Warning"), self.tx("Select a cloud with computed normals."))
             return
 
         projection = self._canonical_projection()
@@ -3398,7 +3423,7 @@ class DSEMainApp:
 
     def run_plot_density(self):
         cloud = self.get_selected_cloud()
-        if cloud is None or not cloud.hasNormals():
+        if cloud is None or not stereonet.cloud_has_normals(cloud):
             messagebox.showwarning(self.tx("Warning"), self.tx("Select a cloud with computed normals."))
             return
 
