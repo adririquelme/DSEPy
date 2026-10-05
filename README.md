@@ -127,7 +127,7 @@ Since CloudCompare is installed in `C:\Program Files\` by default, installing Py
 2. Open the **Python Console** (from the menu or toolbar).
 3. Execute the launcher script:
    ```python
-   exec(open("C:/CCPlugins/DSEPy/main_gui_v100.py").read())
+   exec(open("C:/CCPlugins/DSEPy/main_gui.py").read())
    ```
 
 ---
