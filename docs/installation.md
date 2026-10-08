@@ -7,114 +7,62 @@ This guide details the complete installation process for **DSEpy** within **Clou
 ## 📋 Prerequisites
 
 1. **CloudCompare** (v2.12 or higher recommended).
-2. **CloudCompare Python Plugin** enabled (e.g., CloudComPy or standard Python wrapper).
+2. In the CloudCompare installer, enable the **Python Runtime** component. If it was omitted, rerun the installer in modify mode and add it. DSEpy must run in the Python environment provided by CloudCompare; a separate system Python is not a substitute.
 
 ---
 
-## ⚠️ Crucial Concept: CloudCompare Embedded Python
+## ⚠️ Crucial Concept: CloudCompare Python Runtime
 
-DSEpy runs inside CloudCompare's embedded Python interpreter. Installing packages using standard Windows command prompt (`pip install ...`) will install dependencies into system Python, **not into CloudCompare's Python environment**.
-
-To ensure DSEpy works properly, packages must be installed directly into CloudCompare's Python distribution.
+DSEpy runs inside the Python environment used by CloudCompare. A bare `pip install ...` may target a different Python installation, so always invoke pip as `python.exe -m pip` using the Python Runtime's own interpreter.
 
 ---
 
-## 🛠️ Step-by-Step Installation
+## 📦 Step 1: Download DSEpy
 
-### Step 1: Identify CloudCompare's Python Executable
+Git is not required:
 
-1. Open **CloudCompare**.
-2. Open the **Python Console** / plugin panel.
-3. Run the following code to retrieve the exact path of the Python executable used by CloudCompare:
+1. Open [DSEpy Releases](https://github.com/adririquelme/DSEpy/releases), choose the version you want, and download its **Source code (zip)** archive. To use the current development branch instead, select **Code → Download ZIP** on the repository page.
+2. Extract the archive and keep the complete folder structure, including `icons` and `locales`, in a permanent location such as `C:\CCPlugins\DSEpy`.
 
-```python
-import sys
-print("CloudCompare Python Executable:")
-print(sys.executable)
-```
+Alternatively, if Git is installed:
 
-Example output:
-`C:\Program Files\CloudCompare\python\python.exe`
-
----
-
-### Step 2: Install Required Dependencies
-
-You can install dependencies using either of two methods:
-
-#### Method A: Via Windows Terminal (PowerShell / CMD) — *Recommended*
-Open Windows Command Prompt or PowerShell and run `pip` using the exact executable path obtained in Step 1:
-
-```cmd
-"C:\Program Files\CloudCompare\python\python.exe" -m pip install numpy scipy matplotlib Pillow
-```
-
-*To install optional packages for enhanced 3D rendering and color maps:*
-```cmd
-"C:\Program Files\CloudCompare\python\python.exe" -m pip install colorcet pyvista
-```
-
-*To enable HDBSCAN in Step 3, install scikit-learn 1.3.0 or later in the same CloudCompare Python environment:*
-```cmd
-"C:\Program Files\CloudCompare\python\python.exe" -m pip install "scikit-learn>=1.3.0"
-```
-
-HDBSCAN is optional; DBSCAN remains available without scikit-learn. Check that the selected scikit-learn wheel is compatible with CloudCompare's embedded Python, NumPy and SciPy versions before installing it.
-
-#### Method B: Directly Inside CloudCompare Python Console
-Paste and execute this snippet inside CloudCompare's Python console:
-
-```python
-import subprocess
-import sys
-
-required_packages = ["numpy", "scipy", "matplotlib", "Pillow"]
-
-print("Installing DSEpy dependencies...")
-subprocess.check_call([sys.executable, "-m", "pip", "install"] + required_packages)
-print("Installation complete!")
+```powershell
+git clone https://github.com/adririquelme/DSEpy.git C:\CCPlugins\DSEpy
 ```
 
 ---
 
-### Step 3: Set Up DSEpy Directory Structure
+## 🛠️ Step 2: Install Dependencies in the CloudCompare Runtime
 
-1. Download the latest release from the [GitHub Releases page](https://github.com/adririquelme/DSEpy/releases) or clone the repository:
-   ```bash
-   git clone [https://github.com/adririquelme/DSEpy.git](https://github.com/adririquelme/DSEpy.git)
+1. Open CloudCompare and its Python Console.
+2. Run this code to inspect the Python version and executable used by the console:
+
+   ```python
+   import sys
+   print(sys.version)
+   print(sys.executable)
    ```
-2. Ensure the relative paths are preserved in your local installation directory:
 
-```text
-DSEpy/
-├── main_gui_v100.py
-├── colour_optimisation.py
-├── stereonet.py
-├── i18n.py
-├── icons/
-│   ├── add.png
-│   ├── apply.png
-│   └── ...
-├── locales/
-│   ├── en.json
-│   ├── es.json
-│   └── ...
-└── docs/
-```
+3. Close CloudCompare completely. Use the path to the Runtime's `python.exe`. If `sys.executable` returned that interpreter, use the printed path. If it returned `CloudCompare.exe` or another host executable, do not pass that host executable to pip; locate the `python.exe` installed with the CloudCompare Python Runtime. The location varies by CloudCompare version and installation folder.
+4. In PowerShell, replace both example paths with the actual paths on your computer:
+
+   ```powershell
+   & "C:\Path\To\CloudCompare\PythonRuntime\python.exe" -m pip install --user -r "C:\CCPlugins\DSEpy\requirements.txt"
+   ```
+
+`-m pip` invokes pip for that exact interpreter. `--user` installs packages for the current Windows user and normally avoids writing to the protected `Program Files` directory. If pip is missing, verify that the Runtime component is installed and that you selected its `python.exe`; do not install dependencies into an unrelated system Python.
 
 ---
 
-### Step 4: Launching DSEpy
+## ▶️ Step 3: Launch DSEpy
 
-1. Open **CloudCompare** and load your 3D point cloud (with computed normal vectors).
+1. Open **CloudCompare** and load your 3D point cloud.
 2. Open the **Python Console**.
-3. Launch the main script:
+3. Run the following code, replacing the example folder with the folder where you extracted or cloned DSEpy:
 
-```python
-import os
-script_path = r"C:\Path\To\DSEpy\main_gui_v100.py"
-exec(open(script_path, encoding='utf-8').read())
-```
+   ```python
+   exec(open(r"C:\CCPlugins\DSEpy\main_gui.py", encoding="utf-8").read())
+   ```
 
 ---
 

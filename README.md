@@ -75,22 +75,57 @@ It represents the Python/CloudCompare evolution of the original **Discontinuity 
  └────────────────────────────────────────┘
 ```
 
+---
+
 <a id="installation"></a>
 ## 🛠️ Installation & Setup
 
 ### Prerequisites
-* **[CloudCompare](https://www.cloudcompare.org/)** (v2.14.beta - build 2024-09-26 or higher required; earlier builds or older stable releases may cause Python binding issues).
-* **CloudCompare Python Plugin** enabled during installation (ensure the Python plugin option is checked in the CloudCompare setup wizard).
-* **No separate Python or pip installation on Windows is required.** CloudCompare includes its own standalone Python environment with `pip` pre-installed.
+* **[CloudCompare](https://www.cloudcompare.org/)** installed with its **Python Runtime** component enabled. If it was omitted, rerun the CloudCompare installer in modify mode and add it. DSEpy must run in the Python environment provided by CloudCompare; installing a separate system Python is not a substitute.
+* DSEpy supports stable and beta Python runtimes: runtimes that expose normal accessors read normals directly; on stable runtimes that do not, use **Edit → Normals → Export normals to SF(s)** to create `Nx`, `Ny`, and `Nz` first.
 
 ---
 
 #### 1. Download DSEpy
-Choose **one** of the following methods to place DSEpy in a simple directory path without spaces or special characters (e.g., `C:\CCPlugins\DSEPy`):
+Git is optional. Choose either method:
 
-* **Option A: Using Git** *(Requires [Git](https://git-scm.com/) installed)*
-  ```cmd
-  git clone [https://github.com/adririquelme/DSEpy.git](https://github.com/adririquelme/DSEpy.git) C:\CCPlugins\DSEPyf
+* **Without Git:** open [DSEpy Releases](https://github.com/adririquelme/DSEpy/releases), choose the version you want, and download its **Source code (zip)** archive. Extract it and keep the complete folder structure (including `icons` and `locales`). To use the current development branch instead, select **Code → Download ZIP** on the repository page.
+* **With Git:**
+```bash
+git clone https://github.com/adririquelme/DSEpy.git C:\CCPlugins\DSEPy
+```
+
+Place the extracted or cloned folder somewhere permanent, for example `C:\CCPlugins\DSEpy`. In the steps below, replace that example with the actual folder path if different.
+
+#### 2. Install Dependencies in CloudCompare's Python Runtime
+Packages must be installed for the Python interpreter used by CloudCompare, not by running a bare `pip` command (which may target another Python installation).
+
+1. Open CloudCompare, open its Python Console, and run:
+   ```python
+   import sys
+   print(sys.version)
+   print(sys.executable)
+   ```
+2. Close CloudCompare completely. Locate the `python.exe` installed with the CloudCompare Python Runtime. If `sys.executable` printed the path to that `python.exe`, use it. If it printed `CloudCompare.exe` (or another host executable), do **not** use that path with `-m pip`; find the Runtime's `python.exe` inside the CloudCompare installation folder instead. Its location varies between versions and installation folders.
+3. In PowerShell, substitute the actual paths in this command:
+   ```powershell
+   & "C:\Path\To\CloudCompare\PythonRuntime\python.exe" -m pip install --user -r "C:\CCPlugins\DSEpy\requirements.txt"
+   ```
+   `-m pip` ensures pip belongs to that interpreter. `--user` installs packages for the current Windows user and normally avoids writing to the protected `Program Files` directory.
+
+If PowerShell reports that pip is missing, first check that the selected executable really is the CloudCompare Runtime's `python.exe` and that the Runtime is installed. Do not work around this by installing packages into an unrelated system Python.
+
+---
+
+#### 3. Quick Start / Launching DSEpy
+1. Open **CloudCompare**.
+2. Open the **Python Console** (from the menu or toolbar).
+3. Execute the launcher script, replacing the example path if needed:
+   ```python
+   exec(open(r"C:\CCPlugins\DSEpy\main_gui.py", encoding="utf-8").read())
+   ```
+
+---
 
 <a id="repository-structure"></a>
 ## 📂 Repository Structure

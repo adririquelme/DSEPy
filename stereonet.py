@@ -49,10 +49,27 @@ def cloud_reports_normals(cloud):
     return cloud is not None and cloud.hasNormals()
 
 
+def cloud_has_normal_scalar_fields(cloud):
+    """Return whether the cloud has Nx, Ny and Nz scalar fields."""
+    if cloud is None:
+        return False
+    get_scalar_field_index = getattr(cloud, "getScalarFieldIndexByName", None)
+    if not callable(get_scalar_field_index):
+        return False
+    for name in ("Nx", "Ny", "Nz"):
+        field_index = get_scalar_field_index(name)
+        if not isinstance(field_index, int) or field_index < 0:
+            return False
+    return True
+
+
 def cloud_has_normals(cloud):
     """Return whether this pycc binding lets DSE read the cloud normals."""
-    if not cloud_reports_normals(cloud):
+    if cloud is None:
         return False
+    if not cloud_reports_normals(cloud):
+        # CloudCompare 2.13.x: normals converted to Nx/Ny/Nz scalar fields.
+        return cloud_has_normal_scalar_fields(cloud)
 
     if any(
         getattr(cloud, name, None) is not None
@@ -112,7 +129,13 @@ def _normal_components_from_scalar_fields(cloud, point_count):
 
 def get_cloud_normals(cloud):
     """Read normals across CloudCompare Python bindings with different APIs."""
-    if cloud is None or not cloud.hasNormals():
+    if cloud is None:
+        raise RuntimeError(_tr("error.no_normals"))
+    if not cloud.hasNormals():
+        if cloud_has_normal_scalar_fields(cloud):
+            return _normal_components_from_scalar_fields(
+                cloud, int(cloud.size())
+            )
         raise RuntimeError(_tr("error.no_normals"))
 
     array_accessors = [

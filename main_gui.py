@@ -11,7 +11,7 @@ import webbrowser
 from datetime import datetime
 
 # Single source of truth for the DSEPy version. Change this value only when releasing a new version.
-DSE_VERSION = "1.0.2"
+DSE_VERSION = "1.0.3beta"
 
 
 def _enable_windows_dpi_awareness():
@@ -214,6 +214,74 @@ import stereonet
 import colour_optimisation as colour_opt
 importlib.reload(stereonet)
 importlib.reload(colour_opt)
+
+
+def _set_point_cloud_colors(cloud, rgb):
+    """Assign per-point RGB values across CloudCompare Python API versions."""
+    rgb = np.asarray(rgb, dtype=np.uint8)
+    if rgb.ndim != 2 or rgb.shape[1] != 3:
+        raise ValueError("Point colors must be an N x 3 RGB array.")
+    if rgb.shape[0] != cloud.size():
+        raise ValueError("The number of colors must match the number of points.")
+
+    def write_color_buffer(color_buffer):
+        if color_buffer is None:
+            raise RuntimeError("CloudCompare did not create the RGB color table.")
+        color_buffer = np.asarray(color_buffer)
+        if (
+            color_buffer.ndim != 2
+            or color_buffer.shape[0] != rgb.shape[0]
+            or color_buffer.shape[1] < 3
+        ):
+            raise RuntimeError("CloudCompare returned an incompatible RGB color table.")
+        if not color_buffer.flags.writeable:
+            raise RuntimeError("CloudCompare returned a read-only RGB color table.")
+        color_buffer[:, :3] = rgb
+        if color_buffer.shape[1] >= 4:
+            color_buffer[:, 3] = 255
+
+    set_colors = getattr(cloud, "setColors", None)
+    if callable(set_colors):
+        set_colors(np.ascontiguousarray(rgb))
+        return
+
+    resize_colors = getattr(cloud, "resizeTheRGBTable", None)
+    get_colors = getattr(cloud, "colors", None)
+    if callable(resize_colors) and callable(get_colors):
+        resize_colors()
+        write_color_buffer(get_colors())
+        return
+
+    colorize = getattr(cloud, "colorize", None)
+    if callable(colorize) and callable(get_colors):
+        colorize(1.0, 1.0, 1.0, 1.0)
+        write_color_buffer(get_colors())
+        colorize(1.0, 1.0, 1.0, 1.0)
+        return
+
+    set_point_color = getattr(cloud, "setPointColor", None)
+    rgb_type = getattr(pycc, "Rgb", None)
+    if callable(resize_colors) and callable(set_point_color) and rgb_type is not None:
+        resize_colors()
+        for index, (red, green, blue) in enumerate(rgb):
+            set_point_color(
+                index, rgb_type(int(red), int(green), int(blue))
+            )
+        return
+
+    available_color_methods = sorted(
+        name for name in dir(cloud)
+        if "color" in name.lower() or "rgb" in name.lower()
+    )
+    raise RuntimeError(
+        "This CloudCompare Python Runtime does not expose a supported "
+        "per-point color API. Available color-related methods: {}. "
+        "pycc module: {}."
+        .format(
+            ", ".join(available_color_methods) or "(none)",
+            getattr(pycc, "__file__", "(unknown location)")
+        )
+    )
 
 
 class DSEProgressDialog:
@@ -2581,7 +2649,7 @@ class DSEMainApp:
                     source_name, self.tr("colour.copy_suffix"),
                     variables["space"].get()
                 ))
-                coloured.setColors(np.ascontiguousarray(rgb, dtype=np.uint8))
+                _set_point_cloud_colors(coloured, rgb)
                 coloured.showColors(True)
                 try:
                     coloured.setNormals(
@@ -3337,7 +3405,7 @@ class DSEMainApp:
                     colour_space, selected_space.capitalize()
                 )
             )
-            coloured.setColors(np.ascontiguousarray(rgb, dtype=np.uint8))
+            _set_point_cloud_colors(coloured, rgb)
             coloured.showColors(True)
             try:
                 coloured.setNormals(
@@ -4508,7 +4576,7 @@ class DSEMainApp:
                     colors[:, 1] = green
                     colors[:, 2] = blue
 
-                    vertices.setColors(colors)
+                    _set_point_cloud_colors(vertices, colors)
                     vertices.showColors(True)
                     vertices.setEnabled(False)
 
