@@ -226,6 +226,11 @@ The Wiki is the primary source of documentation for DSEpy and is continuously up
 * **Roberto Tomás Jover** [![ORCID](https://img.shields.io/badge/ORCID-0000--0003--2947--9441-green?logo=orcid&logoColor=white)](https://orcid.org/0000-0003-2947-9441) — *Department of Civil Engineering, Universidad de Alicante*
 * **Antonio Abellán Fernández** [![ORCID](https://img.shields.io/badge/ORCID-0000--0003--2391--6049-green?logo=orcid&logoColor=white)](https://orcid.org/0000-0003-2391-6049)
 
+### Acknowledgments
+
+* **Rafael Jiménez** and **Nicholas Sitar** for the spectral clustering method of discontinuity sets implemented in DSEpy: Jimenez-Rodriguez, R., & Sitar, N. (2006). *A spectral method for clustering of rock discontinuity sets*. International Journal of Rock Mechanics and Mining Sciences, 43(7), 1052–1061. https://doi.org/10.1016/j.ijrmms.2006.02.003
+* **HDBSCAN**: Campello, R. J. G. B., Moulavi, D., & Sander, J. (2013). *Density-based clustering based on hierarchical density estimates*. PAKDD 2013, LNCS 7819, 160–172. https://doi.org/10.1007/978-3-642-37456-2_14 (used through scikit-learn).
+* The scikit-learn developers (HDBSCAN, K-means, silhouette score) and the CloudCompare development team.
 ---
 
 <a id="citation"></a>

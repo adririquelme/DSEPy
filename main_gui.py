@@ -196,12 +196,12 @@ except Exception as exc:
 # If it is missing, the plugin still works fine with the standard
 # matplotlib colormaps; _cluster_rgb() falls back gracefully.
 try:
-    import colorcet  # noqa: F401
+    import colorcet  # type: ignore  # noqa: F401
     _COLORCET_AVAILABLE = True
 except Exception:
     _COLORCET_AVAILABLE = False
 
-import pycc
+import pycc  # type: ignore
 import tkinter as tk
 try:
     from PIL import Image, ImageTk
@@ -212,8 +212,10 @@ from tkinter import messagebox, ttk, scrolledtext, filedialog
 
 import stereonet
 import colour_optimisation as colour_opt
+import spectral_clustering as spectral
 importlib.reload(stereonet)
 importlib.reload(colour_opt)
+importlib.reload(spectral)
 
 
 def _set_point_cloud_colors(cloud, rgb):
@@ -846,7 +848,7 @@ class DSEMainApp:
             )
         else:
             button.configure(image=icon, text="", compound=tk.CENTER)
-        button._dse_icon_image = icon
+        button._dse_icon_image = icon  # type: ignore[attr-defined]
         try:
             self.add_tooltip(button, tooltip_key)
         except Exception:
@@ -940,7 +942,7 @@ class DSEMainApp:
                 image=refresh_icon, text="", compound=tk.CENTER,
                 width=38, height=36, padx=2, pady=2
             )
-            self.btn_refresh_cloud._dse_icon_image = refresh_icon
+            self.btn_refresh_cloud._dse_icon_image = refresh_icon  # type: ignore[attr-defined]
         else:
             self.btn_refresh_cloud.configure(
                 text=self.tr("Refresh"), width=38, height=36,
@@ -961,7 +963,7 @@ class DSEMainApp:
                     image=icon, text="", compound=tk.CENTER,
                     width=46, height=44, padx=2, pady=2
                 )
-                button._dse_icon_image = icon
+                button._dse_icon_image = icon  # type: ignore[attr-defined]
             else:
                 button.configure(text=fallback, width=6, height=2)
         tools_icons = {
@@ -1645,6 +1647,23 @@ class DSEMainApp:
         self.btn_generate_colour_cloud.configure(state=tk.DISABLED)
         self.btn_generate_colour_cloud.pack(side=tk.LEFT, padx=5, pady=(4, 2))
 
+        # Spectral clustering of discontinuity sets (Jimenez-Rodriguez & Sitar, 2006).
+        spectral_frame = ttk.LabelFrame(
+            self.step1_tab, text=" " + self.tx("Spectral clustering of sets") + " ",
+            padding=6
+        )
+        spectral_frame.pack(fill=tk.X, padx=4, pady=3)
+        self.btn_spectral_clustering = self._make_icon_button_v030(
+            spectral_frame, "cluster_analysis", self.open_spectral_clustering_tool,
+            "tip.spectral_clustering", self.tx("Spectral")
+        )
+        self.btn_spectral_clustering.configure(state=tk.DISABLED)
+        self.btn_spectral_clustering.pack(side=tk.LEFT, padx=5, pady=(4, 2))
+        tk.Label(
+            spectral_frame, justify=tk.LEFT, wraplength=230,
+            text=self.tx("Groups poles into discontinuity sets using the pole space selected above.")
+        ).pack(side=tk.LEFT, padx=6)
+
         # Step 1: Principal poles.
         self.grp_step1 = ttk.LabelFrame(
             self.step1_tab, text=" " + self.tr("gui.principal_poles") + " ",
@@ -1959,7 +1978,7 @@ class DSEMainApp:
         self.tree.column("N", width=70, anchor=tk.CENTER)
 
         tree_scroll = ttk.Scrollbar(tree_frame, orient=tk.VERTICAL, command=self.tree.yview)
-        self.tree.configure(yscroll=tree_scroll.set)
+        self.tree.configure(yscroll=tree_scroll.set)  # type: ignore[call-overload]
         self.tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         tree_scroll.pack(side=tk.RIGHT, fill=tk.Y)
         self.tree.bind("<<TreeviewSelect>>", self.on_pole_select)
@@ -2024,7 +2043,7 @@ class DSEMainApp:
             self.planes_tree.column(col, width=w, minwidth=w, anchor=tk.CENTER, stretch=True)
 
         planes_scroll = ttk.Scrollbar(planes_frame, orient=tk.VERTICAL, command=self.planes_tree.yview)
-        self.planes_tree.configure(yscroll=planes_scroll.set)
+        self.planes_tree.configure(yscroll=planes_scroll.set)  # type: ignore[call-overload]
         self.planes_tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         planes_scroll.pack(side=tk.RIGHT, fill=tk.Y)
 
@@ -2151,7 +2170,7 @@ class DSEMainApp:
             constrained_layout=True
         )
         try:
-            figure.canvas.manager.set_window_title(window_title)
+            figure.canvas.manager.set_window_title(window_title)  # type: ignore[union-attr]
         except Exception:
             pass
         flat_axes = axes.ravel()
@@ -2685,7 +2704,7 @@ class DSEMainApp:
             icon = self.icons.get(icon_name) if getattr(self, "icons", None) else None
             if icon is not None:
                 button.configure(image=icon, text="", compound=tk.CENTER)
-                button._dse_icon_image = icon
+                button._dse_icon_image = icon  # type: ignore[attr-defined]
             else:
                 button.configure(text=fallback, wraplength=52)
             self.add_tooltip(button, tooltip_key)
@@ -3029,6 +3048,200 @@ class DSEMainApp:
 
         tk.Button(dialog, text=self.tx("Calculate"), command=calculate, bg="#d1e7dd", width=24).grid(row=3, column=0, columnspan=2, pady=14)
 
+    def open_spectral_clustering_tool(self):
+        """Spectral clustering of discontinuity sets (Jimenez-Rodriguez & Sitar, 2006)."""
+        cloud = self.get_selected_cloud()
+        if cloud is None or not stereonet.cloud_has_normals(cloud):
+            messagebox.showwarning(
+                self.tx("Warning"), self.tx("Select a cloud with computed normals."),
+                parent=self.root
+            )
+            return
+
+        dialog = tk.Toplevel(self.root)
+        dialog.title(self.tx("Spectral clustering of sets"))
+        dialog.geometry("620x480")
+
+        sigma_var = tk.StringVar(value=str(spectral.DEFAULT_SIGMA))
+        k_var = tk.StringVar(value="")
+        method_var = tk.StringVar(value="eigengap")
+        kmax_var = tk.StringVar(value="8")
+        samples_var = tk.StringVar(value="3000")
+
+        form = tk.Frame(dialog)
+        form.pack(fill=tk.X, padx=10, pady=8)
+        rows = (
+            ("Sigma (0.10 - 0.15)", tk.Entry(form, textvariable=sigma_var, width=14), "tip.spectral.sigma"),
+            ("Number of sets K (empty = automatic)", tk.Entry(form, textvariable=k_var, width=14), "tip.spectral.k"),
+            ("Automatic K method", ttk.Combobox(
+                form, textvariable=method_var, values=("eigengap", "silhouette"),
+                state="readonly", width=12), "tip.spectral.method"),
+            ("Maximum K (automatic)", tk.Entry(form, textvariable=kmax_var, width=14), "tip.spectral.kmax"),
+            ("Maximum points in spectral step", tk.Entry(form, textvariable=samples_var, width=14), "tip.spectral.samples"),
+        )
+        for row, (label, widget, tip_key) in enumerate(rows):
+            label_widget = tk.Label(form, text=self.tx(label), anchor="w")
+            label_widget.grid(row=row, column=0, sticky="w", pady=3)
+            widget.grid(row=row, column=1, sticky="e", padx=8, pady=3)
+            self.add_tooltip(label_widget, tip_key)
+            self.add_tooltip(widget, tip_key)
+        form.columnconfigure(0, weight=1)
+
+        status_var = tk.StringVar(value="")
+        status_label = tk.Label(dialog, textvariable=status_var, anchor="w", justify=tk.LEFT,
+                                wraplength=490)
+        status_label.pack(fill=tk.X, padx=10)
+        self.add_tooltip(status_label, "tip.spectral.status")
+
+        columns = ("set", "count", "percent", "dipdir", "dip", "trend", "plunge")
+        table = ttk.Treeview(dialog, columns=columns, show="headings", height=8)
+        for column, title, width in (
+            ("set", self.tx("Set"), 50), ("count", self.tx("Count"), 70),
+            ("percent", "%", 55), ("dipdir", self.tr("table.dip_direction"), 95),
+            ("dip", self.tr("table.dip"), 80), ("trend", self.tx("Pole trend (deg)"), 100),
+            ("plunge", self.tx("Pole plunge (deg)"), 105),
+        ):
+            table.heading(column, text=title)
+            table.column(column, width=width, anchor="center")
+        table.pack(fill=tk.BOTH, expand=True, padx=10, pady=6)
+        self.add_tooltip(table, "tip.spectral.table")
+
+        def plot_result(projection, poles, labels, mean_vectors, orient, k, space_name):
+            fig, ax = plt.subplots(figsize=(7, 7))
+            stereonet.draw_stereonet(ax, projection=projection, labeled=1)
+
+            def spectral_format_coord(x_pos, y_pos):
+                dipdir, dip = stereonet.f_cart2clar(x_pos, y_pos, projection=projection)
+                if dipdir is None:
+                    return ""
+                return self.tr("plot.coord", dipdir=dipdir, dip=dip, projection=projection)
+
+            ax.format_coord = spectral_format_coord
+            dipdir, dip = stereonet.f_vnorm2clar_v02(poles)
+            px, py = stereonet.f_clar2cart(dipdir, dip, projection=projection)
+            cmap = plt.get_cmap("tab10")
+            step = max(1, len(px) // 200000)
+            for c in range(k):
+                sel = np.flatnonzero(labels == c)[::step]
+                text = f"S{c + 1}"
+                if orient[c] is not None:
+                    text += f"  {orient[c][0]:05.1f}/{orient[c][1]:04.1f}"
+                ax.plot(px[sel], py[sel], ".", markersize=2.0, alpha=0.5,
+                        color=cmap(c % 10), label=text, zorder=1)
+            for c in range(k):
+                if np.isnan(mean_vectors[c]).any():
+                    continue
+                m_dd, m_dip = stereonet.f_vnorm2clar_v02(
+                    spectral.orientations_to_vectors(mean_vectors[c:c + 1]))
+                mx, my = stereonet.f_clar2cart(m_dd, m_dip, projection=projection)
+                ax.plot(mx, my, "*", markersize=14, markeredgecolor="k",
+                        color=cmap(c % 10), zorder=3)
+                ax.annotate(f"S{c + 1}", (mx[0], my[0]), xytext=(6, 6),
+                            textcoords="offset points", fontweight="bold")
+            ax.legend(
+                loc="upper right", markerscale=5, fontsize=8,
+                title=self.tx("Set  DipDir/Dip (deg)"))
+            ax.set_title(self.tx("Spectral clustering of sets") + f" (K={k}, {space_name})")
+            plt.show()
+
+        def run():
+            try:
+                sigma = float(sigma_var.get())
+                k_text = k_var.get().strip()
+                k_value = int(k_text) if k_text else None
+                k_max = int(kmax_var.get())
+                max_samples = int(samples_var.get())
+                if sigma <= 0 or max_samples < 3 or k_max < 2:
+                    raise ValueError
+            except ValueError:
+                messagebox.showerror(self.tx("Error"), self.tx("Please enter valid numeric parameters."), parent=dialog)
+                return
+
+            progress_dialog = DSEProgressDialog(
+                dialog, title=self.tx("Spectral clustering of sets"), translator=self.tr
+            )
+            progress_dialog.lbl_title.config(text=self.tx("Spectral clustering of sets"))
+            last_logged = [-100.0]
+
+            def on_progress(percent, message):
+                if percent - last_logged[0] >= 10 or percent >= 100:
+                    last_logged[0] = percent
+                    self.log(f"  [Spectral {percent:3.0f}%] {message}")
+                return progress_dialog.update_progress(percent, self.tx(message))
+
+            start = time.perf_counter()
+            try:
+                on_progress(0, "Reading normals")
+                normals = stereonet.get_cloud_normals(cloud)
+                lengths = np.linalg.norm(normals, axis=1)
+                valid = np.isfinite(normals).all(axis=1) & (lengths > np.finfo(float).eps)
+                unit = normals[valid] / lengths[valid, None]
+                rotation = self.optimised_colour_rotation if self._use_rotated_pole_space() else None
+                if rotation is not None:
+                    unit = (rotation @ unit.T).T
+                unit[unit[:, 2] < 0.0] *= -1.0
+                if len(unit) < 3:
+                    messagebox.showwarning(self.tx("Warning"), self.tx("Not enough valid normals."), parent=dialog)
+                    return
+                result, labels = spectral.cluster_normals(
+                    unit, k=k_value, max_samples=max_samples, sigma=sigma,
+                    k_max=k_max, k_method=method_var.get(), progress=on_progress
+                )
+            except spectral.SpectralClusteringCancelled:
+                self.log(self.tx("Spectral clustering cancelled."))
+                return
+            except ImportError:
+                messagebox.showerror(self.tx("Error"), "scikit-learn is required.", parent=dialog)
+                return
+            except Exception as exc:
+                messagebox.showerror(self.tx("Error"), str(exc), parent=dialog)
+                return
+            finally:
+                progress_dialog.close()
+
+            self.spectral_result = result
+            self.spectral_labels = labels
+            k = result.k_optimal
+            space_name = self.tx("Rotated space") if rotation is not None else self.tx("Original space")
+            silhouette = "" if result.silhouette is None else f", silhouette={result.silhouette:.3f}"
+            status_var.set(
+                f"K={k}, sigma={result.sigma:g}{silhouette}, "
+                f"{len(unit)} poles ({len(result.labels)} in spectral step), {space_name}"
+            )
+            self.log(f"[Spectral] {status_var.get()} ({time.perf_counter() - start:.2f} s)")
+
+            # Mean orientation of every set, always reported in the original space.
+            orient = []
+            table.delete(*table.get_children())
+            for c in range(k):
+                count = int(np.sum(labels == c))
+                percent = 100.0 * count / len(labels)
+                if np.isnan(result.mean_vectors[c]).any():
+                    orient.append(None)
+                    cells = ("-", "-", "-", "-")
+                else:
+                    vec = spectral.orientations_to_vectors(result.mean_vectors[c:c + 1])
+                    if rotation is not None:
+                        vec = (rotation.T @ vec.T).T
+                    dd, dp = stereonet.f_vnorm2clar_v02(vec)
+                    dd, dp = float(dd[0]), float(dp[0])
+                    orient.append((dd, dp))
+                    cells = (f"{dd:.1f}", f"{dp:.1f}", f"{(dd + 180.0) % 360.0:.1f}", f"{90.0 - dp:.1f}")
+                table.insert("", tk.END, values=(f"S{c + 1}", count, f"{percent:.1f}") + cells)
+                self.log(
+                    f"[Spectral] S{c + 1}: {count} poles ({percent:.1f}%), "
+                    f"dip dir/dip = {cells[0]}/{cells[1]}, "
+                    f"pole trend/plunge = {cells[2]}/{cells[3]}"
+                )
+
+            plot_result(self._canonical_projection(), unit, labels,
+                        result.mean_vectors, orient, k, space_name)
+
+        self.add_tooltip(calculate_button := tk.Button(
+            dialog, text=self.tx("Calculate"), command=run, bg="#d1e7dd", width=24),
+            "tip.spectral.calculate")
+        calculate_button.pack(pady=(0, 10))
+
     def get_selected_cloud(self, verbose=True):
         CC = pycc.GetInstance()
         entities = CC.getSelectedEntities()
@@ -3169,6 +3382,8 @@ class DSEMainApp:
             self.btn_generate_colour_cloud.config(
                 state=tk.NORMAL if enabled else tk.DISABLED
             )
+        if hasattr(self, "btn_spectral_clustering"):
+            self.btn_spectral_clustering.config(state=state)
         if hasattr(self, "pole_space_combo"):
             self.pole_space_combo.configure(
                 state="readonly" if enabled else "disabled"

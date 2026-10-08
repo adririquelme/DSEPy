@@ -11,5 +11,5 @@ Pillow
 scikit-learn>=1.3.0  # HDBSCAN clustering in Step 3
 
 # Optional packages:
-colorcet  - additional scientific colour maps
-pyvista   - interactive 3D normal/sphere visualisation
+# colorcet  - additional scientific colour maps
+# pyvista   - interactive 3D normal/sphere visualisation

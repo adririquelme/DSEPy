@@ -2,23 +2,15 @@
 
 All notable changes to DSEPy are documented in this file.
 
-## [1.0.2]
- 
-### Added
- 
-- New cluster analysis functionality for discontinuity data interpretation.
-- Alternative normal vector loading using scalar fields (`Nx`, `Ny`, `Nz`) when direct access through the CloudCompare Python API is unavailable.
- 
-### Improved
- 
-- Better compatibility across CloudCompare versions.
-- More robust handling of normal vector information.
-- Improved user feedback when normals cannot be accessed directly.
- 
+## [1.0.2] - 2026-10-05
+
 ### Fixed
- 
-- Several minor bugs and stability issues.
-- Minor GUI improvements and code cleanup.
+
+- Detect point-cloud normal access according to the capabilities exposed by the active CloudCompare Python runtime.
+- Support stable `pycc` builds by reading normals from the `Nx`, `Ny`, and `Nz` scalar fields exported by CloudCompare.
+- Show a one-time compatibility notice when the selected cloud has normals that the active runtime cannot read directly.
+- Reduce the Refresh control size and increase the visible execution log height.
+- Update the installation guide to use the current `main_gui.py` launcher.
 
 ## [1.0.0] - 2026-09-13
 
