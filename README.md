@@ -75,62 +75,22 @@ It represents the Python/CloudCompare evolution of the original **Discontinuity 
  └────────────────────────────────────────┘
 ```
 
----
-
 <a id="installation"></a>
 ## 🛠️ Installation & Setup
 
 ### Prerequisites
 * **[CloudCompare](https://www.cloudcompare.org/)** (v2.14.beta - build 2024-09-26 or higher required; earlier builds or older stable releases may cause Python binding issues).
-* **CloudCompare Python Plugin** enabled during installation (ensure the Python plugin option is checked during the CloudCompare setup wizard).
+* **CloudCompare Python Plugin** enabled during installation (ensure the Python plugin option is checked in the CloudCompare setup wizard).
+* **No separate Python or pip installation on Windows is required.** CloudCompare includes its own standalone Python environment with `pip` pre-installed.
 
 ---
 
 #### 1. Download DSEpy
-Clone or extract DSEpy into a simple directory path without spaces or special characters (e.g., `C:\CCPlugins\DSEPy`):
-```bash
-git clone https://github.com/adririquelme/DSEpy.git C:\CCPlugins\DSEPy
-```
+Choose **one** of the following methods to place DSEpy in a simple directory path without spaces or special characters (e.g., `C:\CCPlugins\DSEPy`):
 
-#### 2. Install Dependencies in CloudCompare's Python
-Since CloudCompare is installed in `C:\Program Files\` by default, installing Python packages requires elevated administrator privileges.
-
-1. **Close CloudCompare completely** if it is currently running.
-2. **Open Command Prompt (CMD) or PowerShell as Administrator:**
-   * Press `Win + S`, type `powershell` or `cmd`, right-click, and select **Run as administrator**.
-3. **Navigate to the DSEpy directory:**
-   ```cmd
-   cd C:\CCPlugins\DSEPy
-   ```
-4. **Run the installation command:**
-
-   * **In PowerShell:**
-     ```powershell
-     & "C:\Program Files\CloudCompare\plugins\Python\python.exe" -m pip install -r requirements.txt --no-warn-script-location --break-system-packages
-     ```
-
-   * **In Command Prompt (CMD):**
-     ```cmd
-     "C:\Program Files\CloudCompare\plugins\Python\python.exe" -m pip install -r requirements.txt --no-warn-script-location --break-system-packages
-     ```
-
-> 💡 **Troubleshooting & Notes:**
-> * **Externally Managed Environment Error (PEP 668):** Newer CloudCompare 2.14.beta builds mark their embedded Python as externally managed. The `--break-system-packages` flag is required to allow `pip` to install packages directly into CloudCompare's Python environment.
-> * **Permission Error / Access Denied (`WinError 5`):** Ensure your console was opened via **"Run as administrator"** and that **CloudCompare is completely closed**.
-> * **PowerShell Syntax Error (`Unexpected token`):** In PowerShell, always include the `&` operator before quoted executable paths.
-> * **NumPy 2.x Compatibility Issues:** CloudCompare plugins require **NumPy 1.x** (`numpy<2.0.0`). Ensure your `requirements.txt` restricts NumPy (`numpy>=1.20.0,<2.0.0`) to avoid C-extension errors (`ImportError: cannot import name '_c_internal_utils'`).
-
----
-
-#### 3. Quick Start / Launching DSEpy
-1. Open **CloudCompare**.
-2. Open the **Python Console** (from the menu or toolbar).
-3. Execute the launcher script:
-   ```python
-   exec(open("C:/CCPlugins/DSEPy/main_gui.py").read())
-   ```
-
----
+* **Option A: Using Git** *(Requires [Git](https://git-scm.com/) installed)*
+  ```cmd
+  git clone [https://github.com/adririquelme/DSEpy.git](https://github.com/adririquelme/DSEpy.git) C:\CCPlugins\DSEPyf
 
 <a id="repository-structure"></a>
 ## 📂 Repository Structure
