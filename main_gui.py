@@ -28,7 +28,7 @@ def _enable_windows_dpi_awareness():
         pass
 
 
-def _fit_window_to_screen(window, preferred_width=1160, preferred_height=760):
+def _fit_window_to_screen(window, preferred_width=1160, preferred_height=650):
     """Choose a compact initial size without exceeding the work area."""
     window.update_idletasks()
     screen_w = max(640, window.winfo_screenwidth())
@@ -38,7 +38,7 @@ def _fit_window_to_screen(window, preferred_width=1160, preferred_height=760):
     x = max(0, (screen_w - width) // 2)
     y = max(0, (screen_h - height) // 3)
     window.geometry("{}x{}+{}+{}".format(width, height, x, y))
-    window.minsize(min(900, width), min(600, height))
+    window.minsize(min(900, width), min(350, height))
 
 # 1. Resolve the plugin directory without assuming that __file__ exists.
 # 1. Resolve the plugin directory in CloudCompare exec mode.
@@ -717,8 +717,8 @@ class DSEMainApp:
         # Tk menus support PNG images as well.
         tools_icons = {
             0: "imagen_rotacion",
-            2: "spacing",
-            3: "persistence",
+            3: "spacing",
+            4: "persistence",
         }
         for index, name in tools_icons.items():
             icon = self.icons.get(name)
@@ -812,7 +812,8 @@ class DSEMainApp:
             "plot_poles", "principal_poles", "classify", "plot_families",
             "cluster_analysis", "cluster_facets", "display_density", "refresh",
             "add", "apply", "delete", "move_up", "move_down",
-            "spacing", "persistence", "imagen_rotacion", "imagen_HSV_icono"
+            "spacing", "persistence", "imagen_rotacion", "imagen_HSV_icono",
+            "spectral_clustering_icon1"
         )
         for name in names:
             path = os.path.join(self._icons_directory_v030(), name + ".png")
@@ -968,8 +969,9 @@ class DSEMainApp:
                 button.configure(text=fallback, width=6, height=2)
         tools_icons = {
             0: "imagen_rotacion",
-            2: "spacing",
-            3: "persistence",
+            1: "spectral_clustering_icon1",
+            3: "spacing",
+            4: "persistence",
         }
         for index, name in tools_icons.items():
             icon = self.icons.get(name)
@@ -1466,9 +1468,19 @@ class DSEMainApp:
 
         self.tools_menu = tk.Menu(self.menu_bar, tearoff=0)
         self.tools_menu.add_command(label=self.tx("Normal Colour Optimisation..."), command=self.open_normal_colour_optimisation, state=tk.DISABLED)
+        self.tools_menu.add_command(label=self.tx("Spectral Clustering..."), command=self.open_spectral_clustering_tool, state=tk.DISABLED)
         self.tools_menu.add_separator()
         self.tools_menu.add_command(label=self.tx("Normal Spacing..."), command=self.open_normal_spacing_tool, state=tk.DISABLED)
         self.tools_menu.add_command(label=self.tx("Persistence..."), command=self.open_persistence_tool, state=tk.DISABLED)
+        self._tools_menu_tips = {
+            0: "tip.tools.colour_optimisation",
+            1: "tip.spectral_clustering",
+            3: "tip.tools.normal_spacing",
+            4: "tip.tools.persistence",
+        }
+        self._tools_menu_tip_window = None
+        self.tools_menu.bind("<<MenuSelect>>", self._on_tools_menu_select, add="+")
+        self.tools_menu.bind("<Unmap>", lambda _e: self._hide_tools_menu_tip(), add="+")
         self.tools_menu_index = 0
         self.menu_bar.add_cascade(label=self.tx("Tools"), menu=self.tools_menu)
 
@@ -1493,11 +1505,50 @@ class DSEMainApp:
             self.menu_bar.entryconfig(self.language_menu_index, label=self._language_menu_label())
             self.menu_bar.entryconfig(self.about_menu_index, label=self.tx("About"))
             self.tools_menu.entryconfig(0, label=self.tx("Normal Colour Optimisation..."))
-            for index, key in zip((2, 3), ("Normal Spacing...", "Persistence...")):
+            self.tools_menu.entryconfig(1, label=self.tx("Spectral Clustering..."))
+            for index, key in zip((3, 4), ("Normal Spacing...", "Persistence...")):
                 self.tools_menu.entryconfig(index, label=self.tx(key))
             self._rebuild_language_menu()
         except Exception:
             pass
+
+    def _hide_tools_menu_tip(self):
+        tip = getattr(self, "_tools_menu_tip_window", None)
+        if tip is not None:
+            try:
+                tip.destroy()
+            except Exception:
+                pass
+        self._tools_menu_tip_window = None
+
+    def _on_tools_menu_select(self, _event=None):
+        """Show a tooltip describing the highlighted Tools menu entry."""
+        self._hide_tools_menu_tip()
+        try:
+            active = self.tools_menu.index("active")
+        except Exception:
+            return
+        key = self._tools_menu_tips.get(active) if isinstance(active, int) else None
+        if not key:
+            return
+        try:
+            tip = tk.Toplevel(self.root)
+            tip.wm_overrideredirect(True)
+            tip.attributes("-topmost", True)
+            tk.Label(
+                tip, text=self.tr(key), justify=tk.LEFT, relief=tk.SOLID,
+                borderwidth=1, background="#fffbe6", foreground="#202124",
+                wraplength=380, padx=9, pady=7
+            ).pack()
+            tip.update_idletasks()
+            x = self.tools_menu.winfo_pointerx() + 24
+            y = self.tools_menu.winfo_pointery() + 12
+            x = min(x, tip.winfo_screenwidth() - tip.winfo_reqwidth() - 8)
+            y = min(y, tip.winfo_screenheight() - tip.winfo_reqheight() - 8)
+            tip.wm_geometry(f"+{x}+{y}")
+            self._tools_menu_tip_window = tip
+        except Exception:
+            self._hide_tools_menu_tip()
 
     def show_about(self):
         about = tk.Toplevel(self.root)
@@ -1542,11 +1593,48 @@ class DSEMainApp:
         self.main_paned = ttk.PanedWindow(self.root, orient=tk.HORIZONTAL)
         self.main_paned.pack(side=tk.TOP, fill=tk.BOTH, expand=True, padx=6, pady=(6, 3))
 
-        left_frame = ttk.Frame(self.main_paned, width=540)
+        left_outer = ttk.Frame(self.main_paned, width=540)
         right_frame = ttk.Frame(self.main_paned)
-        self.main_paned.add(left_frame, weight=1)
+        self.main_paned.add(left_outer, weight=1)
         self.main_paned.add(right_frame, weight=1)
         self.root.after_idle(lambda: self.main_paned.sashpos(0, 540))
+
+        # The workflow panel scrolls vertically when the window is too short,
+        # so the window height is not limited by its natural height.
+        left_canvas = tk.Canvas(left_outer, highlightthickness=0, borderwidth=0, width=1)
+        left_scroll = ttk.Scrollbar(left_outer, orient=tk.VERTICAL, command=left_canvas.yview)
+        left_canvas.configure(yscrollcommand=left_scroll.set)
+        left_outer.rowconfigure(0, weight=1)
+        left_outer.columnconfigure(0, weight=1)
+        left_canvas.grid(row=0, column=0, sticky="nsew")
+        left_scroll.grid(row=0, column=1, sticky="ns")
+        left_frame = ttk.Frame(left_canvas)
+        left_window = left_canvas.create_window((0, 0), window=left_frame, anchor="nw")
+
+        def _layout_left_panel(_event=None):
+            canvas_w = left_canvas.winfo_width()
+            canvas_h = left_canvas.winfo_height()
+            needed_h = left_frame.winfo_reqheight()
+            left_canvas.itemconfigure(
+                left_window, width=canvas_w, height=max(needed_h, canvas_h)
+            )
+            left_canvas.configure(scrollregion=(0, 0, canvas_w, max(needed_h, canvas_h)))
+            if needed_h > canvas_h:
+                left_scroll.grid()
+            else:
+                left_scroll.grid_remove()
+                left_canvas.yview_moveto(0)
+
+        def _left_mousewheel(event):
+            if left_frame.winfo_reqheight() > left_canvas.winfo_height():
+                left_canvas.yview_scroll(int(-event.delta / 120), "units")
+
+        left_canvas.bind("<Configure>", _layout_left_panel)
+        left_frame.bind("<Configure>", _layout_left_panel)
+        left_canvas.bind("<Enter>", lambda _e: left_canvas.bind_all("<MouseWheel>", _left_mousewheel))
+        left_canvas.bind("<Leave>", lambda _e: left_canvas.unbind_all("<MouseWheel>"))
+        left_frame.bind("<Enter>", lambda _e: left_canvas.bind_all("<MouseWheel>", _left_mousewheel))
+        left_frame.bind("<Leave>", lambda _e: left_canvas.unbind_all("<MouseWheel>"))
 
         # ---------------------------------------------------------
         # LEFT PANEL: THREE-STEP WORKFLOW
@@ -1646,23 +1734,6 @@ class DSEMainApp:
         )
         self.btn_generate_colour_cloud.configure(state=tk.DISABLED)
         self.btn_generate_colour_cloud.pack(side=tk.LEFT, padx=5, pady=(4, 2))
-
-        # Spectral clustering of discontinuity sets (Jimenez-Rodriguez & Sitar, 2006).
-        spectral_frame = ttk.LabelFrame(
-            self.step1_tab, text=" " + self.tx("Spectral clustering of sets") + " ",
-            padding=6
-        )
-        spectral_frame.pack(fill=tk.X, padx=4, pady=3)
-        self.btn_spectral_clustering = self._make_icon_button_v030(
-            spectral_frame, "cluster_analysis", self.open_spectral_clustering_tool,
-            "tip.spectral_clustering", self.tx("Spectral")
-        )
-        self.btn_spectral_clustering.configure(state=tk.DISABLED)
-        self.btn_spectral_clustering.pack(side=tk.LEFT, padx=5, pady=(4, 2))
-        tk.Label(
-            spectral_frame, justify=tk.LEFT, wraplength=230,
-            text=self.tx("Groups poles into discontinuity sets using the pole space selected above.")
-        ).pack(side=tk.LEFT, padx=6)
 
         # Step 1: Principal poles.
         self.grp_step1 = ttk.LabelFrame(
@@ -1962,7 +2033,7 @@ class DSEMainApp:
         tree_frame.pack(fill=tk.BOTH, expand=True, pady=2)
 
         self.tree = ttk.Treeview(
-            tree_frame, columns=("ID", "DipDir", "Dip", "Density", "FisherK", "N"), show="headings", height=6
+            tree_frame, columns=("ID", "DipDir", "Dip", "Density", "FisherK", "N"),                                     show="headings", height=1
         )
         self.tree.heading("ID", text=self.tr("table.id"))
         self.tree.heading("DipDir", text=self.tr("table.dip_direction"))
@@ -1994,8 +2065,9 @@ class DSEMainApp:
         self.btn_apply_edit = tk.Button(edit_frame, text=self.tr("gui.apply_changes"), command=self.action_update_pole, bg="#fff3cd")
         self.btn_apply_edit.grid(row=0, column=4, padx=6, pady=4)
 
-        btn_box = tk.Frame(self.poles_frame)
-        btn_box.pack(fill=tk.X, pady=2)
+        edit_frame.columnconfigure(5, weight=1)
+        btn_box = tk.Frame(edit_frame)
+        btn_box.grid(row=0, column=5, sticky="e", padx=(6, 4), pady=2)
         self.btn_mup = tk.Button(btn_box, text=self.tr("gui.move_up"), command=self.action_move_up, width=10)
         self.btn_mup.pack(side=tk.LEFT, padx=2)
         self.btn_mdown = tk.Button(btn_box, text=self.tr("gui.move_down"), command=self.action_move_down, width=10)
@@ -2014,7 +2086,7 @@ class DSEMainApp:
         ).pack(fill=tk.X, padx=8, pady=(8, 4))
         pair_frame = ttk.Frame(self.tab_pairwise)
         pair_frame.pack(fill=tk.BOTH, expand=True, padx=6, pady=6)
-        self.pairwise_tree = ttk.Treeview(pair_frame, show="headings", height=12)
+        self.pairwise_tree = ttk.Treeview(pair_frame, show="headings", height=1)
         pair_y = ttk.Scrollbar(pair_frame, orient=tk.VERTICAL, command=self.pairwise_tree.yview)
         pair_x = ttk.Scrollbar(pair_frame, orient=tk.HORIZONTAL, command=self.pairwise_tree.xview)
         self.pairwise_tree.configure(yscrollcommand=pair_y.set, xscrollcommand=pair_x.set)
@@ -2035,7 +2107,7 @@ class DSEMainApp:
         self.planes_tree = ttk.Treeview(
             planes_frame,
             columns=("Family", "Cl", "DipDir", "Dip", "A", "B", "C", "D", "Size"),
-            show="headings", height=10
+            show="headings", height=1
         )
         for col, w in [("Family",80),("Cl",70),("DipDir",115),("Dip",90),
                         ("A",90),("B",90),("C",90),("D",100),("Size",100)]:
@@ -2074,7 +2146,7 @@ class DSEMainApp:
         self.cluster_fisher_tree = ttk.Treeview(
             fisher_frame,
             columns=("Family", "DipDir", "Dip", "N", "K", "MaxDev", "Confidence"),
-            show="headings", height=10
+            show="headings", height=1
         )
         for column, heading, width in (
                 ("Family", "DS", 75), ("DipDir", "Dip Dir. (deg)", 115),
@@ -2099,11 +2171,14 @@ class DSEMainApp:
             text=self.tr("gui.execution_log")
         )
         self.log_frame.pack(
-            side=tk.BOTTOM, fill=tk.X, padx=6, pady=(3, 6)
+            side=tk.BOTTOM, fill=tk.X, padx=6, pady=(3, 6), before=self.main_paned
         )
+        # The paned area must not demand its natural height; otherwise it
+        # squeezes the log and prevents the window from being made shorter.
+        self.main_paned.configure(height=1)
         self.txt_log = scrolledtext.ScrolledText(
             self.log_frame, font=("Consolas", 9), state=tk.DISABLED,
-            height=8, wrap=tk.NONE
+            height=4, wrap=tk.NONE
         )
         self.txt_log.pack(fill=tk.X, expand=False, padx=6, pady=5)
 
@@ -3060,13 +3135,34 @@ class DSEMainApp:
 
         dialog = tk.Toplevel(self.root)
         dialog.title(self.tx("Spectral clustering of sets"))
-        dialog.geometry("620x480")
+        dialog.geometry("620x560")
+
+        rotation_available = self.optimised_colour_rotation is not None
+        space_original = self.tx("Original space")
+        space_rotated = self.tx("Rotated space")
+        space_var = tk.StringVar(
+            value=space_rotated if (rotation_available and self._use_rotated_pole_space())
+            else space_original
+        )
+        space_frame = tk.Frame(dialog)
+        space_frame.pack(fill=tk.X, padx=10, pady=(8, 0))
+        space_label = tk.Label(space_frame, text=self.tx("Analysis space"), anchor="w")
+        space_label.pack(side=tk.LEFT)
+        space_combo = ttk.Combobox(
+            space_frame, textvariable=space_var,
+            values=(space_original, space_rotated) if rotation_available else (space_original,),
+            state="readonly", width=18)
+        space_combo.pack(side=tk.RIGHT)
+        self.add_tooltip(space_label, "tip.spectral.space")
+        self.add_tooltip(space_combo, "tip.spectral.space")
 
         sigma_var = tk.StringVar(value=str(spectral.DEFAULT_SIGMA))
         k_var = tk.StringVar(value="")
         method_var = tk.StringVar(value="eigengap")
         kmax_var = tk.StringVar(value="8")
         samples_var = tk.StringVar(value="3000")
+        legend_var = tk.IntVar(value=1)
+        legend_orient_var = tk.IntVar(value=1)
 
         form = tk.Frame(dialog)
         form.pack(fill=tk.X, padx=10, pady=8)
@@ -3087,6 +3183,23 @@ class DSEMainApp:
             self.add_tooltip(widget, tip_key)
         form.columnconfigure(0, weight=1)
 
+        legend_frame = tk.Frame(dialog)
+        legend_frame.pack(fill=tk.X, padx=10)
+        legend_check = tk.Checkbutton(
+            legend_frame, text=self.tx("Show legend"), variable=legend_var, anchor="w")
+        legend_check.pack(side=tk.LEFT)
+        legend_orient_check = tk.Checkbutton(
+            legend_frame, text=self.tx("Include centroid orientation in legend"),
+            variable=legend_orient_var, anchor="w")
+        legend_orient_check.pack(side=tk.LEFT, padx=(12, 0))
+        self.add_tooltip(legend_check, "tip.spectral.legend")
+        self.add_tooltip(legend_orient_check, "tip.spectral.legend_orient")
+
+        def sync_legend_options(*_):
+            legend_orient_check.config(state=tk.NORMAL if legend_var.get() else tk.DISABLED)
+
+        legend_var.trace_add("write", sync_legend_options)
+
         status_var = tk.StringVar(value="")
         status_label = tk.Label(dialog, textvariable=status_var, anchor="w", justify=tk.LEFT,
                                 wraplength=490)
@@ -3106,9 +3219,10 @@ class DSEMainApp:
         table.pack(fill=tk.BOTH, expand=True, padx=10, pady=6)
         self.add_tooltip(table, "tip.spectral.table")
 
-        def plot_result(projection, poles, labels, mean_vectors, orient, k, space_name):
+        def plot_result(projection, poles, labels, mean_vectors, orient, k, space_name,
+                        rotated, show_legend, legend_orientation):
             fig, ax = plt.subplots(figsize=(7, 7))
-            stereonet.draw_stereonet(ax, projection=projection, labeled=1)
+            stereonet.draw_stereonet(ax, projection=projection, labeled=0 if rotated else 1)
 
             def spectral_format_coord(x_pos, y_pos):
                 dipdir, dip = stereonet.f_cart2clar(x_pos, y_pos, projection=projection)
@@ -3124,7 +3238,7 @@ class DSEMainApp:
             for c in range(k):
                 sel = np.flatnonzero(labels == c)[::step]
                 text = f"S{c + 1}"
-                if orient[c] is not None:
+                if legend_orientation and orient[c] is not None:
                     text += f"  {orient[c][0]:05.1f}/{orient[c][1]:04.1f}"
                 ax.plot(px[sel], py[sel], ".", markersize=2.0, alpha=0.5,
                         color=cmap(c % 10), label=text, zorder=1)
@@ -3138,9 +3252,11 @@ class DSEMainApp:
                         color=cmap(c % 10), zorder=3)
                 ax.annotate(f"S{c + 1}", (mx[0], my[0]), xytext=(6, 6),
                             textcoords="offset points", fontweight="bold")
-            ax.legend(
-                loc="upper right", markerscale=5, fontsize=8,
-                title=self.tx("Set  DipDir/Dip (deg)"))
+            if show_legend:
+                ax.legend(
+                    loc="upper right", markerscale=5, fontsize=8,
+                    title=self.tx("Set  DipDir/Dip (deg)") if legend_orientation
+                    else self.tx("Set"))
             ax.set_title(self.tx("Spectral clustering of sets") + f" (K={k}, {space_name})")
             plt.show()
 
@@ -3176,7 +3292,7 @@ class DSEMainApp:
                 lengths = np.linalg.norm(normals, axis=1)
                 valid = np.isfinite(normals).all(axis=1) & (lengths > np.finfo(float).eps)
                 unit = normals[valid] / lengths[valid, None]
-                rotation = self.optimised_colour_rotation if self._use_rotated_pole_space() else None
+                rotation = self.optimised_colour_rotation if space_var.get() == space_rotated else None
                 if rotation is not None:
                     unit = (rotation @ unit.T).T
                 unit[unit[:, 2] < 0.0] *= -1.0
@@ -3235,7 +3351,9 @@ class DSEMainApp:
                 )
 
             plot_result(self._canonical_projection(), unit, labels,
-                        result.mean_vectors, orient, k, space_name)
+                        result.mean_vectors, orient, k, space_name,
+                        rotation is not None, bool(legend_var.get()),
+                        bool(legend_orient_var.get()))
 
         self.add_tooltip(calculate_button := tk.Button(
             dialog, text=self.tx("Calculate"), command=run, bg="#d1e7dd", width=24),
@@ -3284,8 +3402,9 @@ class DSEMainApp:
             self._set_step2_state(False)
             self._set_step3_state(False)
             self.tools_menu.entryconfig(0, state=tk.DISABLED)
-            self.tools_menu.entryconfig(2, state=tk.DISABLED)
+            self.tools_menu.entryconfig(1, state=tk.DISABLED)
             self.tools_menu.entryconfig(3, state=tk.DISABLED)
+            self.tools_menu.entryconfig(4, state=tk.DISABLED)
             return False
 
         cloud_name = cloud.getName()
@@ -3301,8 +3420,9 @@ class DSEMainApp:
         cluster_tools_state = tk.NORMAL if (has_js_field and has_cl_field and has_cluster_analysis) else tk.DISABLED
 
         self.tools_menu.entryconfig(0, state=tk.NORMAL if has_normals else tk.DISABLED)
-        self.tools_menu.entryconfig(2, state=cluster_tools_state)
+        self.tools_menu.entryconfig(1, state=tk.NORMAL if has_normals else tk.DISABLED)
         self.tools_menu.entryconfig(3, state=cluster_tools_state)
+        self.tools_menu.entryconfig(4, state=cluster_tools_state)
 
         has_principal_poles = (len(self.principal_poles) > 0)
 
@@ -3382,8 +3502,6 @@ class DSEMainApp:
             self.btn_generate_colour_cloud.config(
                 state=tk.NORMAL if enabled else tk.DISABLED
             )
-        if hasattr(self, "btn_spectral_clustering"):
-            self.btn_spectral_clustering.config(state=state)
         if hasattr(self, "pole_space_combo"):
             self.pole_space_combo.configure(
                 state="readonly" if enabled else "disabled"

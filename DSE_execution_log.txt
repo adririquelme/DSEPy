@@ -1,346 +1,551 @@
-[02/10/26 09:14:36] [en] Language changed to English.
-[02/10/26 09:14:36] [en] Greetings Professor Falken. Shall we play a game?
-[02/10/26 09:14:36] [en] DSEPy version 1.0.2.
-[02/10/26 09:14:36] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
-[02/10/26 09:14:36] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
-[02/10/26 09:14:36] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
-[02/10/26 09:14:36] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
-[02/10/26 09:14:36] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
-[02/10/26 09:14:38] [en] === Step 1: Botev KDE2D Density & Principal Poles Calculation ===
-[02/10/26 09:14:38] [en] Spatial Grid Resolution: 128x128 (2^7)
-[02/10/26 09:14:38] [en] Computing density matrix for 3805666 orientation poles...
-[02/10/26 09:14:38] [en] Timing - Density computation: 0.172 s
-[02/10/26 09:14:38] [en] Detecting local peaks with angular separation >= 15.0 deg...
-[02/10/26 09:14:38] [en] Timing - Principal pole search: 0.001 s
-[02/10/26 09:14:39] [en] === Fisher concentration by family (provisional) ===
-[02/10/26 09:14:39] [en]  -> Family J_1: K=53.01, N=1905565, R=1869617.5547
-[02/10/26 09:14:39] [en]  -> Family J_2: K=36.99, N=319836, R=311190.1755
-[02/10/26 09:14:39] [en]  -> Family J_3: K=35.00, N=344857, R=335003.1697
-[02/10/26 09:14:39] [en]  -> Family J_4: K=38.00, N=570572, R=555555.9655
-[02/10/26 09:14:39] [en]  -> Family J_5: K=32.35, N=146063, R=141548.2218
-[02/10/26 09:14:39] [en]  -> Family J_6: K=29.40, N=148036, R=143000.0707
-[02/10/26 09:14:39] [en] Timing - Provisional Fisher K: 0.788 s
-[02/10/26 09:14:39] [en] Extracted 6 principal poles.
-[02/10/26 09:14:40] [en] Timing - Step 1 total: 1.978 s
-[02/10/26 09:14:42] [en] === Step 2: Classifying Point Cloud into DS Field (Cone: 30.0 deg) ===
-[02/10/26 09:14:42] [en] Scalar writer: stable C++ ccScalarField.setValue backend.
-[02/10/26 09:14:42] [en]   [JS] Reading 3D normals from 3805666 points...
-[02/10/26 09:14:42] [en]   [JS] Calculating angular distance to 6 principal poles...
-[02/10/26 09:14:42] [en]   [JS] Writing 'Discontinuity Set (DS)' scalar field to CloudCompare...
-[02/10/26 09:14:43] [en]   [JS] === JS Classification Completed in 1.73 s ===
-Total points processed: 3805666
+[08/10/26 23:19:07] [en] Language changed to English.
+[08/10/26 23:19:07] [en] Greetings Professor Falken. Shall we play a game?
+[08/10/26 23:19:07] [en] DSEPy version 1.0.3beta.
+[08/10/26 23:19:07] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
+[08/10/26 23:19:07] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
+[08/10/26 23:19:07] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
+[08/10/26 23:19:07] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
+[08/10/26 23:19:07] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
+[08/10/26 23:19:54] [en] Refresh: selected CloudCompare entity 'Site_01_LiDAR_registrado_normaleshough - Cloud - Cloud'.
+[08/10/26 23:20:13] [en] [Spectral] K=3, sigma=0.12, silhouette=0.869, 1055673 poles (3000 in spectral step), Original space (4.21 s)
+[08/10/26 23:22:40] [en] [Spectral] K=2, sigma=0.12, silhouette=0.882, 1055673 poles (3000 in spectral step), Original space (5.74 s)
+[08/10/26 23:22:52] [en] [Spectral] K=3, sigma=0.12, silhouette=0.869, 1055673 poles (3000 in spectral step), Original space (3.88 s)
+[08/10/26 23:23:14] [en] [Spectral] K=5, sigma=0.12, silhouette=0.735, 1055673 poles (3000 in spectral step), Original space (3.89 s)
+[08/10/26 23:23:30] [en] [Spectral] K=3, sigma=0.12, silhouette=0.869, 1055673 poles (3000 in spectral step), Original space (3.94 s)
+[08/10/26 23:24:09] [en] Language changed to English.
+[08/10/26 23:24:09] [en] Greetings Professor Falken. Shall we play a game?
+[08/10/26 23:24:09] [en] DSEPy version 1.0.3beta.
+[08/10/26 23:24:09] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
+[08/10/26 23:24:09] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
+[08/10/26 23:24:09] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
+[08/10/26 23:24:09] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
+[08/10/26 23:24:09] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
+[08/10/26 23:24:17] [en] [Spectral] K=8, sigma=0.12, silhouette=0.962, 3024132 poles (3000 in spectral step), Original space (4.24 s)
+[08/10/26 23:24:27] [en] [Spectral] K=13, sigma=0.12, silhouette=0.928, 3024132 poles (3000 in spectral step), Original space (4.45 s)
+[08/10/26 23:26:18] [en] Language changed to English.
+[08/10/26 23:26:18] [en] Greetings Professor Falken. Shall we play a game?
+[08/10/26 23:26:18] [en] DSEPy version 1.0.3beta.
+[08/10/26 23:26:18] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
+[08/10/26 23:26:18] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
+[08/10/26 23:26:18] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
+[08/10/26 23:26:18] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
+[08/10/26 23:26:18] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
+[08/10/26 23:27:12] [en] Language changed to English.
+[08/10/26 23:27:12] [en] Greetings Professor Falken. Shall we play a game?
+[08/10/26 23:27:12] [en] DSEPy version 1.0.3beta.
+[08/10/26 23:27:12] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
+[08/10/26 23:27:12] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
+[08/10/26 23:27:12] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
+[08/10/26 23:27:12] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
+[08/10/26 23:27:12] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
+[08/10/26 23:28:03] [en]   [Spectral   0%] Reading normals
+[08/10/26 23:28:47] [en]   [Spectral  20%] Normalised Laplacian L = D^-1/2 A D^-1/2
+[08/10/26 23:33:23] [en] Language changed to English.
+[08/10/26 23:33:23] [en] Greetings Professor Falken. Shall we play a game?
+[08/10/26 23:33:23] [en] DSEPy version 1.0.3beta.
+[08/10/26 23:33:23] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
+[08/10/26 23:33:23] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
+[08/10/26 23:33:23] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
+[08/10/26 23:33:23] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
+[08/10/26 23:33:23] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
+[08/10/26 23:33:37] [en]   [Spectral   0%] Reading normals
+[08/10/26 23:33:37] [en]   [Spectral  20%] Normalised Laplacian L = D^-1/2 A D^-1/2
+[08/10/26 23:33:45] [en]   [Spectral  55%] Eigenvalues sorted
+[08/10/26 23:33:45] [en]   [Spectral  77%] K-means in spectral space (K=8)
+[08/10/26 23:33:46] [en]   [Spectral  92%] Assigning remaining 3020132 poles to sets
+[08/10/26 23:33:46] [en]   [Spectral 100%] Done
+[08/10/26 23:33:46] [en] [Spectral] K=8, sigma=0.1, silhouette=0.956, 3024132 poles (4000 in spectral step), Original space (9.16 s)
+[08/10/26 23:33:46] [en] [Spectral] S1: 804483 poles (26.6%), dip dir/dip = 10.6/89.7, pole trend/plunge = 190.6/0.3
+[08/10/26 23:33:46] [en] [Spectral] S2: 843282 poles (27.9%), dip dir/dip = 219.2/0.9, pole trend/plunge = 39.2/89.1
+[08/10/26 23:33:46] [en] [Spectral] S3: 403507 poles (13.3%), dip dir/dip = 100.7/50.7, pole trend/plunge = 280.7/39.3
+[08/10/26 23:33:46] [en] [Spectral] S4: 495304 poles (16.4%), dip dir/dip = 292.2/40.2, pole trend/plunge = 112.2/49.8
+[08/10/26 23:33:46] [en] [Spectral] S5: 185893 poles (6.1%), dip dir/dip = 100.5/89.1, pole trend/plunge = 280.5/0.9
+[08/10/26 23:33:46] [en] [Spectral] S6: 101683 poles (3.4%), dip dir/dip = 202.1/55.6, pole trend/plunge = 22.1/34.4
+[08/10/26 23:33:46] [en] [Spectral] S7: 85987 poles (2.8%), dip dir/dip = 10.9/54.9, pole trend/plunge = 190.9/35.1
+[08/10/26 23:33:46] [en] [Spectral] S8: 103993 poles (3.4%), dip dir/dip = 346.7/62.2, pole trend/plunge = 166.7/27.8
+[08/10/26 23:33:51] [en]   [Spectral   0%] Reading normals
+[08/10/26 23:33:52] [en]   [Spectral  20%] Normalised Laplacian L = D^-1/2 A D^-1/2
+[08/10/26 23:33:59] [en]   [Spectral  55%] Eigenvalues sorted
+[08/10/26 23:33:59] [en]   [Spectral  77%] K-means in spectral space (K=16)
+[08/10/26 23:34:00] [en]   [Spectral  92%] Assigning remaining 3020132 poles to sets
+[08/10/26 23:34:00] [en]   [Spectral 100%] Done
+[08/10/26 23:34:00] [en] [Spectral] K=16, sigma=0.1, silhouette=0.926, 3024132 poles (4000 in spectral step), Original space (8.78 s)
+[08/10/26 23:34:00] [en] [Spectral] S1: 841258 poles (27.8%), dip dir/dip = 217.6/0.8, pole trend/plunge = 37.6/89.2
+[08/10/26 23:34:00] [en] [Spectral] S2: 772809 poles (25.6%), dip dir/dip = 10.7/89.8, pole trend/plunge = 190.7/0.2
+[08/10/26 23:34:00] [en] [Spectral] S3: 403365 poles (13.3%), dip dir/dip = 100.8/50.7, pole trend/plunge = 280.8/39.3
+[08/10/26 23:34:00] [en] [Spectral] S4: 87421 poles (2.9%), dip dir/dip = 288.0/41.5, pole trend/plunge = 108.0/48.5
+[08/10/26 23:34:00] [en] [Spectral] S5: 85414 poles (2.8%), dip dir/dip = 11.0/54.9, pole trend/plunge = 191.0/35.1
+[08/10/26 23:34:00] [en] [Spectral] S6: 173325 poles (5.7%), dip dir/dip = 101.6/89.1, pole trend/plunge = 281.6/0.9
+[08/10/26 23:34:00] [en] [Spectral] S7: 68852 poles (2.3%), dip dir/dip = 323.2/46.4, pole trend/plunge = 143.2/43.6
+[08/10/26 23:34:00] [en] [Spectral] S8: 134856 poles (4.5%), dip dir/dip = 304.0/40.3, pole trend/plunge = 124.0/49.7
+[08/10/26 23:34:00] [en] [Spectral] S9: 73989 poles (2.4%), dip dir/dip = 355.9/72.0, pole trend/plunge = 175.9/18.0
+[08/10/26 23:34:00] [en] [Spectral] S10: 60211 poles (2.0%), dip dir/dip = 190.5/56.0, pole trend/plunge = 10.5/34.0
+[08/10/26 23:34:00] [en] [Spectral] S11: 50296 poles (1.7%), dip dir/dip = 339.3/55.7, pole trend/plunge = 159.3/34.3
+[08/10/26 23:34:00] [en] [Spectral] S12: 24466 poles (0.8%), dip dir/dip = 205.1/73.0, pole trend/plunge = 25.1/17.0
+[08/10/26 23:34:00] [en] [Spectral] S13: 201464 poles (6.7%), dip dir/dip = 276.2/40.6, pole trend/plunge = 96.2/49.4
+[08/10/26 23:34:00] [en] [Spectral] S14: 15697 poles (0.5%), dip dir/dip = 221.6/55.7, pole trend/plunge = 41.6/34.3
+[08/10/26 23:34:00] [en] [Spectral] S15: 18053 poles (0.6%), dip dir/dip = 241.3/44.1, pole trend/plunge = 61.3/45.9
+[08/10/26 23:34:00] [en] [Spectral] S16: 12656 poles (0.4%), dip dir/dip = 82.7/89.6, pole trend/plunge = 262.7/0.4
+[08/10/26 23:34:22] [en]   [Spectral   0%] Reading normals
+[08/10/26 23:34:23] [en]   [Spectral  20%] Normalised Laplacian L = D^-1/2 A D^-1/2
+[08/10/26 23:34:30] [en]   [Spectral  55%] Eigenvalues sorted
+[08/10/26 23:34:30] [en]   [Spectral  77%] K-means in spectral space (K=16)
+[08/10/26 23:34:31] [en]   [Spectral  92%] Assigning remaining 3020132 poles to sets
+[08/10/26 23:34:31] [en]   [Spectral 100%] Done
+[08/10/26 23:34:31] [en] [Spectral] K=16, sigma=0.09, silhouette=0.950, 3024132 poles (4000 in spectral step), Original space (8.66 s)
+[08/10/26 23:34:31] [en] [Spectral] S1: 841299 poles (27.8%), dip dir/dip = 217.6/0.8, pole trend/plunge = 37.6/89.2
+[08/10/26 23:34:31] [en] [Spectral] S2: 765610 poles (25.3%), dip dir/dip = 10.7/89.9, pole trend/plunge = 190.7/0.1
+[08/10/26 23:34:31] [en] [Spectral] S3: 268311 poles (8.9%), dip dir/dip = 278.9/40.8, pole trend/plunge = 98.9/49.2
+[08/10/26 23:34:31] [en] [Spectral] S4: 173334 poles (5.7%), dip dir/dip = 101.6/89.1, pole trend/plunge = 281.6/0.9
+[08/10/26 23:34:31] [en] [Spectral] S5: 403365 poles (13.3%), dip dir/dip = 100.8/50.7, pole trend/plunge = 280.8/39.3
+[08/10/26 23:34:31] [en] [Spectral] S6: 60203 poles (2.0%), dip dir/dip = 190.5/56.0, pole trend/plunge = 10.5/34.0
+[08/10/26 23:34:31] [en] [Spectral] S7: 154582 poles (5.1%), dip dir/dip = 302.6/40.3, pole trend/plunge = 122.6/49.7
+[08/10/26 23:34:31] [en] [Spectral] S8: 43142 poles (1.4%), dip dir/dip = 351.5/67.1, pole trend/plunge = 171.5/22.9
+[08/10/26 23:34:31] [en] [Spectral] S9: 85154 poles (2.8%), dip dir/dip = 11.0/54.9, pole trend/plunge = 191.0/35.1
+[08/10/26 23:34:31] [en] [Spectral] S10: 68946 poles (2.3%), dip dir/dip = 323.1/46.4, pole trend/plunge = 143.1/43.6
+[08/10/26 23:34:31] [en] [Spectral] S11: 15668 poles (0.5%), dip dir/dip = 221.5/55.7, pole trend/plunge = 41.5/34.3
+[08/10/26 23:34:31] [en] [Spectral] S12: 24256 poles (0.8%), dip dir/dip = 205.1/72.9, pole trend/plunge = 25.1/17.1
+[08/10/26 23:34:31] [en] [Spectral] S13: 49553 poles (1.6%), dip dir/dip = 339.2/55.7, pole trend/plunge = 159.2/34.3
+[08/10/26 23:34:31] [en] [Spectral] S14: 18765 poles (0.6%), dip dir/dip = 241.8/44.0, pole trend/plunge = 61.8/46.0
+[08/10/26 23:34:31] [en] [Spectral] S15: 12660 poles (0.4%), dip dir/dip = 82.7/89.6, pole trend/plunge = 262.7/0.4
+[08/10/26 23:34:31] [en] [Spectral] S16: 39284 poles (1.3%), dip dir/dip = 2.2/79.0, pole trend/plunge = 182.2/11.0
+[08/10/26 23:34:59] [en]   [Spectral   0%] Reading normals
+[08/10/26 23:34:59] [en]   [Spectral  20%] Normalised Laplacian L = D^-1/2 A D^-1/2
+[08/10/26 23:35:06] [en]   [Spectral  55%] Eigenvalues sorted
+[08/10/26 23:35:06] [en]   [Spectral  77%] K-means in spectral space (K=16)
+[08/10/26 23:35:07] [en]   [Spectral  92%] Assigning remaining 3020132 poles to sets
+[08/10/26 23:35:07] [en]   [Spectral 100%] Done
+[08/10/26 23:35:07] [en] [Spectral] K=16, sigma=0.08, silhouette=0.956, 3024132 poles (4000 in spectral step), Original space (8.61 s)
+[08/10/26 23:35:07] [en] [Spectral] S1: 173334 poles (5.7%), dip dir/dip = 101.6/89.1, pole trend/plunge = 281.6/0.9
+[08/10/26 23:35:07] [en] [Spectral] S2: 841296 poles (27.8%), dip dir/dip = 217.6/0.8, pole trend/plunge = 37.6/89.2
+[08/10/26 23:35:07] [en] [Spectral] S3: 403365 poles (13.3%), dip dir/dip = 100.8/50.7, pole trend/plunge = 280.8/39.3
+[08/10/26 23:35:07] [en] [Spectral] S4: 766472 poles (25.3%), dip dir/dip = 10.7/89.9, pole trend/plunge = 190.7/0.1
+[08/10/26 23:35:07] [en] [Spectral] S5: 268064 poles (8.9%), dip dir/dip = 278.9/40.8, pole trend/plunge = 98.9/49.2
+[08/10/26 23:35:07] [en] [Spectral] S6: 154387 poles (5.1%), dip dir/dip = 302.7/40.3, pole trend/plunge = 122.7/49.7
+[08/10/26 23:35:07] [en] [Spectral] S7: 85201 poles (2.8%), dip dir/dip = 11.0/54.9, pole trend/plunge = 191.0/35.1
+[08/10/26 23:35:07] [en] [Spectral] S8: 60200 poles (2.0%), dip dir/dip = 190.5/56.0, pole trend/plunge = 10.5/34.0
+[08/10/26 23:35:07] [en] [Spectral] S9: 38394 poles (1.3%), dip dir/dip = 1.9/79.0, pole trend/plunge = 181.9/11.0
+[08/10/26 23:35:07] [en] [Spectral] S10: 68936 poles (2.3%), dip dir/dip = 323.1/46.4, pole trend/plunge = 143.1/43.6
+[08/10/26 23:35:07] [en] [Spectral] S11: 49568 poles (1.6%), dip dir/dip = 339.2/55.7, pole trend/plunge = 159.2/34.3
+[08/10/26 23:35:07] [en] [Spectral] S12: 24230 poles (0.8%), dip dir/dip = 205.1/72.9, pole trend/plunge = 25.1/17.1
+[08/10/26 23:35:07] [en] [Spectral] S13: 19233 poles (0.6%), dip dir/dip = 242.2/43.9, pole trend/plunge = 62.2/46.1
+[08/10/26 23:35:07] [en] [Spectral] S14: 43119 poles (1.4%), dip dir/dip = 351.5/67.1, pole trend/plunge = 171.5/22.9
+[08/10/26 23:35:07] [en] [Spectral] S15: 15673 poles (0.5%), dip dir/dip = 221.5/55.7, pole trend/plunge = 41.5/34.3
+[08/10/26 23:35:07] [en] [Spectral] S16: 12660 poles (0.4%), dip dir/dip = 82.7/89.6, pole trend/plunge = 262.7/0.4
+[08/10/26 23:41:36] [en] Language changed to English.
+[08/10/26 23:41:36] [en] Greetings Professor Falken. Shall we play a game?
+[08/10/26 23:41:36] [en] DSEPy version 1.0.3beta.
+[08/10/26 23:41:36] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
+[08/10/26 23:41:36] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
+[08/10/26 23:41:36] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
+[08/10/26 23:41:36] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
+[08/10/26 23:41:36] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
+[08/10/26 23:41:46] [en]   [Spectral   0%] Reading normals
+[08/10/26 23:41:46] [en]   [Spectral  20%] Normalised Laplacian L = D^-1/2 A D^-1/2
+[08/10/26 23:41:49] [en]   [Spectral  55%] Eigenvalues sorted
+[08/10/26 23:41:49] [en]   [Spectral  77%] K-means in spectral space (K=19)
+[08/10/26 23:41:50] [en]   [Spectral  92%] Assigning remaining 3021132 poles to sets
+[08/10/26 23:41:50] [en]   [Spectral 100%] Done
+[08/10/26 23:41:50] [en] [Spectral] K=19, sigma=0.05, silhouette=0.968, 3024132 poles (3000 in spectral step), Original space (4.18 s)
+[08/10/26 23:41:50] [en] [Spectral] S1: 835316 poles (27.6%), dip dir/dip = 209.7/0.8, pole trend/plunge = 29.7/89.2
+[08/10/26 23:41:50] [en] [Spectral] S2: 768607 poles (25.4%), dip dir/dip = 190.8/90.0, pole trend/plunge = 10.8/0.0
+[08/10/26 23:41:50] [en] [Spectral] S3: 403159 poles (13.3%), dip dir/dip = 100.8/50.7, pole trend/plunge = 280.8/39.3
+[08/10/26 23:41:50] [en] [Spectral] S4: 250233 poles (8.3%), dip dir/dip = 278.5/41.8, pole trend/plunge = 98.5/48.2
+[08/10/26 23:41:50] [en] [Spectral] S5: 132388 poles (4.4%), dip dir/dip = 302.9/41.7, pole trend/plunge = 122.9/48.3
+[08/10/26 23:41:50] [en] [Spectral] S6: 81870 poles (2.7%), dip dir/dip = 10.6/55.2, pole trend/plunge = 190.6/34.8
+[08/10/26 23:41:50] [en] [Spectral] S7: 173007 poles (5.7%), dip dir/dip = 101.6/89.1, pole trend/plunge = 281.6/0.9
+[08/10/26 23:41:50] [en] [Spectral] S8: 60452 poles (2.0%), dip dir/dip = 190.5/56.1, pole trend/plunge = 10.5/33.9
+[08/10/26 23:41:50] [en] [Spectral] S9: 68398 poles (2.3%), dip dir/dip = 323.1/46.5, pole trend/plunge = 143.1/43.5
+[08/10/26 23:41:50] [en] [Spectral] S10: 15617 poles (0.5%), dip dir/dip = 221.6/55.7, pole trend/plunge = 41.6/34.3
+[08/10/26 23:41:50] [en] [Spectral] S11: 42999 poles (1.4%), dip dir/dip = 351.5/67.0, pole trend/plunge = 171.5/23.0
+[08/10/26 23:41:50] [en] [Spectral] S12: 41540 poles (1.4%), dip dir/dip = 3.1/78.9, pole trend/plunge = 183.1/11.1
+[08/10/26 23:41:50] [en] [Spectral] S13: 49396 poles (1.6%), dip dir/dip = 339.1/55.6, pole trend/plunge = 159.1/34.4
+[08/10/26 23:41:50] [en] [Spectral] S14: 18033 poles (0.6%), dip dir/dip = 241.0/43.9, pole trend/plunge = 61.0/46.1
+[08/10/26 23:41:50] [en] [Spectral] S15: 18202 poles (0.6%), dip dir/dip = 207.3/70.8, pole trend/plunge = 27.3/19.2
+[08/10/26 23:41:50] [en] [Spectral] S16: 12763 poles (0.4%), dip dir/dip = 82.9/89.8, pole trend/plunge = 262.9/0.2
+[08/10/26 23:41:50] [en] [Spectral] S17: 47170 poles (1.6%), dip dir/dip = 294.5/28.4, pole trend/plunge = 114.5/61.6
+[08/10/26 23:41:50] [en] [Spectral] S18: 1210 poles (0.0%), dip dir/dip = 157.7/87.6, pole trend/plunge = 337.7/2.4
+[08/10/26 23:41:50] [en] [Spectral] S19: 3772 poles (0.1%), dip dir/dip = 24.7/44.0, pole trend/plunge = 204.7/46.0
+[09/10/26 10:55:46] [en] Language changed to English.
+[09/10/26 10:55:46] [en] Greetings Professor Falken. Shall we play a game?
+[09/10/26 10:55:46] [en] DSEPy version 1.0.3beta.
+[09/10/26 10:55:46] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
+[09/10/26 10:55:46] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
+[09/10/26 10:55:46] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
+[09/10/26 10:55:46] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
+[09/10/26 10:55:46] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
+[09/10/26 10:55:50] [en] Refresh: no point cloud selected in CloudCompare.
+[09/10/26 10:55:55] [en] Refresh: selected CloudCompare entity 'Site_01_LiDAR_registrado_normaleshough - Cloud - Cloud'.
+[09/10/26 11:09:54] [en]   [Spectral   0%] Reading normals
+[09/10/26 11:09:54] [en]   [Spectral  20%] Normalised Laplacian L = D^-1/2 A D^-1/2
+[09/10/26 11:09:57] [en]   [Spectral  55%] Eigenvalues sorted
+[09/10/26 11:09:57] [en]   [Spectral  77%] K-means in spectral space (K=3)
+[09/10/26 11:09:58] [en]   [Spectral  92%] Assigning remaining 1052673 poles to sets
+[09/10/26 11:09:58] [en]   [Spectral 100%] Done
+[09/10/26 11:09:58] [en] [Spectral] K=3, sigma=0.12, silhouette=0.869, 1055673 poles (3000 in spectral step), Original space (4.49 s)
+[09/10/26 11:09:58] [en] [Spectral] S1: 383101 poles (36.3%), dip dir/dip = 135.4/89.0, pole trend/plunge = 315.4/1.0
+[09/10/26 11:09:58] [en] [Spectral] S2: 447484 poles (42.4%), dip dir/dip = 30.7/80.0, pole trend/plunge = 210.7/10.0
+[09/10/26 11:09:58] [en] [Spectral] S3: 225088 poles (21.3%), dip dir/dip = 195.9/36.3, pole trend/plunge = 15.9/53.7
+[09/10/26 11:10:27] [en] === Step 1: Botev KDE2D Density & Principal Poles Calculation ===
+[09/10/26 11:10:27] [en] Spatial Grid Resolution: 256x256 (2^8)
+[09/10/26 11:10:27] [en] Computing density matrix for 1055673 orientation poles...
+[09/10/26 11:10:27] [en] Timing - Density computation: 0.132 s
+[09/10/26 11:10:27] [en] Detecting local peaks with angular separation >= 30.0 deg...
+[09/10/26 11:10:27] [en] Timing - Principal pole search: 0.005 s
+[09/10/26 11:10:27] [en] === Fisher concentration by family (provisional) ===
+[09/10/26 11:10:27] [en]  -> Family J_1: K=40.05, N=384969, R=375356.8028
+[09/10/26 11:10:27] [en]  -> Family J_2: K=30.09, N=317104, R=306565.4547
+[09/10/26 11:10:27] [en]  -> Family J_3: K=19.71, N=185403, R=175996.8726
+[09/10/26 11:10:27] [en] Timing - Provisional Fisher K: 0.225 s
+[09/10/26 11:10:27] [en] Extracted 3 principal poles.
+[09/10/26 11:10:27] [en] Timing - Step 1 total: 0.895 s
+[09/10/26 11:10:40] [en] === Step 1: Botev KDE2D Density & Principal Poles Calculation ===
+[09/10/26 11:10:40] [en] Spatial Grid Resolution: 64x64 (2^6)
+[09/10/26 11:10:40] [en] Computing density matrix for 1055673 orientation poles...
+[09/10/26 11:10:40] [en] Timing - Density computation: 0.053 s
+[09/10/26 11:10:40] [en] Detecting local peaks with angular separation >= 30.0 deg...
+[09/10/26 11:10:40] [en] Timing - Principal pole search: 0.001 s
+[09/10/26 11:10:40] [en] === Fisher concentration by family (provisional) ===
+[09/10/26 11:10:40] [en]  -> Family J_1: K=46.69, N=359501, R=351802.0130
+[09/10/26 11:10:40] [en]  -> Family J_2: K=42.39, N=266013, R=259737.6853
+[09/10/26 11:10:40] [en]  -> Family J_3: K=26.75, N=146022, R=140563.7221
+[09/10/26 11:10:40] [en]  -> Family J_4: K=35.30, N=48344, R=46974.6073
+[09/10/26 11:10:40] [en]  -> Family J_5: K=24.51, N=47069, R=45148.3300
+[09/10/26 11:10:40] [en]  -> Family J_6: K=26.35, N=75476, R=72611.7669
+[09/10/26 11:10:40] [en]  -> Family J_7: K=33.74, N=61091, R=59280.4077
+[09/10/26 11:10:40] [en]  -> Family J_8: K=18.35, N=17019, R=16091.3472
+[09/10/26 11:10:40] [en] Timing - Provisional Fisher K: 0.263 s
+[09/10/26 11:10:40] [en] Extracted 8 principal poles.
+[09/10/26 11:10:40] [en] Timing - Step 1 total: 0.614 s
+[09/10/26 11:18:35] [en] Language changed to English.
+[09/10/26 11:18:35] [en] Greetings Professor Falken. Shall we play a game?
+[09/10/26 11:18:35] [en] DSEPy version 1.0.3beta.
+[09/10/26 11:18:35] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
+[09/10/26 11:18:35] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
+[09/10/26 11:18:35] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
+[09/10/26 11:18:35] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
+[09/10/26 11:18:35] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
+[09/10/26 11:19:55] [en]   [Spectral   0%] Reading normals
+[09/10/26 11:19:55] [en]   [Spectral  20%] Normalised Laplacian L = D^-1/2 A D^-1/2
+[09/10/26 11:19:59] [en]   [Spectral  55%] Eigenvalues sorted
+[09/10/26 11:19:59] [en]   [Spectral  77%] K-means in spectral space (K=3)
+[09/10/26 11:19:59] [en]   [Spectral  92%] Assigning remaining 1052673 poles to sets
+[09/10/26 11:19:59] [en]   [Spectral 100%] Done
+[09/10/26 11:19:59] [en] [Spectral] K=3, sigma=0.12, silhouette=0.869, 1055673 poles (3000 in spectral step), Original space (4.17 s)
+[09/10/26 11:19:59] [en] [Spectral] S1: 383101 poles (36.3%), dip dir/dip = 135.4/89.0, pole trend/plunge = 315.4/1.0
+[09/10/26 11:19:59] [en] [Spectral] S2: 447484 poles (42.4%), dip dir/dip = 30.7/80.0, pole trend/plunge = 210.7/10.0
+[09/10/26 11:19:59] [en] [Spectral] S3: 225088 poles (21.3%), dip dir/dip = 195.9/36.3, pole trend/plunge = 15.9/53.7
+[09/10/26 11:20:47] [en] Angles: [-123.451, -4.773, -78.225] deg; objective=0.0153597; evaluations=940; time=40.739 s
+[09/10/26 11:20:59] [en]   [Spectral   0%] Reading normals
+[09/10/26 11:21:00] [en]   [Spectral  20%] Normalised Laplacian L = D^-1/2 A D^-1/2
+[09/10/26 11:21:03] [en]   [Spectral  55%] Eigenvalues sorted
+[09/10/26 11:21:03] [en]   [Spectral  77%] K-means in spectral space (K=3)
+[09/10/26 11:21:03] [en]   [Spectral  92%] Assigning remaining 1052673 poles to sets
+[09/10/26 11:21:03] [en]   [Spectral 100%] Done
+[09/10/26 11:21:03] [en] [Spectral] K=3, sigma=0.12, silhouette=0.869, 1055673 poles (3000 in spectral step), Rotated space (4.09 s)
+[09/10/26 11:21:03] [en] [Spectral] S1: 383101 poles (36.3%), dip dir/dip = 135.4/89.0, pole trend/plunge = 315.4/1.0
+[09/10/26 11:21:03] [en] [Spectral] S2: 447484 poles (42.4%), dip dir/dip = 30.7/80.0, pole trend/plunge = 210.7/10.0
+[09/10/26 11:21:03] [en] [Spectral] S3: 225088 poles (21.3%), dip dir/dip = 195.9/36.3, pole trend/plunge = 15.9/53.7
+[09/10/26 11:21:12] [en] === Step 1: Botev KDE2D Density & Principal Poles Calculation ===
+[09/10/26 11:21:12] [en] Spatial Grid Resolution: 64x64 (2^6)
+[09/10/26 11:21:13] [en] Computing density matrix for 1055673 orientation poles...
+[09/10/26 11:21:13] [en] Timing - Density computation: 0.112 s
+[09/10/26 11:21:13] [en] Detecting local peaks with angular separation >= 30.0 deg...
+[09/10/26 11:21:13] [en] Timing - Principal pole search: 0.001 s
+[09/10/26 11:21:13] [en] === Fisher concentration by family (provisional) ===
+[09/10/26 11:21:13] [en]  -> Family J_1: K=46.69, N=359501, R=351802.0130
+[09/10/26 11:21:13] [en]  -> Family J_2: K=42.39, N=266013, R=259737.6853
+[09/10/26 11:21:13] [en]  -> Family J_3: K=26.75, N=146022, R=140563.7221
+[09/10/26 11:21:13] [en]  -> Family J_4: K=35.30, N=48344, R=46974.6073
+[09/10/26 11:21:13] [en]  -> Family J_5: K=24.51, N=47069, R=45148.3300
+[09/10/26 11:21:13] [en]  -> Family J_6: K=26.35, N=75476, R=72611.7669
+[09/10/26 11:21:13] [en]  -> Family J_7: K=33.74, N=61091, R=59280.4077
+[09/10/26 11:21:13] [en]  -> Family J_8: K=18.35, N=17019, R=16091.3472
+[09/10/26 11:21:13] [en] Timing - Provisional Fisher K: 0.285 s
+[09/10/26 11:21:13] [en] Extracted 8 principal poles.
+[09/10/26 11:21:13] [en] Timing - Step 1 total: 0.956 s
+[09/10/26 11:21:33] [en] === Step 1: Botev KDE2D Density & Principal Poles Calculation ===
+[09/10/26 11:21:33] [en] Spatial Grid Resolution: 64x64 (2^6)
+[09/10/26 11:21:33] [en] Computing density matrix for 1055673 orientation poles...
+[09/10/26 11:21:33] [en] Timing - Density computation: 0.103 s
+[09/10/26 11:21:33] [en] Detecting local peaks with angular separation >= 30.0 deg...
+[09/10/26 11:21:33] [en] Timing - Principal pole search: 0.001 s
+[09/10/26 11:21:34] [en] === Fisher concentration by family (provisional) ===
+[09/10/26 11:21:34] [en]  -> Family J_1: K=39.00, N=388386, R=378426.6722
+[09/10/26 11:21:34] [en]  -> Family J_2: K=29.70, N=320373, R=309587.5839
+[09/10/26 11:21:34] [en]  -> Family J_3: K=19.38, N=186002, R=176402.8530
+[09/10/26 11:21:34] [en] Timing - Provisional Fisher K: 0.198 s
+[09/10/26 11:21:34] [en] Extracted 3 principal poles.
+[09/10/26 11:21:34] [en] Timing - Step 1 total: 0.850 s
+[09/10/26 11:22:59] [en] Language changed to English.
+[09/10/26 11:22:59] [en] Greetings Professor Falken. Shall we play a game?
+[09/10/26 11:22:59] [en] DSEPy version 1.0.3beta.
+[09/10/26 11:22:59] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
+[09/10/26 11:22:59] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
+[09/10/26 11:22:59] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
+[09/10/26 11:22:59] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
+[09/10/26 11:22:59] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
+[09/10/26 11:28:26] [en] Language changed to English.
+[09/10/26 11:28:26] [en] Greetings Professor Falken. Shall we play a game?
+[09/10/26 11:28:26] [en] DSEPy version 1.0.3beta.
+[09/10/26 11:28:26] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
+[09/10/26 11:28:26] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
+[09/10/26 11:28:26] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
+[09/10/26 11:28:26] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
+[09/10/26 11:28:26] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
+[09/10/26 11:29:58] [en] Language changed to English.
+[09/10/26 11:29:58] [en] Greetings Professor Falken. Shall we play a game?
+[09/10/26 11:29:58] [en] DSEPy version 1.0.3beta.
+[09/10/26 11:29:58] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
+[09/10/26 11:29:58] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
+[09/10/26 11:29:58] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
+[09/10/26 11:29:58] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
+[09/10/26 11:29:58] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
+[09/10/26 11:34:27] [en] Language changed to English.
+[09/10/26 11:34:27] [en] Greetings Professor Falken. Shall we play a game?
+[09/10/26 11:34:27] [en] DSEPy version 1.0.3beta.
+[09/10/26 11:34:27] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
+[09/10/26 11:34:27] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
+[09/10/26 11:34:27] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
+[09/10/26 11:34:27] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
+[09/10/26 11:34:27] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
+[09/10/26 11:34:32] [en] Language changed to English.
+[09/10/26 11:34:32] [en] Greetings Professor Falken. Shall we play a game?
+[09/10/26 11:34:32] [en] DSEPy version 1.0.3beta.
+[09/10/26 11:34:32] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
+[09/10/26 11:34:32] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
+[09/10/26 11:34:32] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
+[09/10/26 11:34:32] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
+[09/10/26 11:34:32] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
+[09/10/26 11:44:35] [en] Language changed to English.
+[09/10/26 11:44:35] [en] Greetings Professor Falken. Shall we play a game?
+[09/10/26 11:44:35] [en] DSEPy version 1.0.3beta.
+[09/10/26 11:44:35] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
+[09/10/26 11:44:35] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
+[09/10/26 11:44:35] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
+[09/10/26 11:44:35] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
+[09/10/26 11:44:35] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
+[09/10/26 11:44:40] [en] Language changed to English.
+[09/10/26 11:44:40] [en] Greetings Professor Falken. Shall we play a game?
+[09/10/26 11:44:40] [en] DSEPy version 1.0.3beta.
+[09/10/26 11:44:40] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
+[09/10/26 11:44:40] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
+[09/10/26 11:44:40] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
+[09/10/26 11:44:40] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
+[09/10/26 11:44:40] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
+[09/10/26 11:45:02] [en] Language changed to English.
+[09/10/26 11:45:02] [en] Greetings Professor Falken. Shall we play a game?
+[09/10/26 11:45:02] [en] DSEPy version 1.0.3beta.
+[09/10/26 11:45:02] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
+[09/10/26 11:45:02] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
+[09/10/26 11:45:02] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
+[09/10/26 11:45:02] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
+[09/10/26 11:45:02] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
+[09/10/26 11:48:56] [en] Language changed to English.
+[09/10/26 11:48:56] [en] Greetings Professor Falken. Shall we play a game?
+[09/10/26 11:48:56] [en] DSEPy version 1.0.3beta.
+[09/10/26 11:48:56] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
+[09/10/26 11:48:56] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
+[09/10/26 11:48:56] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
+[09/10/26 11:48:56] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
+[09/10/26 11:48:56] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
+[09/10/26 11:49:01] [en] Language changed to English.
+[09/10/26 11:49:01] [en] Greetings Professor Falken. Shall we play a game?
+[09/10/26 11:49:01] [en] DSEPy version 1.0.3beta.
+[09/10/26 11:49:01] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
+[09/10/26 11:49:01] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
+[09/10/26 11:49:01] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
+[09/10/26 11:49:01] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
+[09/10/26 11:49:01] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
+[09/10/26 11:52:16] [en] Language changed to English.
+[09/10/26 11:52:16] [en] Greetings Professor Falken. Shall we play a game?
+[09/10/26 11:52:16] [en] DSEPy version 1.0.3beta.
+[09/10/26 11:52:16] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
+[09/10/26 11:52:16] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
+[09/10/26 11:52:16] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
+[09/10/26 11:52:16] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
+[09/10/26 11:52:16] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
+[09/10/26 11:52:35] [en] Language changed to English.
+[09/10/26 11:52:35] [en] Greetings Professor Falken. Shall we play a game?
+[09/10/26 11:52:35] [en] DSEPy version 1.0.3beta.
+[09/10/26 11:52:35] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
+[09/10/26 11:52:35] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
+[09/10/26 11:52:35] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
+[09/10/26 11:52:35] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
+[09/10/26 11:52:35] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
+[09/10/26 11:52:49] [en] Language changed to English.
+[09/10/26 11:52:49] [en] Greetings Professor Falken. Shall we play a game?
+[09/10/26 11:52:49] [en] DSEPy version 1.0.3beta.
+[09/10/26 11:52:49] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
+[09/10/26 11:52:49] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
+[09/10/26 11:52:49] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
+[09/10/26 11:52:49] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
+[09/10/26 11:52:49] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
+[09/10/26 11:54:41] [en] Language changed to English.
+[09/10/26 11:54:41] [en] Greetings Professor Falken. Shall we play a game?
+[09/10/26 11:54:41] [en] DSEPy version 1.0.3beta.
+[09/10/26 11:54:41] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
+[09/10/26 11:54:41] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
+[09/10/26 11:54:41] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
+[09/10/26 11:54:41] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
+[09/10/26 11:54:41] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
+[09/10/26 11:56:00] [en] Language changed to English.
+[09/10/26 11:56:00] [en] Greetings Professor Falken. Shall we play a game?
+[09/10/26 11:56:00] [en] DSEPy version 1.0.3beta.
+[09/10/26 11:56:00] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
+[09/10/26 11:56:00] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
+[09/10/26 11:56:00] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
+[09/10/26 11:56:00] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
+[09/10/26 11:56:00] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
+[09/10/26 11:56:55] [en] Language changed to English.
+[09/10/26 11:56:55] [en] Greetings Professor Falken. Shall we play a game?
+[09/10/26 11:56:55] [en] DSEPy version 1.0.3beta.
+[09/10/26 11:56:55] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
+[09/10/26 11:56:55] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
+[09/10/26 11:56:55] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
+[09/10/26 11:56:55] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
+[09/10/26 11:56:55] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
+[09/10/26 11:58:25] [en] Language changed to English.
+[09/10/26 11:58:25] [en] Greetings Professor Falken. Shall we play a game?
+[09/10/26 11:58:25] [en] DSEPy version 1.0.3beta.
+[09/10/26 11:58:25] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
+[09/10/26 11:58:25] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
+[09/10/26 11:58:25] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
+[09/10/26 11:58:25] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
+[09/10/26 11:58:25] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
+[09/10/26 11:59:26] [en] Language changed to English.
+[09/10/26 11:59:26] [en] Greetings Professor Falken. Shall we play a game?
+[09/10/26 11:59:26] [en] DSEPy version 1.0.3beta.
+[09/10/26 11:59:26] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
+[09/10/26 11:59:26] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
+[09/10/26 11:59:26] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
+[09/10/26 11:59:26] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
+[09/10/26 11:59:26] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
+[09/10/26 11:59:57] [en] Language changed to English.
+[09/10/26 11:59:57] [en] Greetings Professor Falken. Shall we play a game?
+[09/10/26 11:59:57] [en] DSEPy version 1.0.3beta.
+[09/10/26 11:59:57] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
+[09/10/26 11:59:57] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
+[09/10/26 11:59:57] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
+[09/10/26 11:59:57] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
+[09/10/26 11:59:57] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
+[09/10/26 12:00:16] [en] Language changed to English.
+[09/10/26 12:00:16] [en] Greetings Professor Falken. Shall we play a game?
+[09/10/26 12:00:16] [en] DSEPy version 1.0.3beta.
+[09/10/26 12:00:16] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
+[09/10/26 12:00:16] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
+[09/10/26 12:00:16] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
+[09/10/26 12:00:16] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
+[09/10/26 12:00:16] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
+[09/10/26 12:00:38] [en] Language changed to English.
+[09/10/26 12:00:38] [en] Greetings Professor Falken. Shall we play a game?
+[09/10/26 12:00:38] [en] DSEPy version 1.0.3beta.
+[09/10/26 12:00:38] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
+[09/10/26 12:00:38] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
+[09/10/26 12:00:38] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
+[09/10/26 12:00:38] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
+[09/10/26 12:00:38] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
+[09/10/26 12:58:26] [en] Language changed to English.
+[09/10/26 12:58:26] [en] Greetings Professor Falken. Shall we play a game?
+[09/10/26 12:58:26] [en] DSEPy version 1.0.3beta.
+[09/10/26 12:58:26] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
+[09/10/26 12:58:26] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
+[09/10/26 12:58:26] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
+[09/10/26 12:58:26] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
+[09/10/26 12:58:26] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
+[09/10/26 12:58:56] [en] Language changed to English.
+[09/10/26 12:58:56] [en] Greetings Professor Falken. Shall we play a game?
+[09/10/26 12:58:56] [en] DSEPy version 1.0.3beta.
+[09/10/26 12:58:56] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
+[09/10/26 12:58:56] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
+[09/10/26 12:58:56] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
+[09/10/26 12:58:56] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
+[09/10/26 12:58:56] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
+[09/10/26 13:01:15] [en] Language changed to English.
+[09/10/26 13:01:15] [en] Greetings Professor Falken. Shall we play a game?
+[09/10/26 13:01:15] [en] DSEPy version 1.0.3beta.
+[09/10/26 13:01:15] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
+[09/10/26 13:01:15] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
+[09/10/26 13:01:15] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
+[09/10/26 13:01:15] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
+[09/10/26 13:01:15] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
+[09/10/26 13:02:25] [en] Language changed to English.
+[09/10/26 13:02:25] [en] Greetings Professor Falken. Shall we play a game?
+[09/10/26 13:02:25] [en] DSEPy version 1.0.3beta.
+[09/10/26 13:02:25] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
+[09/10/26 13:02:25] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
+[09/10/26 13:02:25] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
+[09/10/26 13:02:25] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
+[09/10/26 13:02:25] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
+[09/10/26 13:02:49] [en] Language changed to English.
+[09/10/26 13:02:49] [en] Greetings Professor Falken. Shall we play a game?
+[09/10/26 13:02:49] [en] DSEPy version 1.0.3beta.
+[09/10/26 13:02:49] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
+[09/10/26 13:02:49] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
+[09/10/26 13:02:49] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
+[09/10/26 13:02:49] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
+[09/10/26 13:02:49] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
+[09/10/26 13:02:58] [en] Language changed to English.
+[09/10/26 13:02:58] [en] Greetings Professor Falken. Shall we play a game?
+[09/10/26 13:02:58] [en] DSEPy version 1.0.3beta.
+[09/10/26 13:02:58] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
+[09/10/26 13:02:58] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
+[09/10/26 13:02:58] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
+[09/10/26 13:02:58] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
+[09/10/26 13:02:58] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
+[09/10/26 13:04:01] [en] === Step 1: Botev KDE2D Density & Principal Poles Calculation ===
+[09/10/26 13:04:01] [en] Spatial Grid Resolution: 64x64 (2^6)
+[09/10/26 13:04:01] [en] Computing density matrix for 1055673 orientation poles...
+[09/10/26 13:04:01] [en] Timing - Density computation: 0.053 s
+[09/10/26 13:04:01] [en] Detecting local peaks with angular separation >= 30.0 deg...
+[09/10/26 13:04:01] [en] Timing - Principal pole search: 0.008 s
+[09/10/26 13:04:01] [en] === Fisher concentration by family (provisional) ===
+[09/10/26 13:04:01] [en]  -> Family J_1: K=39.00, N=388386, R=378426.6722
+[09/10/26 13:04:01] [en]  -> Family J_2: K=29.70, N=320373, R=309587.5839
+[09/10/26 13:04:01] [en]  -> Family J_3: K=19.38, N=186002, R=176402.8530
+[09/10/26 13:04:01] [en] Timing - Provisional Fisher K: 0.192 s
+[09/10/26 13:04:01] [en] Extracted 3 principal poles.
+[09/10/26 13:04:01] [en] Timing - Step 1 total: 0.662 s
+[09/10/26 13:04:05] [en] === Step 2: Classifying Point Cloud into DS Field (Cone: 30.0 deg) ===
+[09/10/26 13:04:05] [en] Scalar writer: stable C++ ccScalarField.setValue backend.
+[09/10/26 13:04:05] [en]   [JS] Reading 3D normals from 1055673 points...
+[09/10/26 13:04:05] [en]   [JS] Calculating angular distance to 3 principal poles...
+[09/10/26 13:04:05] [en]   [JS] Writing 'Discontinuity Set (DS)' scalar field to CloudCompare...
+[09/10/26 13:04:06] [en]   [JS] === JS Classification Completed in 0.63 s ===
+Total points processed: 1055673
 JS cone threshold: 30.0
 Point count by family:
-   J_0 (Unclassified / outside cone): 370737 pts (9.74%)
-   Family J_1: 1905565 pts (50.07%)
-   Family J_2: 319836 pts (8.40%)
-   Family J_3: 344857 pts (9.06%)
-   Family J_4: 570572 pts (14.99%)
-   Family J_5: 146063 pts (3.84%)
-   Family J_6: 148036 pts (3.89%)
-[02/10/26 09:14:43] [en] Discontinuity Set (DS) scalar field created from the reviewed principal-pole table.
-[02/10/26 09:14:43] [en] Timing - DS classification and writing: 1.785 s
-[02/10/26 09:14:43] [en]  -> DS = 0 (Unclassified background): 370737 pts (9.74%)
-[02/10/26 09:14:43] [en]  -> DS = 1 (Set J_1): 1905565 pts (50.07%)
-[02/10/26 09:14:43] [en]  -> DS = 2 (Set J_2): 319836 pts (8.40%)
-[02/10/26 09:14:43] [en]  -> DS = 3 (Set J_3): 344857 pts (9.06%)
-[02/10/26 09:14:43] [en]  -> DS = 4 (Set J_4): 570572 pts (14.99%)
-[02/10/26 09:14:43] [en]  -> DS = 5 (Set J_5): 146063 pts (3.84%)
-[02/10/26 09:14:43] [en]  -> DS = 6 (Set J_6): 148036 pts (3.89%)
-[02/10/26 09:14:45] [en] === Fisher concentration by family (final) ===
-[02/10/26 09:14:45] [en]  -> Family J_1: K=53.01, N=1905565, R=1869617.5547
-[02/10/26 09:14:45] [en]  -> Family J_2: K=36.99, N=319836, R=311190.1755
-[02/10/26 09:14:45] [en]  -> Family J_3: K=35.00, N=344857, R=335003.1697
-[02/10/26 09:14:45] [en]  -> Family J_4: K=38.00, N=570572, R=555555.9655
-[02/10/26 09:14:45] [en]  -> Family J_5: K=32.35, N=146063, R=141548.2218
-[02/10/26 09:14:45] [en]  -> Family J_6: K=29.40, N=148036, R=143000.0707
-[02/10/26 09:14:45] [en] Timing - Final Fisher K: 0.724 s
-[02/10/26 09:14:45] [en] Timing - Step 2 total: 3.384 s
-[02/10/26 09:15:15] [en] === Step 3: DBSCAN Clustering + Plane Fitting ===
-[02/10/26 09:15:15] [en] Scalar writer: stable C++ ccScalarField.setValue backend.
-[02/10/26 09:15:15] [en] Clustering method: HDBSCAN
-[02/10/26 09:15:15] [en] HDBSCAN parameters: Min Samples=4, Min Cluster Size=100, Selection=EOM | Merge k_sigmas=1.5 | Sort: size | Fix orient: True
-[02/10/26 09:15:24] [en] HDBSCAN requires scikit-learn 1.3 or later in CloudCompare's Python environment. Install a compatible scikit-learn version there and restart DSEPy.
-[02/10/26 09:15:35] [en] === Step 3: DBSCAN Clustering + Plane Fitting ===
-[02/10/26 09:15:35] [en] Scalar writer: stable C++ ccScalarField.setValue backend.
-[02/10/26 09:15:35] [en] Clustering method: HDBSCAN
-[02/10/26 09:15:35] [en] HDBSCAN parameters: Min Samples=4, Min Cluster Size=100, Selection=EOM | Merge k_sigmas=1.5 | Sort: size | Fix orient: True
-[02/10/26 09:16:35] [en] HDBSCAN requires scikit-learn 1.3 or later in CloudCompare's Python environment. Install a compatible scikit-learn version there and restart DSEPy.
-[02/10/26 09:18:25] [en] === Step 3: DBSCAN Clustering + Plane Fitting ===
-[02/10/26 09:18:25] [en] Scalar writer: stable C++ ccScalarField.setValue backend.
-[02/10/26 09:18:25] [en] Clustering method: HDBSCAN
-[02/10/26 09:18:25] [en] HDBSCAN parameters: Min Samples=4, Min Cluster Size=100, Selection=EOM | Merge k_sigmas=1.5 | Sort: size | Fix orient: True
-[02/10/26 09:18:28] [en] HDBSCAN requires scikit-learn 1.3 or later in CloudCompare's Python environment. Install a compatible scikit-learn version there and restart DSEPy.
-[02/10/26 09:19:01] [en] Language changed to English.
-[02/10/26 09:19:01] [en] Greetings Professor Falken. Shall we play a game?
-[02/10/26 09:19:01] [en] DSEPy version 1.0.2.
-[02/10/26 09:19:01] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
-[02/10/26 09:19:01] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
-[02/10/26 09:19:01] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
-[02/10/26 09:19:01] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
-[02/10/26 09:19:01] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
-[02/10/26 09:19:04] [en] === Step 1: Botev KDE2D Density & Principal Poles Calculation ===
-[02/10/26 09:19:04] [en] Spatial Grid Resolution: 128x128 (2^7)
-[02/10/26 09:19:04] [en] Computing density matrix for 3805666 orientation poles...
-[02/10/26 09:19:05] [en] Timing - Density computation: 0.178 s
-[02/10/26 09:19:05] [en] Detecting local peaks with angular separation >= 15.0 deg...
-[02/10/26 09:19:05] [en] Timing - Principal pole search: 0.001 s
-[02/10/26 09:19:05] [en] === Fisher concentration by family (provisional) ===
-[02/10/26 09:19:05] [en]  -> Family J_1: K=53.01, N=1905565, R=1869617.5547
-[02/10/26 09:19:05] [en]  -> Family J_2: K=36.99, N=319836, R=311190.1755
-[02/10/26 09:19:05] [en]  -> Family J_3: K=35.00, N=344857, R=335003.1697
-[02/10/26 09:19:05] [en]  -> Family J_4: K=38.00, N=570572, R=555555.9655
-[02/10/26 09:19:05] [en]  -> Family J_5: K=32.35, N=146063, R=141548.2218
-[02/10/26 09:19:05] [en]  -> Family J_6: K=29.40, N=148036, R=143000.0707
-[02/10/26 09:19:05] [en] Timing - Provisional Fisher K: 0.893 s
-[02/10/26 09:19:05] [en] Extracted 6 principal poles.
-[02/10/26 09:19:06] [en] Timing - Step 1 total: 2.019 s
-[02/10/26 09:19:08] [en] === Step 2: Classifying Point Cloud into DS Field (Cone: 30.0 deg) ===
-[02/10/26 09:19:08] [en] Scalar writer: stable C++ ccScalarField.setValue backend.
-[02/10/26 09:19:08] [en]   [JS] Reading 3D normals from 3805666 points...
-[02/10/26 09:19:09] [en]   [JS] Calculating angular distance to 6 principal poles...
-[02/10/26 09:19:09] [en]   [JS] Writing 'Discontinuity Set (DS)' scalar field to CloudCompare...
-[02/10/26 09:19:10] [en]   [JS] === JS Classification Completed in 1.67 s ===
-Total points processed: 3805666
-JS cone threshold: 30.0
-Point count by family:
-   J_0 (Unclassified / outside cone): 370737 pts (9.74%)
-   Family J_1: 1905565 pts (50.07%)
-   Family J_2: 319836 pts (8.40%)
-   Family J_3: 344857 pts (9.06%)
-   Family J_4: 570572 pts (14.99%)
-   Family J_5: 146063 pts (3.84%)
-   Family J_6: 148036 pts (3.89%)
-[02/10/26 09:19:10] [en] Discontinuity Set (DS) scalar field created from the reviewed principal-pole table.
-[02/10/26 09:19:10] [en] Timing - DS classification and writing: 1.729 s
-[02/10/26 09:19:10] [en]  -> DS = 0 (Unclassified background): 370737 pts (9.74%)
-[02/10/26 09:19:10] [en]  -> DS = 1 (Set J_1): 1905565 pts (50.07%)
-[02/10/26 09:19:10] [en]  -> DS = 2 (Set J_2): 319836 pts (8.40%)
-[02/10/26 09:19:10] [en]  -> DS = 3 (Set J_3): 344857 pts (9.06%)
-[02/10/26 09:19:10] [en]  -> DS = 4 (Set J_4): 570572 pts (14.99%)
-[02/10/26 09:19:10] [en]  -> DS = 5 (Set J_5): 146063 pts (3.84%)
-[02/10/26 09:19:10] [en]  -> DS = 6 (Set J_6): 148036 pts (3.89%)
-[02/10/26 09:19:12] [en] === Fisher concentration by family (final) ===
-[02/10/26 09:19:12] [en]  -> Family J_1: K=53.01, N=1905565, R=1869617.5547
-[02/10/26 09:19:12] [en]  -> Family J_2: K=36.99, N=319836, R=311190.1755
-[02/10/26 09:19:12] [en]  -> Family J_3: K=35.00, N=344857, R=335003.1697
-[02/10/26 09:19:12] [en]  -> Family J_4: K=38.00, N=570572, R=555555.9655
-[02/10/26 09:19:12] [en]  -> Family J_5: K=32.35, N=146063, R=141548.2218
-[02/10/26 09:19:12] [en]  -> Family J_6: K=29.40, N=148036, R=143000.0707
-[02/10/26 09:19:12] [en] Timing - Final Fisher K: 0.734 s
-[02/10/26 09:19:12] [en] Timing - Step 2 total: 3.301 s
-[02/10/26 09:19:13] [en] === Step 3: DBSCAN Clustering + Plane Fitting ===
-[02/10/26 09:19:13] [en] Scalar writer: stable C++ ccScalarField.setValue backend.
-[02/10/26 09:19:13] [en] Clustering method: HDBSCAN
-[02/10/26 09:19:13] [en] HDBSCAN parameters: Min Samples=4, Min Cluster Size=100, Selection=EOM | Merge k_sigmas=1.5 | Sort: size | Fix orient: True
-[02/10/26 09:19:17] [en] HDBSCAN requires scikit-learn 1.3 or later in CloudCompare's Python environment. Install a compatible scikit-learn version there and restart DSEPy.
-[02/10/26 09:20:44] [en] Language changed to English.
-[02/10/26 09:20:44] [en] Greetings Professor Falken. Shall we play a game?
-[02/10/26 09:20:44] [en] DSEPy version 1.0.2.
-[02/10/26 09:20:44] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
-[02/10/26 09:20:44] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
-[02/10/26 09:20:44] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
-[02/10/26 09:20:44] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
-[02/10/26 09:20:44] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
-[02/10/26 09:20:46] [en] === Step 1: Botev KDE2D Density & Principal Poles Calculation ===
-[02/10/26 09:20:46] [en] Spatial Grid Resolution: 128x128 (2^7)
-[02/10/26 09:20:46] [en] Computing density matrix for 3805666 orientation poles...
-[02/10/26 09:20:46] [en] Timing - Density computation: 0.166 s
-[02/10/26 09:20:46] [en] Detecting local peaks with angular separation >= 15.0 deg...
-[02/10/26 09:20:46] [en] Timing - Principal pole search: 0.001 s
-[02/10/26 09:20:47] [en] === Fisher concentration by family (provisional) ===
-[02/10/26 09:20:47] [en]  -> Family J_1: K=53.01, N=1905565, R=1869617.5547
-[02/10/26 09:20:47] [en]  -> Family J_2: K=36.99, N=319836, R=311190.1755
-[02/10/26 09:20:47] [en]  -> Family J_3: K=35.00, N=344857, R=335003.1697
-[02/10/26 09:20:47] [en]  -> Family J_4: K=38.00, N=570572, R=555555.9655
-[02/10/26 09:20:47] [en]  -> Family J_5: K=32.35, N=146063, R=141548.2218
-[02/10/26 09:20:47] [en]  -> Family J_6: K=29.40, N=148036, R=143000.0707
-[02/10/26 09:20:47] [en] Timing - Provisional Fisher K: 0.849 s
-[02/10/26 09:20:47] [en] Extracted 6 principal poles.
-[02/10/26 09:20:48] [en] Timing - Step 1 total: 2.020 s
-[02/10/26 09:20:50] [en] === Step 2: Classifying Point Cloud into DS Field (Cone: 30.0 deg) ===
-[02/10/26 09:20:50] [en] Scalar writer: stable C++ ccScalarField.setValue backend.
-[02/10/26 09:20:50] [en]   [JS] Reading 3D normals from 3805666 points...
-[02/10/26 09:20:51] [en]   [JS] Calculating angular distance to 6 principal poles...
-[02/10/26 09:20:51] [en]   [JS] Writing 'Discontinuity Set (DS)' scalar field to CloudCompare...
-[02/10/26 09:20:52] [en]   [JS] === JS Classification Completed in 1.72 s ===
-Total points processed: 3805666
-JS cone threshold: 30.0
-Point count by family:
-   J_0 (Unclassified / outside cone): 370737 pts (9.74%)
-   Family J_1: 1905565 pts (50.07%)
-   Family J_2: 319836 pts (8.40%)
-   Family J_3: 344857 pts (9.06%)
-   Family J_4: 570572 pts (14.99%)
-   Family J_5: 146063 pts (3.84%)
-   Family J_6: 148036 pts (3.89%)
-[02/10/26 09:20:52] [en] Discontinuity Set (DS) scalar field created from the reviewed principal-pole table.
-[02/10/26 09:20:52] [en] Timing - DS classification and writing: 1.775 s
-[02/10/26 09:20:52] [en]  -> DS = 0 (Unclassified background): 370737 pts (9.74%)
-[02/10/26 09:20:52] [en]  -> DS = 1 (Set J_1): 1905565 pts (50.07%)
-[02/10/26 09:20:52] [en]  -> DS = 2 (Set J_2): 319836 pts (8.40%)
-[02/10/26 09:20:52] [en]  -> DS = 3 (Set J_3): 344857 pts (9.06%)
-[02/10/26 09:20:52] [en]  -> DS = 4 (Set J_4): 570572 pts (14.99%)
-[02/10/26 09:20:52] [en]  -> DS = 5 (Set J_5): 146063 pts (3.84%)
-[02/10/26 09:20:52] [en]  -> DS = 6 (Set J_6): 148036 pts (3.89%)
-[02/10/26 09:20:54] [en] === Fisher concentration by family (final) ===
-[02/10/26 09:20:54] [en]  -> Family J_1: K=53.01, N=1905565, R=1869617.5547
-[02/10/26 09:20:54] [en]  -> Family J_2: K=36.99, N=319836, R=311190.1755
-[02/10/26 09:20:54] [en]  -> Family J_3: K=35.00, N=344857, R=335003.1697
-[02/10/26 09:20:54] [en]  -> Family J_4: K=38.00, N=570572, R=555555.9655
-[02/10/26 09:20:54] [en]  -> Family J_5: K=32.35, N=146063, R=141548.2218
-[02/10/26 09:20:54] [en]  -> Family J_6: K=29.40, N=148036, R=143000.0707
-[02/10/26 09:20:54] [en] Timing - Final Fisher K: 0.753 s
-[02/10/26 09:20:54] [en] Timing - Step 2 total: 3.365 s
-[02/10/26 09:20:55] [en] === Step 3: DBSCAN Clustering + Plane Fitting ===
-[02/10/26 09:20:55] [en] Scalar writer: stable C++ ccScalarField.setValue backend.
-[02/10/26 09:20:55] [en] Clustering method: HDBSCAN
-[02/10/26 09:20:55] [en] HDBSCAN parameters: Min Samples=4, Min Cluster Size=100, Selection=EOM | Merge k_sigmas=1.5 | Sort: size | Fix orient: True
-[02/10/26 09:30:06] [en] Language changed to English.
-[02/10/26 09:30:06] [en] Greetings Professor Falken. Shall we play a game?
-[02/10/26 09:30:06] [en] DSEPy version 1.0.2.
-[02/10/26 09:30:06] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
-[02/10/26 09:30:06] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
-[02/10/26 09:30:06] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
-[02/10/26 09:30:06] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
-[02/10/26 09:30:06] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
-[02/10/26 09:30:08] [en] === Step 1: Botev KDE2D Density & Principal Poles Calculation ===
-[02/10/26 09:30:08] [en] Spatial Grid Resolution: 128x128 (2^7)
-[02/10/26 09:30:09] [en] Computing density matrix for 3805666 orientation poles...
-[02/10/26 09:30:09] [en] Timing - Density computation: 0.232 s
-[02/10/26 09:30:09] [en] Detecting local peaks with angular separation >= 15.0 deg...
-[02/10/26 09:30:09] [en] Timing - Principal pole search: 0.001 s
-[02/10/26 09:30:10] [en] === Fisher concentration by family (provisional) ===
-[02/10/26 09:30:10] [en]  -> Family J_1: K=53.01, N=1905565, R=1869617.5547
-[02/10/26 09:30:10] [en]  -> Family J_2: K=36.99, N=319836, R=311190.1755
-[02/10/26 09:30:10] [en]  -> Family J_3: K=35.00, N=344857, R=335003.1697
-[02/10/26 09:30:10] [en]  -> Family J_4: K=38.00, N=570572, R=555555.9655
-[02/10/26 09:30:10] [en]  -> Family J_5: K=32.35, N=146063, R=141548.2218
-[02/10/26 09:30:10] [en]  -> Family J_6: K=29.40, N=148036, R=143000.0707
-[02/10/26 09:30:10] [en] Timing - Provisional Fisher K: 1.005 s
-[02/10/26 09:30:10] [en] Extracted 6 principal poles.
-[02/10/26 09:30:11] [en] Timing - Step 1 total: 2.463 s
-[02/10/26 09:30:13] [en] === Step 2: Classifying Point Cloud into DS Field (Cone: 30.0 deg) ===
-[02/10/26 09:30:13] [en] Scalar writer: stable C++ ccScalarField.setValue backend.
-[02/10/26 09:30:13] [en]   [JS] Reading 3D normals from 3805666 points...
-[02/10/26 09:30:13] [en]   [JS] Calculating angular distance to 6 principal poles...
-[02/10/26 09:30:14] [en]   [JS] Writing 'Discontinuity Set (DS)' scalar field to CloudCompare...
-[02/10/26 09:30:15] [en]   [JS] === JS Classification Completed in 1.86 s ===
-Total points processed: 3805666
-JS cone threshold: 30.0
-Point count by family:
-   J_0 (Unclassified / outside cone): 370737 pts (9.74%)
-   Family J_1: 1905565 pts (50.07%)
-   Family J_2: 319836 pts (8.40%)
-   Family J_3: 344857 pts (9.06%)
-   Family J_4: 570572 pts (14.99%)
-   Family J_5: 146063 pts (3.84%)
-   Family J_6: 148036 pts (3.89%)
-[02/10/26 09:30:15] [en] Discontinuity Set (DS) scalar field created from the reviewed principal-pole table.
-[02/10/26 09:30:15] [en] Timing - DS classification and writing: 1.927 s
-[02/10/26 09:30:15] [en]  -> DS = 0 (Unclassified background): 370737 pts (9.74%)
-[02/10/26 09:30:15] [en]  -> DS = 1 (Set J_1): 1905565 pts (50.07%)
-[02/10/26 09:30:15] [en]  -> DS = 2 (Set J_2): 319836 pts (8.40%)
-[02/10/26 09:30:15] [en]  -> DS = 3 (Set J_3): 344857 pts (9.06%)
-[02/10/26 09:30:15] [en]  -> DS = 4 (Set J_4): 570572 pts (14.99%)
-[02/10/26 09:30:15] [en]  -> DS = 5 (Set J_5): 146063 pts (3.84%)
-[02/10/26 09:30:15] [en]  -> DS = 6 (Set J_6): 148036 pts (3.89%)
-[02/10/26 09:30:16] [en] === Fisher concentration by family (final) ===
-[02/10/26 09:30:16] [en]  -> Family J_1: K=53.01, N=1905565, R=1869617.5547
-[02/10/26 09:30:16] [en]  -> Family J_2: K=36.99, N=319836, R=311190.1755
-[02/10/26 09:30:16] [en]  -> Family J_3: K=35.00, N=344857, R=335003.1697
-[02/10/26 09:30:16] [en]  -> Family J_4: K=38.00, N=570572, R=555555.9655
-[02/10/26 09:30:16] [en]  -> Family J_5: K=32.35, N=146063, R=141548.2218
-[02/10/26 09:30:16] [en]  -> Family J_6: K=29.40, N=148036, R=143000.0707
-[02/10/26 09:30:16] [en] Timing - Final Fisher K: 0.751 s
-[02/10/26 09:30:16] [en] Timing - Step 2 total: 3.572 s
-[02/10/26 09:30:18] [en] === Step 3: DBSCAN Clustering + Plane Fitting ===
-[02/10/26 09:30:18] [en] Scalar writer: stable C++ ccScalarField.setValue backend.
-[02/10/26 09:30:18] [en] Clustering method: HDBSCAN
-[02/10/26 09:30:18] [en] HDBSCAN parameters: Min Samples=4, Min Cluster Size=100, Selection=EOM | Merge k_sigmas=1.5 | Sort: size | Fix orient: True
-[02/10/26 09:41:42] [en] Language changed to English.
-[02/10/26 09:41:42] [en] Greetings Professor Falken. Shall we play a game?
-[02/10/26 09:41:42] [en] DSEPy version 1.0.2.
-[02/10/26 09:41:42] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
-[02/10/26 09:41:42] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
-[02/10/26 09:41:42] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
-[02/10/26 09:41:42] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
-[02/10/26 09:41:42] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
-[02/10/26 09:41:45] [en] === Step 1: Botev KDE2D Density & Principal Poles Calculation ===
-[02/10/26 09:41:45] [en] Spatial Grid Resolution: 128x128 (2^7)
-[02/10/26 09:41:45] [en] Computing density matrix for 3805666 orientation poles...
-[02/10/26 09:41:46] [en] Timing - Density computation: 0.201 s
-[02/10/26 09:41:46] [en] Detecting local peaks with angular separation >= 15.0 deg...
-[02/10/26 09:41:46] [en] Timing - Principal pole search: 0.001 s
-[02/10/26 09:41:47] [en] === Fisher concentration by family (provisional) ===
-[02/10/26 09:41:47] [en]  -> Family J_1: K=53.01, N=1905565, R=1869617.5547
-[02/10/26 09:41:47] [en]  -> Family J_2: K=36.99, N=319836, R=311190.1755
-[02/10/26 09:41:47] [en]  -> Family J_3: K=35.00, N=344857, R=335003.1697
-[02/10/26 09:41:47] [en]  -> Family J_4: K=38.00, N=570572, R=555555.9655
-[02/10/26 09:41:47] [en]  -> Family J_5: K=32.35, N=146063, R=141548.2218
-[02/10/26 09:41:47] [en]  -> Family J_6: K=29.40, N=148036, R=143000.0707
-[02/10/26 09:41:47] [en] Timing - Provisional Fisher K: 0.920 s
-[02/10/26 09:41:47] [en] Extracted 6 principal poles.
-[02/10/26 09:41:47] [en] Timing - Step 1 total: 2.216 s
-[02/10/26 09:41:49] [en] === Step 2: Classifying Point Cloud into DS Field (Cone: 30.0 deg) ===
-[02/10/26 09:41:49] [en] Scalar writer: stable C++ ccScalarField.setValue backend.
-[02/10/26 09:41:49] [en]   [JS] Reading 3D normals from 3805666 points...
-[02/10/26 09:41:49] [en]   [JS] Calculating angular distance to 6 principal poles...
-[02/10/26 09:41:50] [en]   [JS] Writing 'Discontinuity Set (DS)' scalar field to CloudCompare...
-[02/10/26 09:41:51] [en]   [JS] === JS Classification Completed in 1.71 s ===
-Total points processed: 3805666
-JS cone threshold: 30.0
-Point count by family:
-   J_0 (Unclassified / outside cone): 370737 pts (9.74%)
-   Family J_1: 1905565 pts (50.07%)
-   Family J_2: 319836 pts (8.40%)
-   Family J_3: 344857 pts (9.06%)
-   Family J_4: 570572 pts (14.99%)
-   Family J_5: 146063 pts (3.84%)
-   Family J_6: 148036 pts (3.89%)
-[02/10/26 09:41:51] [en] Discontinuity Set (DS) scalar field created from the reviewed principal-pole table.
-[02/10/26 09:41:51] [en] Timing - DS classification and writing: 1.755 s
-[02/10/26 09:41:51] [en]  -> DS = 0 (Unclassified background): 370737 pts (9.74%)
-[02/10/26 09:41:51] [en]  -> DS = 1 (Set J_1): 1905565 pts (50.07%)
-[02/10/26 09:41:51] [en]  -> DS = 2 (Set J_2): 319836 pts (8.40%)
-[02/10/26 09:41:51] [en]  -> DS = 3 (Set J_3): 344857 pts (9.06%)
-[02/10/26 09:41:51] [en]  -> DS = 4 (Set J_4): 570572 pts (14.99%)
-[02/10/26 09:41:51] [en]  -> DS = 5 (Set J_5): 146063 pts (3.84%)
-[02/10/26 09:41:51] [en]  -> DS = 6 (Set J_6): 148036 pts (3.89%)
-[02/10/26 09:41:52] [en] === Fisher concentration by family (final) ===
-[02/10/26 09:41:52] [en]  -> Family J_1: K=53.01, N=1905565, R=1869617.5547
-[02/10/26 09:41:52] [en]  -> Family J_2: K=36.99, N=319836, R=311190.1755
-[02/10/26 09:41:52] [en]  -> Family J_3: K=35.00, N=344857, R=335003.1697
-[02/10/26 09:41:52] [en]  -> Family J_4: K=38.00, N=570572, R=555555.9655
-[02/10/26 09:41:52] [en]  -> Family J_5: K=32.35, N=146063, R=141548.2218
-[02/10/26 09:41:52] [en]  -> Family J_6: K=29.40, N=148036, R=143000.0707
-[02/10/26 09:41:52] [en] Timing - Final Fisher K: 0.752 s
-[02/10/26 09:41:52] [en] Timing - Step 2 total: 3.405 s
-[02/10/26 09:42:03] [en] === Step 3: DBSCAN Clustering + Plane Fitting ===
-[02/10/26 09:42:03] [en] Scalar writer: stable C++ ccScalarField.setValue backend.
-[02/10/26 09:42:03] [en] Clustering method: DBSCAN
-[02/10/26 09:42:03] [en] DBSCAN parameters: K=4, k_sigma=2.0, MinPts=4, Minimum Cluster Size=100 | Merge k_sigmas=1.5 | Sort: size | Fix orient: True
-[02/10/26 09:42:31] [en]  -> J_1: eps=0.0175 | 284 -> 63 clusters | 1905565 family pts | raw noise=1540 | small-cluster rejected=11480 pts | final cl=0=13020 | clustering=5.424 s
-[02/10/26 09:42:31] [en]  -> J_2: eps=0.0410 | 228 -> 60 clusters | 319836 family pts | raw noise=767 | small-cluster rejected=19475 pts | final cl=0=20242 | clustering=1.657 s
-[02/10/26 09:42:31] [en]  -> J_3: eps=0.0289 | 276 -> 16 clusters | 344857 family pts | raw noise=746 | small-cluster rejected=17664 pts | final cl=0=18410 | clustering=1.393 s
-[02/10/26 09:42:31] [en]  -> J_4: eps=0.0272 | 246 -> 100 clusters | 570572 family pts | raw noise=811 | small-cluster rejected=14929 pts | final cl=0=15740 | clustering=2.172 s
-[02/10/26 09:42:31] [en]  -> J_5: eps=0.0395 | 208 -> 46 clusters | 146063 family pts | raw noise=428 | small-cluster rejected=9942 pts | final cl=0=10370 | clustering=0.728 s
-[02/10/26 09:42:31] [en]  -> J_6: eps=0.0413 | 199 -> 94 clusters | 148036 family pts | raw noise=557 | small-cluster rejected=13166 pts | final cl=0=13723 | clustering=0.776 s
-[02/10/26 09:42:31] [en] Planes computed. Scalars A, B, C, D written to cloud.
-[02/10/26 09:42:31] [en] Coplanarity merge complete. Final cl, A, B, C, D and sigma fields written.
-[02/10/26 09:42:31] [en] Timing - Complete cluster analysis and scalar writing: 28.144 s
-[02/10/26 09:42:42] [en] Family cloud J_1: 1905565 points, cl active.
-[02/10/26 09:42:43] [en] Family cloud J_2: 319836 points, cl active.
-[02/10/26 09:42:43] [en] Family cloud J_3: 344857 points, cl active.
-[02/10/26 09:42:44] [en] Family cloud J_4: 570572 points, cl active.
-[02/10/26 09:42:45] [en] Family cloud J_5: 146063 points, cl active.
-[02/10/26 09:42:45] [en] Family cloud J_6: 148036 points, cl active.
-[02/10/26 09:42:45] [en] Created 6 family cluster-result clouds in 'Clustering results 20261002_094238'.
-[02/10/26 09:42:45] [en] Timing - CloudCompare UI refresh: 0.079 s
-[02/10/26 09:42:45] [en] Timing - CloudCompare redraw: 0.000 s
-[02/10/26 09:42:45] [en] Cluster Planes tab: 379 cluster planes listed.
-[02/10/26 09:42:45] [en] Timing - Step 3 total: 42.150 s
-[02/10/26 09:43:39] [en] === Step 3: DBSCAN Clustering + Plane Fitting ===
-[02/10/26 09:43:39] [en] Scalar writer: stable C++ ccScalarField.setValue backend.
-[02/10/26 09:43:39] [en] Clustering method: HDBSCAN
-[02/10/26 09:43:39] [en] HDBSCAN parameters: Min Samples=4, Min Cluster Size=100, Selection=EOM, n_jobs=-1 | Merge k_sigmas=1.5 | Sort: size | Fix orient: True
+   J_0 (Unclassified / outside cone): 160912 pts (15.24%)
+   Family J_1: 388386 pts (36.79%)
+   Family J_2: 320373 pts (30.35%)
+   Family J_3: 186002 pts (17.62%)
+[09/10/26 13:04:06] [en] Discontinuity Set (DS) scalar field created from the reviewed principal-pole table.
+[09/10/26 13:04:06] [en] Timing - DS classification and writing: 0.675 s
+[09/10/26 13:04:06] [en]  -> DS = 0 (Unclassified background): 160912 pts (15.24%)
+[09/10/26 13:04:06] [en]  -> DS = 1 (Set J_1): 388386 pts (36.79%)
+[09/10/26 13:04:06] [en]  -> DS = 2 (Set J_2): 320373 pts (30.35%)
+[09/10/26 13:04:06] [en]  -> DS = 3 (Set J_3): 186002 pts (17.62%)
+[09/10/26 13:04:06] [en] === Fisher concentration by family (final) ===
+[09/10/26 13:04:06] [en]  -> Family J_1: K=39.00, N=388386, R=378426.6722
+[09/10/26 13:04:06] [en]  -> Family J_2: K=29.70, N=320373, R=309587.5839
+[09/10/26 13:04:06] [en]  -> Family J_3: K=19.38, N=186002, R=176402.8530
+[09/10/26 13:04:06] [en] Timing - Final Fisher K: 0.173 s
+[09/10/26 13:04:06] [en] Timing - Step 2 total: 0.906 s
+[09/10/26 13:15:21] [en] Language changed to English.
+[09/10/26 13:15:21] [en] Greetings Professor Falken. Shall we play a game?
+[09/10/26 13:15:21] [en] DSEPy version 1.0.3beta.
+[09/10/26 13:15:21] [en] Scientific reference: https://doi.org/10.1016/j.cageo.2014.03.014
+[09/10/26 13:15:21] [en] Normal spacing reference: https://doi.org/10.1016/j.enggeo.2015.06.009
+[09/10/26 13:15:21] [en] Persistence reference: https://doi.org/10.1016/j.ijrmms.2015.12.008
+[09/10/26 13:15:21] [en] Orientation-based colour mapping reference: https://doi.org/10.1016/j.jrmge.2025.12.059
+[09/10/26 13:15:21] [en] DSE wiki: https://github.com/adririquelme/DSEPy/wiki
+[09/10/26 13:15:27] [en]   [Spectral   0%] Reading normals
+[09/10/26 13:15:28] [en]   [Spectral  20%] Normalised Laplacian L = D^-1/2 A D^-1/2
+[09/10/26 13:15:31] [en]   [Spectral  55%] Eigenvalues sorted
+[09/10/26 13:15:31] [en]   [Spectral  77%] K-means in spectral space (K=3)
+[09/10/26 13:15:32] [en]   [Spectral  92%] Assigning remaining 1052673 poles to sets
+[09/10/26 13:15:32] [en]   [Spectral 100%] Done
+[09/10/26 13:15:32] [en] [Spectral] K=3, sigma=0.12, silhouette=0.869, 1055673 poles (3000 in spectral step), Original space (4.41 s)
+[09/10/26 13:15:32] [en] [Spectral] S1: 383101 poles (36.3%), dip dir/dip = 135.4/89.0, pole trend/plunge = 315.4/1.0
+[09/10/26 13:15:32] [en] [Spectral] S2: 447484 poles (42.4%), dip dir/dip = 30.7/80.0, pole trend/plunge = 210.7/10.0
+[09/10/26 13:15:32] [en] [Spectral] S3: 225088 poles (21.3%), dip dir/dip = 195.9/36.3, pole trend/plunge = 15.9/53.7

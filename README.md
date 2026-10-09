@@ -35,6 +35,7 @@ It represents the Python/CloudCompare evolution of the original **Discontinuity 
 
 * **🎨 Advanced Normal Colour Optimisation:** Color-code point cloud normal vectors using advanced color spaces (**HSV**, **CIELAB**, **CIELCH**, **OKLCH**, **HSLuv**, etc.) for intuitive visual orientation inspection.
 * **📊 Stereonet Analysis & Pole Density:** Identify principal discontinuity set poles using spherical density calculations on stereonets.
+* **🧭 Spectral Clustering of Sets (Tools menu):** Automatically group poles into discontinuity sets with the spectral method of Jimenez-Rodriguez & Sitar (2006). It can run in the original or the optimised-rotated pole space, chooses the number of sets automatically (eigengap or silhouette) if requested, and reports the mean orientation of each set in the original space.
 * **🏷️ Automated Set Classification:** Classify 3D points based on proximity to main set orientations.
 * **🔍 Spatial Clustering & Geometric Extraction:**
   * Choose the existing custom KDTree DBSCAN or HDBSCAN (requires optional scikit-learn 1.3.0+ in CloudCompare's Python environment).
@@ -57,6 +58,7 @@ It represents the Python/CloudCompare evolution of the original **Discontinuity 
                      ▼
  ┌────────────────────────────────────────┐
  │  1. Normal Colour Optimisation & Poles │ ──> Interactive Stereonet Density Maps
+ │     (optional: Spectral Clustering)    │ ──> Objective grouping of poles into sets
  └───────────────────┬────────────────────┘
                      │
                      ▼
@@ -134,15 +136,16 @@ If PowerShell reports that pip is missing, first check that the selected executa
 DSEpy/
 ├── main_gui.py          # Main GUI launcher & CloudCompare interface
 ├── colour_optimisation.py   # Chromatic space algorithms & normal colour-coding
+├── spectral_clustering.py   # Spectral clustering of discontinuity sets
+├── test_spectral_clustering.py  # Unit tests for the spectral clustering module
 ├── stereonet.py             # Stereographic projection & density computations
 ├── i18n.py                  # Internationalization translation engine
 ├── requirements.txt         # Python package dependencies
 ├── CITATION.cff             # Academic citation metadata
 ├── CHANGELOG.md             # Version history
 ├── LICENSE                  # GNU GPL v3.0 License
-├── docs/                    # Complete user & developer documentation
+├── docs/                    # Installation, workflow and troubleshooting guides
 │   ├── installation.md
-│   ├── user_guide.md
 │   ├── workflow.md
 │   └── troubleshooting.md
 ├── icons/                   # GUI icons & visual assets
@@ -179,6 +182,7 @@ The Wiki is the primary source of documentation for DSEpy and is continuously up
   * Colour-coded classification workflows.
 
 * 🔍 **Clustering & Facets**
+  * Spectral clustering of discontinuity sets (Tools menu).
   * Spatial clustering of classified discontinuities.
   * Persistence estimation.
   * Normal spacing calculations.
@@ -231,6 +235,7 @@ The Wiki is the primary source of documentation for DSEpy and is continuously up
 * **Rafael Jiménez** and **Nicholas Sitar** for the spectral clustering method of discontinuity sets implemented in DSEpy: Jimenez-Rodriguez, R., & Sitar, N. (2006). *A spectral method for clustering of rock discontinuity sets*. International Journal of Rock Mechanics and Mining Sciences, 43(7), 1052–1061. https://doi.org/10.1016/j.ijrmms.2006.02.003
 * **HDBSCAN**: Campello, R. J. G. B., Moulavi, D., & Sander, J. (2013). *Density-based clustering based on hierarchical density estimates*. PAKDD 2013, LNCS 7819, 160–172. https://doi.org/10.1007/978-3-642-37456-2_14 (used through scikit-learn).
 * The scikit-learn developers (HDBSCAN, K-means, silhouette score) and the CloudCompare development team.
+
 ---
 
 <a id="citation"></a>
@@ -262,7 +267,7 @@ If you use **DSEpy** in academic research, publications, or commercial projects,
   title  = {Uso de nubes de puntos 3D para identificación y caracterización de familias de discontinuidades planas en afloramientos rocosos y evaluación de la calidad geomecánica},
   school = {Universidad de Alicante},
   year   = {2015},
-  url    = {[https://rua.ua.es/entities/publication/78d254b9-1a7b-49b1-a35a-c0edbdeeb225](https://rua.ua.es/entities/publication/78d254b9-1a7b-49b1-a35a-c0edbdeeb225)}
+  url    = {https://rua.ua.es/entities/publication/78d254b9-1a7b-49b1-a35a-c0edbdeeb225}
 }
 ```
 
@@ -320,7 +325,7 @@ If you use **DSEpy** in academic research, publications, or commercial projects,
   year      = {2026},
   version   = {1.0.1},
   publisher = {GitHub},
-  url       = {[https://github.com/adririquelme/DSEpy](https://github.com/adririquelme/DSEpy)}
+  url       = {https://github.com/adririquelme/DSEpy}
 }
 ```
 

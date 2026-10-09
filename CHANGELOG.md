@@ -2,6 +2,18 @@
 
 All notable changes to DSEPy are documented in this file.
 
+## [Unreleased] - 1.0.3beta
+
+### Added
+
+- Spectral Clustering tool (Tools menu) implementing Jimenez-Rodriguez & Sitar (2006), with original/rotated analysis space, automatic K selection (eigengap or silhouette), optional legend and centroid orientations reported in the original space.
+- Tooltips for the Tools menu entries.
+
+### Changed
+
+- Tools menu order: Normal Colour Optimisation, Spectral Clustering, Normal Spacing, Persistence.
+- Compact main window: smaller minimum heights for tables, pole-editing buttons moved next to the manual entry fields, shorter execution log and a vertically scrollable workflow panel for small screens.
+
 ## [1.0.2] - 2026-10-05
 
 ### Fixed
