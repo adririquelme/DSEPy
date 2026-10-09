@@ -232,8 +232,11 @@ The Wiki is the primary source of documentation for DSEpy and is continuously up
 
 ### Acknowledgments
 
-* **Rafael Jiménez** and **Nicholas Sitar** for the spectral clustering method of discontinuity sets implemented in DSEpy: Jimenez-Rodriguez, R., & Sitar, N. (2006). *A spectral method for clustering of rock discontinuity sets*. International Journal of Rock Mechanics and Mining Sciences, 43(7), 1052–1061. https://doi.org/10.1016/j.ijrmms.2006.02.003
+* **KDE2D via diffusion**: Botev, Z. I., Grotowski, J. F., & Kroese, D. P. (2010). *Kernel density estimation via diffusion*. The Annals of Statistics, 38(5), 2916–2957. https://doi.org/10.1214/10-AOS799
+* **DBSCAN**: Ester, M., Kriegel, H.-P., Sander, J., & Xu, X. (1996). *A density-based algorithm for discovering clusters in large spatial databases with noise*. Proceedings of the Second International Conference on Knowledge Discovery and Data Mining, 226–231.
 * **HDBSCAN**: Campello, R. J. G. B., Moulavi, D., & Sander, J. (2013). *Density-based clustering based on hierarchical density estimates*. PAKDD 2013, LNCS 7819, 160–172. https://doi.org/10.1007/978-3-642-37456-2_14 (used through scikit-learn).
+* **Spectral clustering of discontinuity sets**: Jimenez-Rodriguez, R., & Sitar, N. (2006). *A spectral method for clustering of rock discontinuity sets*. International Journal of Rock Mechanics and Mining Sciences, 43(7), 1052–1061. https://doi.org/10.1016/j.ijrmms.2006.02.003
+* **Colorcet** for scientific, perceptually uniform colour maps.
 * The scikit-learn developers (HDBSCAN, K-means, silhouette score) and the CloudCompare development team.
 
 ---
