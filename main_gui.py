@@ -213,9 +213,11 @@ from tkinter import messagebox, ttk, scrolledtext, filedialog
 import stereonet
 import colour_optimisation as colour_opt
 import spectral_clustering as spectral
+import report_generator
 importlib.reload(stereonet)
 importlib.reload(colour_opt)
 importlib.reload(spectral)
+importlib.reload(report_generator)
 
 
 def _set_point_cloud_colors(cloud, rgb):
@@ -459,6 +461,18 @@ class DSEMainApp:
         self.pole_space_var = None
         self.cluster_planes_results = None
         self.cluster_fisher_results = []
+        # Results recorded for the technical report (see report_generator).
+        self.report_records = {}
+        self.report_meta = {
+            "project": "",
+            "client": self.saved_method.get("report_client", ""),
+            "location": self.saved_method.get("report_location", ""),
+            "author": self.saved_method.get("report_author", ""),
+            "report_version": self.saved_method.get("report_version", "1.0"),
+            "observations": self.saved_method.get("report_observations", ""),
+            "folder": self.saved_method.get("report_folder", ""),
+            "formats": self.saved_method.get("report_formats", "html"),
+        }
         self.poles_revision = 0
         self.js_revision = -1
         self.poles_review_status = "empty"
@@ -536,6 +550,9 @@ class DSEMainApp:
             "fix_orientation": 1, "sort_index": 0,
             "random_seed": "", "create_clouds": 1,
             "export_family_clouds": 1,
+            "report_author": "", "report_client": "", "report_location": "",
+            "report_version": "1.0", "report_observations": "",
+            "report_folder": "", "report_formats": "html",
         }
         _, path = self._settings_path()
         try:
@@ -568,6 +585,13 @@ class DSEMainApp:
             "sort_index": int(self.sort_combo.current()), "random_seed": self.ent_random_seed.get().strip(),
             "create_clouds": int(self.create_cluster_clouds_var.get()),
             "export_family_clouds": int(self.export_family_clouds_var.get()),
+            "report_author": self.report_meta["author"],
+            "report_client": self.report_meta["client"],
+            "report_location": self.report_meta["location"],
+            "report_version": self.report_meta["report_version"],
+            "report_observations": self.report_meta["observations"],
+            "report_folder": self.report_meta["folder"],
+            "report_formats": self.report_meta["formats"],
         }
         folder, path = self._settings_path()
         if folder:
@@ -813,7 +837,7 @@ class DSEMainApp:
             "cluster_analysis", "cluster_facets", "display_density", "refresh",
             "add", "apply", "delete", "move_up", "move_down",
             "spacing", "persistence", "imagen_rotacion", "imagen_HSV_icono",
-            "spectral_clustering_icon1"
+            "spectral_clustering_icon1", "technical_report"
         )
         for name in names:
             path = os.path.join(self._icons_directory_v030(), name + ".png")
@@ -972,6 +996,7 @@ class DSEMainApp:
             1: "spectral_clustering_icon1",
             3: "spacing",
             4: "persistence",
+            6: "technical_report",
         }
         for index, name in tools_icons.items():
             icon = self.icons.get(name)
@@ -1472,11 +1497,14 @@ class DSEMainApp:
         self.tools_menu.add_separator()
         self.tools_menu.add_command(label=self.tx("Normal Spacing..."), command=self.open_normal_spacing_tool, state=tk.DISABLED)
         self.tools_menu.add_command(label=self.tx("Persistence..."), command=self.open_persistence_tool, state=tk.DISABLED)
+        self.tools_menu.add_separator()
+        self.tools_menu.add_command(label=self.tx("Technical Report..."), command=self.open_report_dialog)
         self._tools_menu_tips = {
             0: "tip.tools.colour_optimisation",
             1: "tip.spectral_clustering",
             3: "tip.tools.normal_spacing",
             4: "tip.tools.persistence",
+            6: "tip.tools.report",
         }
         self._tools_menu_tip_window = None
         self.tools_menu.bind("<<MenuSelect>>", self._on_tools_menu_select, add="+")
@@ -1508,6 +1536,7 @@ class DSEMainApp:
             self.tools_menu.entryconfig(1, label=self.tx("Spectral Clustering..."))
             for index, key in zip((3, 4), ("Normal Spacing...", "Persistence...")):
                 self.tools_menu.entryconfig(index, label=self.tx(key))
+            self.tools_menu.entryconfig(6, label=self.tx("Technical Report..."))
             self._rebuild_language_menu()
         except Exception:
             pass
@@ -2465,6 +2494,7 @@ class DSEMainApp:
                 self.optimised_colour_evaluations = 0
                 self.optimised_colour_iterations = 0
                 self.optimised_colour_seconds = 0.0
+                self._record_colour_report(result, variables, normals, manual=True)
                 populate_result_table(angles)
                 calculate_colours()
                 progress["value"] = 100
@@ -2633,6 +2663,7 @@ class DSEMainApp:
                 self.optimised_colour_evaluations = int(result.evaluations)
                 self.optimised_colour_iterations = int(result.iterations)
                 self.optimised_colour_seconds = float(result.seconds)
+                self._record_colour_report(result, variables, normals, manual=False)
                 if self.pole_space_var is not None:
                     self.pole_space_combo.configure(state="readonly")
                 populate_result_table(result.angles)
@@ -2912,6 +2943,11 @@ class DSEMainApp:
                             continue
                         raise
                 progress_dialog.update_progress(100, self.tx(self.tr("gui.normal_spacing_completed")))
+                self._record_spacing_report(cloud, results, {
+                    "family": family.get(), "bandwidth": float(bandwidth.get()),
+                    "minimum": float(minimum.get()),
+                    "tolerance": float(tolerance.get()),
+                })
                 folder = None
                 if export.get():
                     folder = filedialog.askdirectory(parent=dialog)
@@ -3069,6 +3105,9 @@ class DSEMainApp:
                     rows = [r for r in rows if r["family_id"] == fid]
                     summaries = [r for r in summaries if r["family_id"] == fid]
                 if not rows: raise ValueError(self.tr("gui.no_valid_persistence"))
+                self._record_persistence_report(
+                    cloud, rows, summaries, {"tolerance": float(tolerance.get())}
+                )
                 folder = filedialog.askdirectory(parent=dialog) if export.get() else None
                 if export.get() and not folder: return
                 if folder:
@@ -3359,6 +3398,334 @@ class DSEMainApp:
             dialog, text=self.tx("Calculate"), command=run, bg="#d1e7dd", width=24),
             "tip.spectral.calculate")
         calculate_button.pack(pady=(0, 10))
+
+    # ---------------------------------------------------------
+    # TECHNICAL REPORT
+    # ---------------------------------------------------------
+    def _report_touch_cloud(self, cloud):
+        """Keep the recorded results tied to a single point cloud."""
+        info = {"name": cloud.getName(), "points": int(cloud.size())}
+        previous = self.report_records.get("cloud")
+        if previous is not None and previous["name"] != info["name"]:
+            self.report_records.clear()
+        self.report_records["cloud"] = info
+
+    def _record_colour_report(self, result, variables, normals, manual):
+        try:
+            self._report_touch_cloud(self.get_selected_cloud(verbose=False))
+            self.report_records["colour"] = {
+                "params": {key: var.get() for key, var in variables.items()},
+                "objective_name": variables["objective"].get(),
+                "angles": np.asarray(result.angles, dtype=float).copy(),
+                "rotation": np.asarray(result.rotation, dtype=float).copy(),
+                "objective": float(result.objective),
+                "equivalent_degrees": float(result.equivalent_degrees),
+                "evaluations": int(result.evaluations),
+                "iterations": int(result.iterations),
+                "seconds": float(result.seconds),
+                "success": bool(result.success), "manual": manual,
+                "projection": self._canonical_projection(),
+                "normals_sample": report_generator.subsample_points(normals)[0],
+            }
+        except Exception as exc:
+            self.log("Report: colour optimisation not recorded ({})".format(exc))
+
+    def _record_step1_report(self, cloud, projection, bins_level, grid_res,
+                             min_angle, max_poles, space, pole_coordinates,
+                             density_grids):
+        try:
+            self._report_touch_cloud(cloud)
+            for key in ("step2", "step3", "spacing", "persistence"):
+                self.report_records.pop(key, None)
+            self.report_records["step1"] = {
+                "projection": projection, "bins": bins_level,
+                "grid_res": grid_res, "min_angle": min_angle,
+                "max_poles": max_poles, "space": space,
+                "density_style": self._canonical_density_style(),
+                "n_poles": int(len(pole_coordinates[space][0])),
+                "poles": {
+                    name: report_generator.subsample_points(*xy)
+                    for name, xy in pole_coordinates.items()
+                },
+                "grids": {
+                    name: tuple(np.asarray(g).copy() for g in grid)
+                    for name, grid in density_grids.items()
+                },
+            }
+        except Exception as exc:
+            self.log("Report: Step 1 not recorded ({})".format(exc))
+
+    def _record_step2_report(self, cloud, stats, cone):
+        try:
+            self._report_touch_cloud(cloud)
+            projection = self._canonical_projection()
+            xp, yp, family = stereonet.project_poles_by_family(
+                cloud, projection=projection
+            )
+            xp, yp, family = report_generator.subsample_points(xp, yp, family)
+            self.report_records["step2"] = {
+                "cone": cone, "counts": {int(k): int(v) for k, v in stats.items()},
+                "total": int(cloud.size()), "plot": (xp, yp, family),
+                "projection": projection, "revision": self.poles_revision,
+            }
+            for key in ("step3", "spacing", "persistence"):
+                self.report_records.pop(key, None)
+        except Exception as exc:
+            self.log("Report: Step 2 not recorded ({})".format(exc))
+
+    def _record_step3_report(self, cloud, method, stats, results, params):
+        try:
+            self._report_touch_cloud(cloud)
+            keep = ("normal", "D", "dipdir", "dip", "sigma", "n_pts",
+                    "best_fit_normal")
+            slim = {
+                int(family): {
+                    int(cl): {key: info[key] for key in keep if key in info}
+                    for cl, info in planes.items()
+                }
+                for family, planes in results.items()
+            }
+            self.report_records["step3"] = {
+                "method": method, "params": dict(params),
+                "stats": {int(k): dict(v) for k, v in stats.items()},
+                "results": slim, "fisher": list(self.cluster_fisher_results),
+                "revision": self.poles_revision,
+            }
+            for key in ("spacing", "persistence"):
+                self.report_records.pop(key, None)
+        except Exception as exc:
+            self.log("Report: Step 3 not recorded ({})".format(exc))
+
+    def _record_spacing_report(self, cloud, results, params):
+        try:
+            self._report_touch_cloud(cloud)
+            slim = []
+            for result in results:
+                item = {k: v for k, v in result.items() if k != "groups"}
+                item["groups"] = [
+                    {"plane_id": g["plane_id"], "D": g["D"]}
+                    for g in result["groups"]
+                ]
+                slim.append(item)
+            self.report_records["spacing"] = {
+                "params": params, "results": slim,
+                "revision": self.poles_revision,
+            }
+        except Exception as exc:
+            self.log("Report: spacing not recorded ({})".format(exc))
+
+    def _record_persistence_report(self, cloud, rows, summaries, params):
+        try:
+            self._report_touch_cloud(cloud)
+            self.report_records["persistence"] = {
+                "params": params, "rows": list(rows),
+                "summaries": list(summaries), "revision": self.poles_revision,
+            }
+        except Exception as exc:
+            self.log("Report: persistence not recorded ({})".format(exc))
+
+    def _collect_report_data(self):
+        """Assemble the report data, dropping results that are out of date."""
+        records = self.report_records
+        data = {"cloud": records.get("cloud"), "colour": records.get("colour")}
+        current = self.poles_revision
+
+        def is_current(name):
+            record = records.get(name)
+            return record is not None and record.get("revision") == current
+
+        if records.get("step1") and self.principal_poles:
+            data["step1"] = records["step1"]
+            data["poles"] = [
+                dict(pole, normal=np.asarray(pole["normal"], dtype=float))
+                for pole in self.principal_poles
+            ]
+            data["poles_status"] = self.poles_review_status
+        if is_current("step2") and self._js_is_current():
+            data["step2"] = records["step2"]
+        if is_current("step3") and self.cluster_planes_results is not None:
+            data["step3"] = records["step3"]
+        if is_current("spacing"):
+            data["spacing"] = records["spacing"]
+        if is_current("persistence"):
+            data["persistence"] = records["persistence"]
+        return data
+
+    def open_report_dialog(self):
+        data = self._collect_report_data()
+        section_names = (
+            ("colour", "report.sec.colour"), ("step1", "report.sec.step1"),
+            ("step2", "report.sec.step2"), ("step3", "report.sec.step3"),
+            ("spacing", "report.sec.spacing"),
+            ("persistence", "report.sec.persistence"),
+        )
+        available = {
+            "colour": bool(data.get("colour")), "step1": bool(data.get("step1")),
+            "step2": bool(data.get("step2")), "step3": bool(data.get("step3")),
+            "spacing": bool(data.get("spacing", {}) and data["spacing"].get("results")),
+            "persistence": bool(data.get("persistence")),
+        }
+        if not any(available.values()):
+            messagebox.showinfo(
+                self.tr("report.title"), self.tr("report.no_results"),
+                parent=self.root
+            )
+            return
+
+        meta = self.report_meta
+        dialog = tk.Toplevel(self.root)
+        dialog.title(self.tr("report.title"))
+        dialog.transient(self.root)
+        dialog.resizable(False, False)
+        frame = ttk.Frame(dialog, padding=14)
+        frame.pack(fill=tk.BOTH, expand=True)
+        frame.columnconfigure(1, weight=1)
+
+        cloud_info = data.get("cloud") or {}
+        text_vars = {
+            "project": tk.StringVar(master=dialog, value=meta["project"] or cloud_info.get("name", "")),
+            "client": tk.StringVar(master=dialog, value=meta["client"]),
+            "location": tk.StringVar(master=dialog, value=meta["location"]),
+            "author": tk.StringVar(master=dialog, value=meta["author"]),
+            "report_version": tk.StringVar(master=dialog, value=meta["report_version"]),
+            "date": tk.StringVar(master=dialog, value=datetime.now().strftime("%Y-%m-%d")),
+        }
+        labels = (
+            ("project", "report.project"), ("client", "report.client"),
+            ("location", "report.location"), ("author", "report.author"),
+            ("report_version", "report.version"), ("date", "report.date"),
+        )
+        for row, (key, label_key) in enumerate(labels):
+            ttk.Label(frame, text=self.tr(label_key)).grid(
+                row=row, column=0, sticky=tk.W, padx=(0, 12), pady=4)
+            ttk.Entry(frame, textvariable=text_vars[key], width=52).grid(
+                row=row, column=1, columnspan=2, sticky=tk.EW, pady=4)
+
+        row = len(labels)
+        ttk.Label(frame, text=self.tr("report.observations")).grid(
+            row=row, column=0, sticky=tk.NW, padx=(0, 12), pady=4)
+        observations = tk.Text(frame, width=52, height=5, wrap=tk.WORD)
+        observations.grid(row=row, column=1, columnspan=2, sticky=tk.EW, pady=4)
+        observations.insert("1.0", meta["observations"])
+
+        row += 1
+        language_names = {"en": "English", "es": "Español"}
+        language_var = tk.StringVar(
+            master=dialog,
+            value=language_names["es" if self.language == "es" else "en"])
+        ttk.Label(frame, text=self.tr("report.language")).grid(
+            row=row, column=0, sticky=tk.W, padx=(0, 12), pady=4)
+        ttk.Combobox(
+            frame, textvariable=language_var, state="readonly", width=20,
+            values=list(language_names.values())
+        ).grid(row=row, column=1, sticky=tk.W, pady=4)
+
+        row += 1
+        format_names = {
+            "html": "HTML", "markdown": "Markdown",
+            "html+markdown": "HTML + Markdown",
+        }
+        format_var = tk.StringVar(
+            master=dialog,
+            value=format_names.get(meta["formats"], "HTML"))
+        ttk.Label(frame, text=self.tr("report.format")).grid(
+            row=row, column=0, sticky=tk.W, padx=(0, 12), pady=4)
+        ttk.Combobox(
+            frame, textvariable=format_var, state="readonly", width=20,
+            values=list(format_names.values())
+        ).grid(row=row, column=1, sticky=tk.W, pady=4)
+
+        row += 1
+        default_folder = meta["folder"] or os.path.join(
+            os.path.expanduser("~"), "Documents")
+        folder_var = tk.StringVar(master=dialog, value=default_folder)
+        ttk.Label(frame, text=self.tr("report.folder")).grid(
+            row=row, column=0, sticky=tk.W, padx=(0, 12), pady=4)
+        ttk.Entry(frame, textvariable=folder_var, width=44).grid(
+            row=row, column=1, sticky=tk.EW, pady=4)
+
+        def browse():
+            chosen = filedialog.askdirectory(
+                parent=dialog, initialdir=folder_var.get() or None)
+            if chosen:
+                folder_var.set(chosen)
+
+        ttk.Button(frame, text=self.tr("report.browse"), command=browse).grid(
+            row=row, column=2, padx=(6, 0), pady=4)
+
+        row += 1
+        sections_box = ttk.LabelFrame(
+            frame, text=self.tr("report.sections"), padding=8)
+        sections_box.grid(row=row, column=0, columnspan=3, sticky=tk.EW, pady=(8, 4))
+        for key, name_key in section_names:
+            mark = "\u2714" if available[key] else "\u2716"
+            state = self.tr("report.included") if available[key] \
+                else self.tr("report.not_available")
+            ttk.Label(
+                sections_box,
+                text="{}  {}  ({})".format(mark, self.tr(name_key), state)
+            ).pack(anchor=tk.W)
+        ttk.Label(
+            sections_box, text=self.tr("report.outdated_hint"),
+            wraplength=520, justify=tk.LEFT, foreground="#6c757d"
+        ).pack(anchor=tk.W, pady=(6, 0))
+
+        def generate():
+            folder = folder_var.get().strip()
+            if not folder:
+                messagebox.showwarning(
+                    self.tr("report.title"), self.tr("report.error_folder"),
+                    parent=dialog)
+                return
+            language = next(
+                code for code, name in language_names.items()
+                if name == language_var.get())
+            format_key = next(
+                key for key, name in format_names.items()
+                if name == format_var.get())
+            meta.update({
+                "project": text_vars["project"].get().strip(),
+                "client": text_vars["client"].get().strip(),
+                "location": text_vars["location"].get().strip(),
+                "author": text_vars["author"].get().strip(),
+                "report_version": text_vars["report_version"].get().strip(),
+                "observations": observations.get("1.0", tk.END).strip(),
+                "folder": folder, "formats": format_key,
+            })
+            info = dict(
+                meta, date=text_vars["date"].get().strip(),
+                language=language, software_version=DSE_VERSION)
+            dialog.config(cursor="watch")
+            dialog.update_idletasks()
+            try:
+                paths = report_generator.generate_report(
+                    self._collect_report_data(), info, folder,
+                    formats=format_key.split("+"))
+            except Exception as exc:
+                messagebox.showerror(
+                    self.tr("report.title"),
+                    self.tr("report.error", error=exc), parent=dialog)
+                return
+            finally:
+                dialog.config(cursor="")
+            try:
+                self._save_method_settings()
+            except Exception:
+                pass
+            for path in paths:
+                self.log(self.tr("report.log_saved", path=path))
+            if messagebox.askyesno(
+                    self.tr("report.title"),
+                    self.tr("report.done", path=paths[0]), parent=dialog):
+                webbrowser.open("file:///" + paths[0].replace("\\", "/"))
+            dialog.destroy()
+
+        buttons = ttk.Frame(frame)
+        buttons.grid(row=row + 1, column=0, columnspan=3, pady=(10, 0))
+        ttk.Button(buttons, text=self.tr("report.generate"), command=generate).pack(
+            side=tk.LEFT, padx=6)
+        ttk.Button(buttons, text=self.tr("report.cancel"), command=dialog.destroy).pack(
+            side=tk.LEFT, padx=6)
 
     def get_selected_cloud(self, verbose=True):
         CC = pycc.GetInstance()
@@ -3885,6 +4252,10 @@ class DSEMainApp:
         self.principal_poles = self._poles_from_rotated_to_original(
             principal_poles, projection
         )
+        self._record_step1_report(
+            cloud, projection, bins_level, grid_res, min_angle, max_poles,
+            selected_space, pole_coordinates, density_grids
+        )
         self._rebuild_display_principal_poles(selected_space)
         self.poles_revision += 1
         self.js_revision = -1
@@ -3992,6 +4363,7 @@ class DSEMainApp:
         except Exception as exc:
             self.log(self.tr("log.fisher_final_warning", exc=exc))
 
+        self._record_step2_report(cloud, stats, cone_thresh)
         pycc.GetInstance().redrawAll()
 
         # Refresh an existing family plot with the new JS classification.
@@ -4380,6 +4752,19 @@ class DSEMainApp:
             self.log(self.tr("log.timing_stage", stage=self.tx(stage_name), seconds=seconds))
         self.cluster_planes_results = results
         self._populate_cluster_fisher_tab(results)
+        self._record_step3_report(
+            cloud, clustering_method, stats, results,
+            {
+                "k_neighbor": k_neighbor, "k_sigma": k_sigma,
+                "dbscan_minpts": dbscan_minpts,
+                "hdbscan_min_samples": hdbscan_min_samples,
+                "hdbscan_selection": hdbscan_selection,
+                "minimum_cluster_size": minimum_cluster_size,
+                "merge_sigma": merge_k_sigmas,
+                "fix_orientation": fix_orientation, "sort_by": sort_by,
+                "random_seed": random_seed,
+            }
+        )
         if self.export_family_clouds_var.get():
             try:
                 self._create_family_cluster_result_clouds(cloud)

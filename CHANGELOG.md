@@ -6,6 +6,7 @@ All notable changes to DSEPy are documented in this file.
 
 ### Added
 
+- Technical report generator (Tools → Technical Report...): produces a self-contained HTML and/or Markdown report (English or Spanish) with project metadata, colour optimisation, principal poles, assignment, clustering, spacing and persistence results, parameters, equations and figures (`report_generator.py`).
 - Spectral Clustering tool (Tools menu) implementing Jimenez-Rodriguez & Sitar (2006), with original/rotated analysis space, automatic K selection (eigengap or silhouette), optional legend and centroid orientations reported in the original space.
 - Tooltips for the Tools menu entries.
 
