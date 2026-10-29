@@ -151,7 +151,8 @@ def make_working_sample(normals, fraction=1.0, weights=None, seed=None):
 
 def optimise_rotation(normals, degrees_of_freedom=2, objective="rational_vertical_asymptote",
                       subsample=1.0, weights=None, seed=None, max_iterations=80,
-                      population_size=12, tolerance=1e-4, progress_callback=None):
+                      population_size=12, tolerance=1e-4, progress_callback=None,
+                      angles_callback=None):
     working, working_weights = make_working_sample(normals, subsample, weights, seed)
     dof = int(degrees_of_freedom)
     bounds = [(-180.0,180.0),(-45.0,45.0)] if dof == 2 else [(-180.0,180.0)]*3
@@ -160,6 +161,8 @@ def optimise_rotation(normals, degrees_of_freedom=2, objective="rational_vertica
     def fun(x): return objective_value(x, working, objective, working_weights)
     def callback(x, convergence=0.0):
         iterations[0] += 1
+        if angles_callback:
+            angles_callback(iterations[0], np.array(x, dtype=float))
         if progress_callback:
             return progress_callback(iterations[0], int(max_iterations), float(fun(x)), float(convergence)) is False
         return False

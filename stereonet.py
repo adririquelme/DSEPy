@@ -24,6 +24,10 @@ from scipy.sparse.csgraph import connected_components
 
 _TRANSLATOR = None
 
+# np.trapezoid only exists in NumPy >= 2.0; older builds (e.g. the one bundled
+# with CloudCompare) provide np.trapz instead.
+_trapezoid = getattr(np, "trapezoid", None) or np.trapz
+
 def set_translator(translator):
     """Install the application translation function used by visible text."""
     global _TRANSLATOR
@@ -2157,7 +2161,7 @@ def _positive_reflection_kde(values, bandwidth=0.0, grid_count=512):
         x = np.linspace(0.0, max(values[0] * 2.0, width * 5.0), grid_count)
         density_values = np.exp(-0.5 * ((x - values[0]) / width) ** 2)
         density_values += np.exp(-0.5 * ((x + values[0]) / width) ** 2)
-        density_values /= max(np.trapezoid(density_values, x), np.finfo(float).eps)
+        density_values /= max(_trapezoid(density_values, x), np.finfo(float).eps)
         return density_values, x, width
     reflected = np.concatenate([values, -values])
     kde = gaussian_kde(reflected)

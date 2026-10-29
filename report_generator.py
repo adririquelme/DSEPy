@@ -31,6 +31,7 @@ import base64
 import datetime
 import html
 import io
+import itertools
 import os
 import re
 import struct
@@ -43,6 +44,8 @@ import stereonet
 
 MAX_PLOT_POINTS = 150000
 MAX_TABLE_ROWS = 1000
+PESSIMISTIC_K = 1.645  # one-sided 95th percentile of a normal distribution
+CONSERVATIVE_K = 1.0   # lower tail, about the 16th percentile
 FORMATS = ("html", "markdown")
 LANGUAGES = ("en", "es")
 
@@ -95,6 +98,11 @@ class _Document:
 
     def bullets(self, items):
         self.blocks.append(("ul", list(items)))
+
+    def where(self, items):
+        """Legend that defines every symbol of the preceding equation."""
+        self.blocks.append(("p", self.L("where:", "donde:")))
+        self.blocks.append(("ul", ["{}: {}".format(s, d) for s, d in items]))
 
     def note(self, text):
         self.blocks.append(("note", text))
@@ -258,6 +266,17 @@ def _section_cover(doc, info, data):
         (L("Number of points", "Número de puntos"),
          "{:,}".format(int(cloud["points"])) if cloud.get("points") else "-"),
     ], L("Report identification", "Identificación del informe"))
+    if cloud.get("bbox_min") and cloud.get("bbox_max"):
+        low = np.asarray(cloud["bbox_min"], dtype=float)
+        high = np.asarray(cloud["bbox_max"], dtype=float)
+        center, size = (low + high) / 2.0, high - low
+        doc.table(["", "X", "Y", "Z"],
+                  [(L("Minimum", "Mínimo"),) + tuple(_fmt(v, 3) for v in low),
+                   (L("Maximum", "Máximo"),) + tuple(_fmt(v, 3) for v in high),
+                   (L("Box centre", "Centro de la caja"),) + tuple(_fmt(v, 3) for v in center),
+                   (L("Box dimensions", "Dimensiones de la caja"),) + tuple(_fmt(v, 3) for v in size)],
+                  L("Bounding box of the analysed point cloud (axis-aligned, cloud coordinates and units)",
+                    "Caja envolvente de la nube de puntos analizada (alineada con los ejes, coordenadas y unidades de la nube)"))
     if info.get("observations"):
         doc.heading(2, L("Observations", "Observaciones"))
         for chunk in re.split(r"\n\s*\n", info["observations"].strip()):
@@ -277,6 +296,14 @@ def _section_summary(doc, data, included):
         "métodos aplicados y resultados obtenidos, de modo que el análisis pueda "
         "revisarse y reproducirse."))
     doc.bullets(included)
+    doc.note(L(
+        "Units: all distances (spacings, persistence, plane offsets D, block sizes, coordinates and box "
+        "dimensions) are expressed in the units of the point cloud (mm, m or whichever applies); areas and "
+        "volumes are in those units squared and cubed. Angles are in degrees.",
+        "Unidades: todas las distancias (espaciados, persistencia, términos D de los planos, tamaños de "
+        "bloque, coordenadas y dimensiones de la caja) están expresadas en las unidades de la nube de "
+        "puntos (mm, m o las que correspondan); las áreas y volúmenes están en esas unidades al cuadrado "
+        "y al cubo. Los ángulos están en grados."))
     poles = data.get("poles") or []
     if poles:
         rows = [(_family_label(p["idx"]), "{:05.1f}".format(p["dipdir"]),
@@ -313,16 +340,36 @@ def _section_colour(doc, data, number):
     doc.equation(r"J(\theta)=\frac{1}{N}\sum_{i=1}^{N} f\left(\beta_i(\theta)\right),"
                  r"\qquad \mathbf{n}_i'=R(\theta)\,\mathbf{n}_i,\qquad "
                  r"\beta_i=\arccos\left|n'_{i,z}\right|")
+    doc.where([
+        ("J", L("objective function to be minimised", "función objetivo a minimizar")),
+        ("θ", L("rotation parameters (angles in degrees)", "parámetros de la rotación (ángulos en grados)")),
+        ("N", L("number of normals in the working sample", "número de normales de la muestra de trabajo")),
+        ("n_i", L("unit normal vector of point i in the original system",
+                  "vector normal unitario del punto i en el sistema original")),
+        ("R(θ)", L("3×3 rotation matrix defined by θ", "matriz de rotación 3×3 definida por θ")),
+        ("n'_i", L("rotated normal (flipped to the upper hemisphere)",
+                   "normal rotada (llevada al hemisferio superior)")),
+        ("n'_{i,z}", L("vertical component of n'_i", "componente vertical de n'_i")),
+        ("β_i", L("dip of the rotated pole i, in degrees (0° = centre, 90° = border)",
+                  "buzamiento del polo rotado i, en grados (0° = centro, 90° = borde)")),
+        ("f", L("penalty function of the dip", "función de penalización del buzamiento")),
+    ])
     if objective in OBJECTIVE_LATEX:
         doc.paragraph(L("Penalty function selected ({}):", "Función de penalización seleccionada ({}):")
                       .format(objective))
         doc.equation(OBJECTIVE_LATEX[objective])
+        doc.where([("β", L("dip of the rotated pole, in degrees", "buzamiento del polo rotado, en grados")),
+                   ("f(β)", L("penalty assigned to that dip (grows as the pole approaches the border)",
+                              "penalización asignada a ese buzamiento (crece al acercarse el polo al borde)"))])
     dof = angles.size
     if dof == 3:
         doc.paragraph(L(
             "Three degrees of freedom: intrinsic ZYX Euler rotation (angles in degrees).",
             "Tres grados de libertad: rotación de Euler intrínseca ZYX (ángulos en grados)."))
         doc.equation(r"R=R_z(\psi)\,R_y(\theta)\,R_x(\phi)")
+        doc.where([("R_z(ψ), R_y(θ), R_x(φ)",
+                    L("elementary rotations about the Z, Y and X axes", "rotaciones elementales alrededor de los ejes Z, Y y X")),
+                   ("ψ, θ, φ", L("rotation angles about Z, Y and X (degrees)", "ángulos de giro alrededor de Z, Y y X (grados)"))])
         names = ["ψ (Z)", "θ (Y)", "φ (X)"]
     else:
         doc.paragraph(L(
@@ -379,24 +426,32 @@ def _section_colour(doc, data, number):
         normals = np.asarray(normals, float)
         rotated_x, rotated_y, rotated_n, valid = colour_opt.projected_poles_from_normals(
             normals, angles, projection=projection)
-        rgb = colour_opt.colours_from_projected_poles(
-            rotated_x, rotated_y, params.get("space", "HSV"),
-            float(params.get("lightness", 80)), valid=valid)
+        space = params.get("space", "HSV")
+        lightness = float(params.get("lightness", 80))
+        rgb_rotated = colour_opt.colours_from_projected_poles(
+            rotated_x, rotated_y, space, lightness, valid=valid)
+        # Original poles follow the DSE (Riquelme) stereonet convention, exactly
+        # as stereonet.project_poles does, and are coloured from that position.
         dipdir, dip = stereonet.f_vnorm2clar_v02(normals)
         ox, oy = stereonet.f_clar2cart(dipdir, dip, projection=projection)
+        rgb_original = colour_opt.colours_from_projected_poles(
+            ox, oy, space, lightness, valid=valid)
         fig = Figure(figsize=(11, 5.6))
-        for position, (x, y, title) in enumerate((
-                (ox[valid], oy[valid], L("Original poles", "Polos originales")),
-                (rotated_x[valid], rotated_y[valid], L("Rotated poles", "Polos rotados")))):
-            ax = _stereonet_axes(fig, (0.02 + 0.5 * position, 0.02, 0.46, 0.88), projection, 0)
-            ax.scatter(x, y, s=3, c=rgb[valid].astype(float) / 255.0, edgecolors="none",
+        for position, (x, y, colours, labeled, title) in enumerate((
+                (ox[valid], oy[valid], rgb_original[valid], 1, L("Original poles", "Polos originales")),
+                (rotated_x[valid], rotated_y[valid], rgb_rotated[valid], 0,
+                 L("Rotated poles", "Polos rotados")))):
+            ax = _stereonet_axes(fig, (0.02 + 0.5 * position, 0.02, 0.46, 0.88), projection, labeled)
+            ax.scatter(x, y, s=3, c=colours.astype(float) / 255.0, edgecolors="none",
                        alpha=0.85, zorder=0)
             ax.set_title(title, fontsize=11)
-        doc.figure(fig, L("Poles coloured with the optimised orientation colour map "
-                          "(same colours in both spaces; {} projection, {:,} sampled normals).",
-                          "Polos coloreados con el mapa de color por orientación optimizado "
-                          "(mismos colores en ambos espacios; proyección {}, {:,} normales muestreadas).")
-                   .format(projection, len(normals)))
+        doc.figure(fig, L("Poles coloured with the selected orientation colour map ({} colour space) "
+                          "in the original reference system (with labels) and after the optimised "
+                          "rotation; {} projection, {:,} sampled normals.",
+                          "Polos coloreados con el mapa de color por orientación seleccionado (espacio "
+                          "de color {}) en el sistema original (con etiquetas) y tras la rotación "
+                          "optimizada; proyección {}, {:,} normales muestreadas.")
+                   .format(space, projection, len(normals)))
 
         original_dip = colour_opt.dips_from_normals(normals)
         rotated_dip = colour_opt.dips_from_normals(rotated_n)
@@ -434,6 +489,10 @@ def _section_step1(doc, data, number):
         "estereograma con la proyección {}. La distancia r al centro depende del "
         "buzamiento β del polo:".format(projection)))
     doc.equation(PROJECTION_LATEX.get(projection, PROJECTION_LATEX["Equal-angle"]))
+    doc.where([("r", L("distance of the pole to the centre of the unit-radius stereonet",
+                       "distancia del polo al centro del estereograma de radio unidad")),
+               ("β", L("dip of the pole, in radians (0 = centre, π/2 = border)",
+                       "buzamiento del polo, en radianes (0 = centro, π/2 = borde)"))])
     doc.paragraph(L(
         "The pole density is estimated with the adaptive diffusion kernel density "
         "estimator of Botev et al. (2010) on a regular grid of {0}×{0} cells (2^{1}). "
@@ -540,6 +599,10 @@ def _section_step1(doc, data, number):
         doc.paragraph(L("The angle between two sets is the axial angle between their poles:",
                         "El ángulo entre dos familias es el ángulo axial entre sus polos:"))
         doc.equation(r"\theta_{ij}=\arccos\left|\,\mathbf{n}_i\cdot\mathbf{n}_j\,\right|")
+        doc.where([("θ_ij", L("axial angle between sets i and j (°)", "ángulo axial entre las familias i y j (°)")),
+                   ("n_i, n_j", L("unit vectors of the principal poles of sets i and j",
+                                  "vectores unitarios de los polos principales de las familias i y j")),
+                   ("·", L("scalar (dot) product", "producto escalar"))])
         angles = _pairwise_angles(poles)
         labels = [_family_label(p["idx"]) for p in poles]
         doc.table([""] + labels,
@@ -569,6 +632,12 @@ def _section_step2(doc, data, number):
     doc.equation(r"\theta_{ik}=\arccos\left|\,\mathbf{n}_i\cdot\mathbf{p}_k\,\right|,\qquad "
                  r"k^{*}=\arg\min_k\,\theta_{ik}")
     doc.equation(r"DS_i=k^{*}\ \ \mathrm{if}\ \ \theta_{ik^{*}}\leq\theta_c,\qquad DS_i=0\ \ \mathrm{otherwise}")
+    doc.where([("n_i", L("unit normal of point i", "normal unitaria del punto i")),
+               ("p_k", L("unit vector of the principal pole of set k", "vector unitario del polo principal de la familia k")),
+               ("θ_ik", L("axial angle between n_i and p_k (°)", "ángulo axial entre n_i y p_k (°)")),
+               ("k*", L("set whose pole is closest to n_i", "familia cuyo polo está más próximo a n_i")),
+               ("DS_i", L("set assigned to point i (0 = unclassified)", "familia asignada al punto i (0 = sin clasificar)")),
+               ("θ_c", L("cone threshold (°)", "umbral del cono (°)"))])
     doc.key_values([(L("Cone threshold θc (°)", "Umbral del cono θc (°)"), _gfmt(step2["cone"])),
                     (L("Number of points", "Número de puntos"), "{:,}".format(int(step2["total"])))],
                    L("Step 2 parameters", "Parámetros del Paso 2"))
@@ -592,6 +661,11 @@ def _section_step2(doc, data, number):
                     "El parámetro de concentración de Fisher de cada familia se calcula con las "
                     "normales axiales de sus puntos (N puntos, longitud resultante R):"))
     doc.equation(r"K=\frac{N-1}{N-R}")
+    doc.where([("K", L("Fisher concentration parameter (higher = more concentrated)",
+                       "parámetro de concentración de Fisher (mayor = más concentrado)")),
+               ("N", L("number of points of the set", "número de puntos de la familia")),
+               ("R", L("length of the resultant of the N unit normals (0 ≤ R ≤ N)",
+                       "longitud de la resultante de las N normales unitarias (0 ≤ R ≤ N)"))])
 
     plot = step2.get("plot")
     if plot is not None:
@@ -641,6 +715,10 @@ def _section_step3(doc, data, number):
             "vecino más próximo: ε = μ + kσ·s, siendo μ y s la media y la desviación típica "
             "de dichas distancias."))
         doc.equation(r"\varepsilon=\mu_k+k_\sigma\,s_k")
+        doc.where([("ε", L("neighbourhood radius of DBSCAN", "radio de vecindad de DBSCAN")),
+                   ("μ_k", L("mean distance to the k-th nearest neighbour", "distancia media al k-ésimo vecino más próximo")),
+                   ("s_k", L("standard deviation of that distance", "desviación típica de dicha distancia")),
+                   ("k_σ", L("multiplier of the standard deviation (parameter kσ)", "multiplicador de la desviación típica (parámetro kσ)"))])
     else:
         doc.paragraph(L(
             "The points of each discontinuity set are clustered in 3D with HDBSCAN "
@@ -656,6 +734,12 @@ def _section_step3(doc, data, number):
         "plano Ax + By + Cz + D = 0 (normal unitaria) y se mide su rugosidad mediante la "
         "desviación típica σ de los residuos ortogonales:"))
     doc.equation(r"r_i=A x_i+B y_i+C z_i+D,\qquad \sigma=\sqrt{\frac{\sum_i r_i^{2}}{N-1}}")
+    doc.where([("A, B, C", L("components of the unit normal of the plane", "componentes de la normal unitaria del plano")),
+               ("D", L("offset of the plane (signed distance to the origin)", "término independiente del plano (distancia con signo al origen)")),
+               ("(x_i, y_i, z_i)", L("coordinates of point i of the cluster", "coordenadas del punto i del cluster")),
+               ("r_i", L("orthogonal distance of point i to the plane", "distancia ortogonal del punto i al plano")),
+               ("N", L("number of points of the cluster", "número de puntos del cluster")),
+               ("σ", L("standard deviation of the residuals (roughness)", "desviación típica de los residuos (rugosidad)"))])
     fixed = params.get("fix_orientation")
     if fixed:
         doc.paragraph(L(
@@ -673,6 +757,9 @@ def _section_step3(doc, data, number):
                 "conectan cuando la distancia entre sus planos no supera {0} veces la suma de sus "
                 "σ, y las componentes conexas se fusionan en un único plano.").format(_gfmt(merge)))
             doc.equation(r"\left|D_i-D_j\right|\leq k_m\,(\sigma_i+\sigma_j)")
+            doc.where([("D_i, D_j", L("offsets of the planes of clusters i and j", "términos D de los planos de los clusters i y j")),
+                       ("σ_i, σ_j", L("standard deviations of the residuals of both clusters", "desviaciones típicas de los residuos de ambos clusters")),
+                       ("k_m", L("merge factor (parameter)", "factor de fusión (parámetro)"))])
     else:
         doc.paragraph(L("The orientation of every plane is the free best fit (SVD) of its cluster; "
                         "no coplanarity merge is applied.",
@@ -734,23 +821,49 @@ def _section_step3(doc, data, number):
                  .format(len(shown), len(plane_rows)))
 
     projection = (data.get("step1") or {}).get("projection") or "Equal-angle"
+    fisher = step3.get("fisher") or []
     fig = Figure(figsize=(6.4, 6.0))
     ax = _stereonet_axes(fig, (0.01, 0.02, 0.98, 0.9), projection, 1)
     cmap = _tab10()
-    for family_id in sorted(step3["results"]):
-        planes = step3["results"][family_id]
-        if not planes:
-            continue
-        x, y = stereonet.f_clar2cart([p["dipdir"] for p in planes.values()],
-                                     [p["dip"] for p in planes.values()], projection=projection)
-        sizes = np.array([p["n_pts"] for p in planes.values()], dtype=float)
-        ax.scatter(x, y, s=12 + 60 * sizes / max(sizes.max(), 1.0), color=cmap((family_id - 1) % 10),
-                   edgecolors="black", linewidths=0.4, alpha=0.85, label=_family_label(family_id), zorder=5)
-    ax.legend(loc="upper right", fontsize=8)
-    doc.figure(fig, L("Poles of the fitted cluster planes (marker size proportional to the number of points).",
-                      "Polos de los planos de cluster ajustados (tamaño proporcional al número de puntos)."))
-
-    fisher = step3.get("fisher") or []
+    if fisher:
+        for index, item in enumerate(fisher):
+            color = cmap(index % 10)
+            label = _family_label(item["family_id"])
+            normals = np.asarray(item["normals"], dtype=float)
+            dipdir, dip = stereonet.f_vnorm2clar_v02(normals)
+            x, y = stereonet.f_clar2cart(dipdir, dip, projection=projection)
+            ax.scatter(x, y, s=22, color=color, marker="o", edgecolors="0.3", linewidths=0.5, zorder=3,
+                       label=L("{} cluster normals", "Normales de cluster {}").format(label))
+            px, py = stereonet.f_clar2cart(item["dipdir"], item["dip"], projection=projection)
+            ax.scatter(px, py, s=110, color=color, marker="p", edgecolors="black", linewidths=0.9, zorder=10,
+                       label=L("{} mean pole", "Polo medio {}").format(label))
+            n_value, k_value = int(item["N"]), float(item["K"])
+            _draw_fisher_circle(ax, item["principal_normal"], item["max_deviation"], projection, color)
+            if n_value >= 3 and k_value > 0:
+                _draw_fisher_circle(ax, item["principal_normal"], 140.0 / np.sqrt(k_value * n_value),
+                                    projection, "black", linestyle="--", linewidth=1.5)
+        ax.legend(loc="upper left", bbox_to_anchor=(1.0, 1.0), fontsize=7, borderaxespad=0.0)
+        doc.figure(fig, L(
+            "Normals of the fitted cluster planes of each set (axial data folded onto the lower hemisphere), "
+            "mean pole (pentagon), circle of maximum deviation (solid, set colour) and 95 % confidence "
+            "circle of the mean pole (dashed black). Clusters are not assumed parallel.",
+            "Normales de los planos de cluster ajustados de cada familia (datos axiales llevados al "
+            "hemisferio inferior), polo medio (pentágono), círculo de máxima desviación (continuo, color de "
+            "la familia) y círculo de confianza del 95 % del polo medio (negro discontinuo). No se "
+            "supone que los clusters sean paralelos."))
+    else:
+        for family_id in sorted(step3["results"]):
+            planes = step3["results"][family_id]
+            if not planes:
+                continue
+            x, y = stereonet.f_clar2cart([p["dipdir"] for p in planes.values()],
+                                         [p["dip"] for p in planes.values()], projection=projection)
+            sizes = np.array([p["n_pts"] for p in planes.values()], dtype=float)
+            ax.scatter(x, y, s=12 + 60 * sizes / max(sizes.max(), 1.0), color=cmap((family_id - 1) % 10),
+                       edgecolors="black", linewidths=0.4, alpha=0.85, label=_family_label(family_id), zorder=5)
+        ax.legend(loc="upper right", fontsize=8)
+        doc.figure(fig, L("Poles of the fitted cluster planes (marker size proportional to the number of points).",
+                          "Polos de los planos de cluster ajustados (tamaño proporcional al número de puntos)."))
     if fisher:
         doc.heading(2, number_label(number, 4) + L("Orientation dispersion of the planes",
                                                    "Dispersión de orientación de los planos"))
@@ -770,6 +883,31 @@ def _section_step3(doc, data, number):
         doc.table([L("Set", "Familia"), L("Dip dir. (°)", "Dir. buz. (°)"), L("Dip (°)", "Buz. (°)"), "N", "K",
                    L("Max. deviation (°)", "Desv. máx. (°)"), "63 % (°)", "95 % (°)"], rows,
                   L("Fisher statistics of the cluster planes", "Estadísticos de Fisher de los planos de cluster"))
+
+
+def _draw_fisher_circle(axis, normal, radius_deg, projection, color, linestyle="-", linewidth=1.3):
+    """Small circle of angular radius radius_deg around a pole (same geometry as the GUI plot)."""
+    if not 0.0 < radius_deg < 90.0:
+        return
+    normal = np.asarray(normal, dtype=float)
+    normal = normal / np.linalg.norm(normal)
+    reference = np.array([0.0, 0.0, 1.0])
+    if abs(float(normal @ reference)) > 0.9:
+        reference = np.array([1.0, 0.0, 0.0])
+    axis_u = np.cross(reference, normal)
+    axis_u /= np.linalg.norm(axis_u)
+    axis_v = np.cross(normal, axis_u)
+    angles = np.linspace(0.0, 2.0 * np.pi, 181)
+    radius = np.radians(radius_deg)
+    circle = np.cos(radius) * normal + np.sin(radius) * (
+        np.cos(angles)[:, None] * axis_u + np.sin(angles)[:, None] * axis_v)
+    dipdir, dip = stereonet.f_vnorm2clar_v02(circle)
+    x, y = stereonet.f_clar2cart(dipdir, dip, projection=projection)
+    # The two branches are discontinuous at the primitive; NaN avoids a joining chord.
+    breaks = np.flatnonzero(np.hypot(np.diff(x), np.diff(y)) > 0.5) + 1
+    x = np.insert(x, breaks, np.nan)
+    y = np.insert(y, breaks, np.nan)
+    axis.plot(x, y, color=color, linestyle=linestyle, linewidth=linewidth, zorder=6)
 
 
 def _grid_figure(count, width=5.2, height=3.9):
@@ -800,6 +938,9 @@ def _section_spacing(doc, data, number):
         "total). Los espaciados inferiores al mínimo se descartan y la distribución se estima con "
         "un estimador de densidad de núcleo gaussiano reflejado en cero."))
     doc.equation(r"s_{ij}=\left|D_i-D_j\right|")
+    doc.where([("s_ij", L("normal spacing between planes i and j", "espaciado normal entre los planos i y j")),
+               ("D_i, D_j", L("offsets of the (parallel) planes i and j; for unit normals their difference is the normal distance between the planes",
+                              "términos D de los planos (paralelos) i y j; con normales unitarias su diferencia es la distancia normal entre planos"))])
     doc.key_values([
         (L("Bandwidth (0 = automatic)", "Ancho de banda (0 = automático)"), _gfmt(params.get("bandwidth"))),
         (L("Minimum spacing", "Espaciado mínimo"), _gfmt(params.get("minimum"))),
@@ -827,6 +968,104 @@ def _section_spacing(doc, data, number):
         axis.grid(alpha=0.2)
     doc.figure(fig, L("Spacing distribution (kernel density) per discontinuity set.",
                       "Distribución del espaciado (densidad de núcleo) por familia."))
+
+
+def _block_groups(data):
+    """Return (poles by id, usable spacing stats by id, groups of three set ids)."""
+    spacing = data.get("spacing")
+    if not spacing or not spacing.get("results"):
+        return {}, {}, []
+    poles = {p.get("idx"): p for p in (data.get("poles") or [])}
+    stats = {}
+    for r in spacing["results"]:
+        values = [r.get(k) for k in ("min", "mean", "std")]
+        if r["family_id"] in poles and all(v is not None and np.isfinite(v) for v in values) and r["min"] > 0:
+            stats[r["family_id"]] = r
+    ids = sorted(stats)
+    return poles, stats, [list(c) for c in itertools.combinations(ids, 3)]
+
+
+def _section_block_size(doc, data, number):
+    L = doc.L
+    poles, stats, groups = _block_groups(data)
+    if not groups:
+        return
+    doc.heading(1, "{}. {}".format(number, L("Mean block size (Palmström)", "Tamaño medio de bloque (Palmström)")))
+    doc.paragraph(L(
+        "The mean block volume is estimated for combinations of three discontinuity sets using the "
+        "mean normal spacing of each set and the angles between the sets (Palmström, 2005). All "
+        "possible combinations of three sets are evaluated (with n sets, n(n-1)(n-2)/6 combinations; "
+        "e.g. J1-J2-J3, J1-J2-J4, J1-J3-J4 and J2-J3-J4 for four sets). Each combination is defined below.",
+        "El volumen medio de bloque se estima para combinaciones de tres familias a partir del "
+        "espaciado normal medio de cada familia y los ángulos entre familias (Palmström, 2005). Se "
+        "evalúan todas las combinaciones posibles de tres familias (con n familias, n(n-1)(n-2)/6 "
+        "combinaciones; p. ej. J1-J2-J3, J1-J2-J4, J1-J3-J4 y J2-J3-J4 para cuatro familias). "
+        "Cada combinación se define a continuación."))
+    doc.table([L("Combination", "Combinación"), L("Sets included", "Familias incluidas")],
+              [("C{}".format(n), ", ".join(_family_label(i) for i in group)) for n, group in enumerate(groups, 1)],
+              L("Combinations of sets used for the block size", "Combinaciones de familias usadas para el tamaño de bloque"))
+    doc.equation(r"V_b=\frac{s_1\,s_2\,s_3}{\sin\gamma_{12}\,\sin\gamma_{13}\,\sin\gamma_{23}}"
+                 r"\qquad d_b=\sqrt[3]{V_b}")
+    doc.where([("V_b", L("mean block volume", "volumen medio de bloque")),
+               ("s_1, s_2, s_3", L("representative normal spacing of each of the three sets (depends on the scenario)",
+                                   "espaciado normal representativo de cada una de las tres familias (depende del escenario)")),
+               ("γ_12, γ_13, γ_23", L("angles between the poles of each pair of sets (degrees)",
+                                      "ángulos entre los polos de cada par de familias (grados)")),
+               ("d_b", L("equivalent block size (edge of a cube of volume V_b)",
+                         "tamaño equivalente de bloque (arista de un cubo de volumen V_b)"))])
+    doc.paragraph(L(
+        "The representative spacing of each set is derived from the mean (μ) and standard deviation (σ) "
+        "of its non-persistent normal spacing (S1), assuming an approximately normal distribution. "
+        "Three scenarios are considered:",
+        "El espaciado representativo de cada familia se obtiene de la media (μ) y la desviación típica (σ) "
+        "de su espaciado normal no persistente (S1), suponiendo una distribución aproximadamente normal. "
+        "Se consideran tres escenarios:"))
+    doc.bullets([
+        L("Average: s = μ, the mean spacing of each set.",
+          "Promedio: s = μ, el espaciado medio de cada familia."),
+        L("Pessimistic: s = μ + {k}·σ, the upper tail of the distribution (95th percentile, one-sided). "
+          "Spacings are larger, so the blocks are the largest that can be expected.".format(k=PESSIMISTIC_K),
+          "Pesimista: s = μ + {k}·σ, la cola superior de la distribución (percentil 95, unilateral). "
+          "Los espaciados son mayores y, por tanto, los bloques son los mayores esperables.".format(k=PESSIMISTIC_K)),
+        L("Conservative: s = max(μ − {k}·σ, s_min), the lower tail of the distribution (≈ 16th percentile), "
+          "a representative value smaller than the mean; it is never below the minimum spacing s_min "
+          "measured. Blocks are smaller than the average.".format(k=CONSERVATIVE_K),
+          "Conservador: s = max(μ − {k}·σ, s_min), la cola inferior de la distribución (≈ percentil 16), "
+          "un valor representativo menor que la media; nunca es inferior al espaciado mínimo s_min "
+          "medido. Los bloques son menores que el promedio.".format(k=CONSERVATIVE_K)),
+    ])
+    doc.where([("μ", L("mean of the non-persistent normal spacing of the set", "media del espaciado normal no persistente de la familia")),
+               ("σ", L("standard deviation of that spacing", "desviación típica de dicho espaciado")),
+               ("s_min", L("minimum spacing measured for the set", "espaciado mínimo medido en la familia"))])
+    scenarios = [
+        (L("Pessimistic", "Pesimista"), lambda r: r["mean"] + PESSIMISTIC_K * r["std"]),
+        (L("Average", "Promedio"), lambda r: r["mean"]),
+        (L("Conservative", "Conservador"), lambda r: max(r["mean"] - CONSERVATIVE_K * r["std"], r["min"])),
+    ]
+    for number_group, group in enumerate(groups, 1):
+        names = ", ".join(_family_label(i) for i in group)
+        doc.heading(2, "C{} ({})".format(number_group, names))
+        normals = np.asarray([poles[i]["normal"] for i in group], dtype=float)
+        normals /= np.linalg.norm(normals, axis=1)[:, None]
+        gammas = np.degrees(np.arccos(np.clip(np.abs(normals @ normals.T), 0.0, 1.0)))
+        pairs = [(0, 1), (0, 2), (1, 2)]
+        sines = [np.sin(np.radians(gammas[a, b])) for a, b in pairs]
+        doc.paragraph("{}: ".format(names) + ", ".join(
+            "γ({}, {}) = {}°".format(_family_label(group[a]), _family_label(group[b]), _fmt(gammas[a, b], 1))
+            for a, b in pairs))
+        if min(sines) < 0.05:
+            doc.note(L("Two sets are almost parallel (angle < 3°); the block volume is not reliable.",
+                       "Dos familias son casi paralelas (ángulo < 3°); el volumen de bloque no es fiable."))
+            continue
+        rows = []
+        for label, fn in scenarios:
+            s = [fn(stats[i]) for i in group]
+            volume = s[0] * s[1] * s[2] / (sines[0] * sines[1] * sines[2])
+            rows.append([label] + [_gfmt(v) for v in s] + [_gfmt(volume), _gfmt(volume ** (1.0 / 3.0))])
+        doc.table([L("Scenario", "Escenario")] + ["s_" + _family_label(i) for i in group] + ["V_b", "d_b"], rows,
+                  L("Block size for sets {}".format(names), "Tamaño de bloque para las familias {}".format(names)))
+    doc.note(L("Units follow those of the point cloud (length for spacing and d_b, length³ for V_b).",
+               "Las unidades son las de la nube de puntos (longitud para espaciado y d_b, longitud³ para V_b)."))
 
 
 def _section_persistence(doc, data, number):
@@ -892,6 +1131,8 @@ def _section_references(doc, number):
         "Orientation-based colour mapping: https://doi.org/10.1016/j.jrmge.2025.12.059",
         "Botev, Z.I., Grotowski, J.F., Kroese, D.P. (2010). Kernel density estimation via diffusion. "
         "Annals of Statistics, 38(5), 2916-2957.",
+        "Palmström, A. (2005). Measurements of and correlations between block size and rock quality "
+        "designation (RQD). Tunnelling and Underground Space Technology, 20(4), 362-377.",
     ])
 
 
@@ -988,6 +1229,33 @@ def _safe_name(text):
     return cleaned or "DSE"
 
 
+def _section_disclaimer(doc, number):
+    L = doc.L
+    doc.heading(1, "{}. {}".format(number, L("Disclaimer and responsibility", "Exención de responsabilidad")))
+    doc.paragraph(L(
+        "This report has been generated with DSE (Discontinuity Set Extractor), academic open-source "
+        "software distributed under the GNU General Public License v3.0, WITHOUT ANY WARRANTY of any "
+        "kind, express or implied, including merchantability or fitness for a particular purpose. The "
+        "results are provided as-is, may contain errors, and depend on the quality of the point cloud "
+        "and on the parameters chosen by the user.",
+        "Este informe se ha generado con DSE (Discontinuity Set Extractor), un programa académico de "
+        "código abierto distribuido bajo la licencia GNU General Public License v3.0, SIN NINGUNA "
+        "GARANTÍA de ningún tipo, expresa o implícita, incluida la comerciabilidad o la idoneidad para "
+        "un fin concreto. Los resultados se ofrecen tal cual, pueden contener errores y dependen de la "
+        "calidad de la nube de puntos y de los parámetros elegidos por el usuario."))
+    doc.paragraph(L(
+        "The user is solely responsible for checking the results, for their interpretation and for any "
+        "decision or use made of them, including their inclusion in engineering or safety-related "
+        "studies, which must be validated by a qualified professional. In no event shall the authors, "
+        "contributors or their institutions be liable for any claim, damage or loss arising from the use "
+        "of the software or of the results contained in this report.",
+        "El usuario es el único responsable de verificar los resultados, de su interpretación y de "
+        "cualquier decisión o uso que haga de ellos, incluida su incorporación a estudios de ingeniería o "
+        "de seguridad, que deberán ser validados por un profesional cualificado. En ningún caso los "
+        "autores, colaboradores o sus instituciones serán responsables de reclamaciones, daños o pérdidas "
+        "derivados del uso del software o de los resultados de este informe."))
+
+
 def build_document(data, info):
     """Assemble the report document model from recorded results."""
     language = info.get("language", "en")
@@ -1011,6 +1279,9 @@ def build_document(data, info):
     if data.get("spacing") and data["spacing"].get("results"):
         included.append(L("Normal spacing analysis", "Análisis de espaciado normal"))
         sections.append(_section_spacing)
+        if _block_groups(data):
+            included.append(L("Mean block size (Palmström)", "Tamaño medio de bloque (Palmström)"))
+            sections.append(_section_block_size)
     if data.get("persistence") and data["persistence"].get("rows"):
         included.append(L("Persistence analysis", "Análisis de persistencia"))
         sections.append(_section_persistence)
@@ -1024,6 +1295,7 @@ def build_document(data, info):
         section(doc, data, number)
         number += 1
     _section_references(doc, number)
+    _section_disclaimer(doc, number + 1)
     return doc
 
 

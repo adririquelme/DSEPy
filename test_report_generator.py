@@ -30,6 +30,20 @@ def _poles():
     return poles
 
 
+def _fisher_item(family_id, pole):
+    rng = np.random.default_rng(family_id)
+    normal = np.asarray(pole["normal"], dtype=float)
+    normals = normal + rng.normal(0, 0.05, (6, 3))
+    normals /= np.linalg.norm(normals, axis=1)[:, None]
+    normals[normals @ normal < 0] *= -1
+    mean = normals.sum(axis=0)
+    mean /= np.linalg.norm(mean)
+    dev = np.degrees(np.arccos(np.clip(normals @ mean, 0, 1)))
+    dipdir, dip = stereonet.f_vnorm2clar_v02(mean.reshape(1, 3))
+    return {"family_id": family_id, "normals": normals, "principal_normal": mean, "N": 6, "K": 80.0,
+            "max_deviation": float(dev.max()), "dipdir": float(dipdir[0]), "dip": float(dip[0])}
+
+
 def _full_data():
     normals, labels = _normals()
     dipdir, dip = stereonet.f_vnorm2clar_v02(normals)
@@ -50,7 +64,7 @@ def _full_data():
                "x_full": kde_x, "kde_full": np.exp(-kde_x / 2), "mean": 1.5, "std": 0.2, "min": 1.0,
                "max": 2.0, "mode": 1.4, "max_density_spacing": 1.3, "mean_full": 1.6}
     return {
-        "cloud": {"name": "Slope A", "points": 890},
+        "cloud": {"name": "Slope A", "points": 890, "bbox_min": [10.0, 20.0, 0.0], "bbox_max": [60.0, 45.0, 12.5]},
         "colour": {"params": {"space": "HSV", "lightness": "80", "objective": "rational_vertical_asymptote",
                               "subsample": "25", "iterations": "80", "population": "12", "seed": ""},
                    "objective_name": "rational_vertical_asymptote", "angles": angles, "rotation": rotation,
@@ -69,9 +83,9 @@ def _full_data():
                   "stats": {f: {"pts": 300, "eps": 0.05, "clusters_before_merge": 3, "clusters_after_merge": 2,
                                 "raw_noise": 5, "rejected_points": 3, "zero_points": 8} for f in (1, 2, 3)},
                   "results": planes,
-                  "fisher": [{"family_id": 1, "dipdir": 30.0, "dip": 20.0, "N": 2, "K": 80.0,
-                              "max_deviation": 1.0}]},
-        "spacing": {"params": {"bandwidth": 0.0, "minimum": 0.01, "tolerance": 1e-5}, "results": [spacing]},
+                  "fisher": [_fisher_item(f, p) for f, p in enumerate(_poles()[:3], start=1)]},
+        "spacing": {"params": {"bandwidth": 0.0, "minimum": 0.01, "tolerance": 1e-5},
+                    "results": [spacing] + [dict(spacing, family_id=f, mean=1.5 + f) for f in (2, 3)]},
         "persistence": {"params": {"tolerance": 1e-5},
                         "rows": [{"family_id": 1, "plane_id": i, "cluster_ids": (i,), "D": 1.0 * i, "n_points": 50,
                                   "p_dip": 3.0, "p_strike": 4.0, "p_max": 5.0 + i, "area": 12.0} for i in range(1, 5)],
@@ -88,6 +102,7 @@ def test_full_report_html_and_markdown(tmp_path, language):
     assert [p.rsplit(".", 1)[-1] for p in paths] == ["html", "md"]
     text = open(paths[0], encoding="utf-8").read()
     assert "A. Author" in text and "Second &lt;b&gt;paragraph" in text
+    assert "35.000" in text and "12.500" in text
     assert text.count("data:image/png;base64") >= 12
     markdown = open(paths[1], encoding="utf-8").read()
     assert "| --- " in markdown
@@ -101,6 +116,25 @@ def test_sections_are_optional(tmp_path):
     doc = rg.build_document(data, {"language": "en"})
     kinds = [b[2] for b in doc.blocks if b[0] == "h" and b[1] == 1]
     assert any("Persistence" in k for k in kinds) and not any("Principal poles" in k for k in kinds)
+
+
+def test_block_size_section_groups_sets_by_three():
+    data = _full_data()
+    doc = rg.build_document(data, {"language": "en"})
+    titles = [b[2] for b in doc.blocks if b[0] == "h" and b[1] == 1]
+    assert any("block size" in t for t in titles)
+    data["spacing"]["results"] = data["spacing"]["results"][:2]
+    titles = [b[2] for b in rg.build_document(data, {"language": "en"}).blocks if b[0] == "h" and b[1] == 1]
+    assert not any("block size" in t for t in titles)
+
+
+def test_block_size_uses_all_combinations_of_three():
+    data = _full_data()
+    data["spacing"]["results"].append(dict(data["spacing"]["results"][0], family_id=4))
+    data["poles"] = _poles() + [stereonet.create_pole_dict(200.0, 50.0, projection=PROJECTION, idx=4)]
+    doc = rg.build_document(data, {"language": "en"})
+    headings = [b[2] for b in doc.blocks if b[0] == "h" and b[1] == 2 and b[2].startswith("C")]
+    assert len(headings) == 4
 
 
 def test_empty_data_is_rejected(tmp_path):
