@@ -1019,17 +1019,17 @@ class DSEMainApp:
     def _refresh_action_labels(self):
         """Apply compact icons and localized descriptive button text."""
         labels = {
-            "poles": self.tr("action.poles", default="◎  Plot Poles"),
-            "density": self.tr("action.density", default="⚙  Density and Principal Poles"),
-            "classify": self.tr("action.classify", default="✓  Classify Point Cloud (JS)"),
-            "families": self.tr("action.families", default="◉  Poles by Family (JS)"),
-            "cluster": self.tr("action.cluster", default="▦  Run Cluster Analysis"),
-            "facets": self.tr("action.facets", default="△  Create Cluster Facets"),
+            "poles": self.tr("action.poles", default="\u25ce  Plot Poles"),
+            "density": self.tr("action.density", default="\u2699  Density and Principal Poles"),
+            "classify": self.tr("action.classify", default="\u2713  Classify Point Cloud (JS)"),
+            "families": self.tr("action.families", default="\u25c9  Poles by Family (JS)"),
+            "cluster": self.tr("action.cluster", default="\u25a6  Run Cluster Analysis"),
+            "facets": self.tr("action.facets", default="\u25b3  Create Cluster Facets"),
             "add": self.tr("action.add", default="+  Add Pole"),
-            "apply": self.tr("action.apply", default="✓  Apply Changes"),
+            "apply": self.tr("action.apply", default="\u2713  Apply Changes"),
             "delete": self.tr("action.delete", default="-  Delete Pole"),
-            "up": self.tr("action.up", default="↑  Move Up"),
-            "down": self.tr("action.down", default="↓  Move Down"),
+            "up": self.tr("action.up", default="\u2191  Move Up"),
+            "down": self.tr("action.down", default="\u2193  Move Down"),
         }
         self.btn_poles.config(text=labels["poles"])
         self.btn_density.config(text=labels["density"])
@@ -2623,7 +2623,7 @@ class DSEMainApp:
         dialog.after_idle(update_colour_preview)
 
         # Dip histogram of the normals (original vs current rotation). It is
-        # redrawn after every generation so the user sees it move towards 0°.
+        # redrawn after every generation so the user sees it move towards 0.
         hist_label = ttk.Label(frame)
         hist_label.grid(row=8, column=0, columnspan=2, sticky=tk.W, pady=(10, 0))
         hist_state = {"sample": None, "original": None, "photo": None, "figure": None}
@@ -3957,7 +3957,7 @@ class DSEMainApp:
         observations.insert("1.0", meta["observations"])
 
         row += 1
-        language_names = {"en": "English", "es": "Español"}
+        language_names = {"en": "English", "es": "Espa\u00f1ol"}
         language_var = tk.StringVar(
             master=dialog,
             value=language_names["es" if self.language == "es" else "en"])
