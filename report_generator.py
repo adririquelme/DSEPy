@@ -24,7 +24,7 @@ not need MathJax or an Internet connection.
     spacing      params, results
     persistence  params, rows, summaries
 ``info`` keys: project, client, author, date, report_version, software_version,
-location, observations, language ("en" | "es").
+software_release_year, location, observations, language ("en" | "es").
 """
 
 import base64
@@ -1117,10 +1117,18 @@ def _section_persistence(doc, data, number):
                  .format(len(shown), len(rows)))
 
 
-def _section_references(doc, number):
+def _section_references(doc, number, info):
     L = doc.L
     doc.heading(1, "{}. {}".format(number, L("References", "Referencias")))
+    year = info.get("software_release_year") or datetime.date.today().year
+    version = info.get("software_version")
+    software_reference = (
+        "Riquelme, A., Tomás, R., & Abellán, A. ({}). DSEpy: Python-based "
+        "Discontinuity Set Extractor for CloudCompare{}."
+    ).format(year, " (Version {})".format(version) if version else "")
+    software_reference += " GitHub. https://github.com/adririquelme/DSEPy"
     doc.bullets([
+        software_reference,
         "Riquelme, A.J., Abellán, A., Tomás, R., Jaboyedoff, M. (2014). A new approach for semi-automatic "
         "rock mass joints recognition from 3D point clouds. Computers & Geosciences. "
         "https://doi.org/10.1016/j.cageo.2014.03.014",
@@ -1128,7 +1136,21 @@ def _section_references(doc, number):
         "rating using 3D point clouds. Int. J. Rock Mech. Min. Sci. https://doi.org/10.1016/j.ijrmms.2015.12.008",
         "Riquelme, A.J., Abellán, A., Tomás, R. (2015). Discontinuity spacing analysis in rock masses using 3D "
         "point clouds. Engineering Geology. https://doi.org/10.1016/j.enggeo.2015.06.009",
-        "Orientation-based colour mapping: https://doi.org/10.1016/j.jrmge.2025.12.059",
+        "Riquelme, A. (2015). Uso de nubes de puntos 3D para identificación y caracterización de familias de "
+        "discontinuidades planas en afloramientos rocosos y evaluación de la calidad geomecánica "
+        "[Doctoral dissertation, Universidad de Alicante]. RUA Repository. "
+        "https://rua.ua.es/entities/publication/78d254b9-1a7b-49b1-a35a-c0edbdeeb225",
+        "Riquelme, A., Tomás, R., Cano, M., Pastor, J. L., & Abellán, A. (2018). Automatic mapping of "
+        "discontinuity persistence on rock masses using 3D point clouds. Rock Mechanics and Rock Engineering, "
+        "51(10), 3005–3028. https://doi.org/10.1007/s00603-018-1519-9",
+        "Ester, M., Kriegel, H., Sander, J., & Xu, X. (1996). A density-based algorithm for discovering "
+        "clusters in large spatial databases with noise. In E. Simoudis, J. Han, & U. Fayyad (Eds.), "
+        "Second International Conference on Knowledge Discovery and Data Mining (Vol. 96, pp. 226–231). "
+        "AAAI Press.",
+        "Riquelme, A., Tomás, R., Cano, M., Pastor, J. L., & Abellán, A. (2026). Orientation-based colour "
+        "mapping and spherical density analysis for rock discontinuity detection in 3D point clouds of roadcut "
+        "slopes. Journal of Rock Mechanics and Geotechnical Engineering, 18(10), 7965–7983. "
+        "https://doi.org/10.1016/j.jrmge.2025.12.059",
         "Botev, Z.I., Grotowski, J.F., Kroese, D.P. (2010). Kernel density estimation via diffusion. "
         "Annals of Statistics, 38(5), 2916-2957.",
         "Palmström, A. (2005). Measurements of and correlations between block size and rock quality "
@@ -1294,7 +1316,7 @@ def build_document(data, info):
     for section in sections:
         section(doc, data, number)
         number += 1
-    _section_references(doc, number)
+    _section_references(doc, number, info)
     _section_disclaimer(doc, number + 1)
     return doc
 

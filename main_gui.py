@@ -12,6 +12,8 @@ from datetime import datetime
 
 # Single source of truth for the DSEPy version. Change this value only when releasing a new version.
 DSE_VERSION = "1.0.3beta"
+# Keep the software citation year aligned with the published DSEPy version.
+DSE_RELEASE_YEAR = 2026
 
 
 def _enable_windows_dpi_awareness():
@@ -4042,7 +4044,8 @@ class DSEMainApp:
             })
             info = dict(
                 meta, date=text_vars["date"].get().strip(),
-                language=language, software_version=DSE_VERSION)
+                language=language, software_version=DSE_VERSION,
+                software_release_year=DSE_RELEASE_YEAR)
             dialog.config(cursor="watch")
             dialog.update_idletasks()
             try:

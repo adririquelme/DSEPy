@@ -97,7 +97,8 @@ def _full_data():
 @pytest.mark.parametrize("language", ["en", "es"])
 def test_full_report_html_and_markdown(tmp_path, language):
     info = {"project": "Test / project", "author": "A. Author", "client": "Client", "language": language,
-            "observations": "First paragraph.\n\nSecond <b>paragraph</b>.", "software_version": "1.0.3beta"}
+            "observations": "First paragraph.\n\nSecond <b>paragraph</b>.", "software_version": "1.0.3beta",
+            "software_release_year": 2026}
     paths = rg.generate_report(_full_data(), info, str(tmp_path), formats=("html", "markdown"))
     assert [p.rsplit(".", 1)[-1] for p in paths] == ["html", "md"]
     text = open(paths[0], encoding="utf-8").read()
@@ -106,6 +107,15 @@ def test_full_report_html_and_markdown(tmp_path, language):
     assert text.count("data:image/png;base64") >= 12
     markdown = open(paths[1], encoding="utf-8").read()
     assert "| --- " in markdown
+    for reference in (
+            "DSEpy: Python-based Discontinuity Set Extractor for CloudCompare (Version 1.0.3beta)",
+            "Riquelme, A. (2015). Uso de nubes de puntos 3D",
+            "Automatic mapping of discontinuity persistence on rock masses",
+            "A density-based algorithm for discovering clusters",
+            "Orientation-based colour mapping and spherical density analysis",
+    ):
+        assert reference in markdown
+    assert "(2026). DSEpy:" in markdown
     figures = list((tmp_path / "DSE_report_Test_project_files").glob("figure_*.png"))
     assert len(figures) >= 8
 
