@@ -134,22 +134,30 @@ If PowerShell reports that pip is missing, first check that the selected executa
 
 ```text
 DSEpy/
-├── main_gui.py          # Main GUI launcher & CloudCompare interface
-├── colour_optimisation.py   # Chromatic space algorithms & normal colour-coding
-├── spectral_clustering.py   # Spectral clustering of discontinuity sets
-├── test_spectral_clustering.py  # Unit tests for the spectral clustering module
-├── stereonet.py             # Stereographic projection & density computations
-├── i18n.py                  # Internationalization translation engine
-├── requirements.txt         # Python package dependencies
-├── CITATION.cff             # Academic citation metadata
-├── CHANGELOG.md             # Version history
-├── LICENSE                  # GNU GPL v3.0 License
-├── docs/                    # Installation, workflow and troubleshooting guides
+├── main_gui.py                  # Main GUI launcher and workflow
+├── gui_config.py                # GUI configuration
+├── gui_icons.py                 # GUI icon loading
+├── gui_progress.py              # Progress display
+├── gui_state.py                 # GUI state management
+├── gui_translations.py          # GUI translation support
+├── gui_utils.py                 # Shared GUI utilities
+├── colour_optimisation.py       # Colour optimisation and normal coding
+├── spectral_clustering.py       # Spectral clustering analysis
+├── stereonet.py                 # Stereographic projection and density analysis
+├── report_generator.py          # Technical report generation
+├── i18n.py                      # Internationalization translation engine
+├── test_report_generator.py     # Technical report tests
+├── test_spectral_clustering.py  # Spectral clustering tests
+├── requirements.txt             # Python package dependencies
+├── CITATION.cff                 # Academic citation metadata
+├── CHANGELOG.md                 # Version history
+├── LICENSE                      # GNU GPL v3.0 License
+├── docs/                        # Installation, workflow and troubleshooting guides
 │   ├── installation.md
 │   ├── workflow.md
 │   └── troubleshooting.md
-├── icons/                   # GUI icons & visual assets
-└── locales/                 # i18n translation JSON files (en, es, ca, de, etc.)
+├── icons/                       # GUI icons and visual assets
+└── locales/                     # Translation JSON files
 ```
 
 ---
