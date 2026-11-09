@@ -11,7 +11,7 @@ import webbrowser
 from datetime import datetime
 
 # Single source of truth for the DSEPy version. Change this value only when releasing a new version.
-DSE_VERSION = "1.0.3beta"
+DSE_VERSION = "1.0.3"
 # Keep the software citation year aligned with the published DSEPy version.
 DSE_RELEASE_YEAR = 2026
 
